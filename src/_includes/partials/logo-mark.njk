@@ -1,0 +1,14 @@
+{#
+  DIWEBA logo mark — the exact geometry used throughout the approved design
+  source (DIWEBA/DIWEBA Website.dc.html, header and footer). Ported as inline
+  SVG rather than a raster file: it is pure geometry, so it scales to any size
+  with no extra asset, no HTTP request, and no aspect-ratio risk.
+
+  Usage: {% include "partials/logo-mark.njk" %} inside an element that sets
+  width/height (currentColor is used, so it inherits text colour).
+#}
+<svg viewBox="0 0 100 100" width="{{ size or 26 }}" height="{{ size or 26 }}" aria-hidden="true" focusable="false">
+  <rect x="16" y="14" width="17" height="72" fill="currentColor"></rect>
+  <path d="M41 14 H54 A36 36 0 0 1 54 86 H41 V69 H54 A19 19 0 0 0 54 31 H41 Z" fill="currentColor"></path>
+  <rect x="8" y="92" width="84" height="8" fill="currentColor"></rect>
+</svg>

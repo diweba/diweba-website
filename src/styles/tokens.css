@@ -2,142 +2,231 @@
    DIWEBA — DESIGN TOKENS
    ============================================================================
 
-   THE ONLY FILE THAT DEFINES A RAW VALUE.
+   Ported from the approved visual source: DIWEBA/DIWEBA Website.dc.html and
+   DIWEBA/diweba-site.js (the interactive homepage mockup Baki Cirak built
+   before implementation began — see docs/DIWEBA_PHASE_0_SPEC.md). These are
+   NOT a fresh design; every value below traces back to that file.
 
-   base.css and components.css reference these custom properties and never
-   declare a literal colour, font stack, or spacing value. That is what makes a
-   re-skin a token change rather than a component rewrite — which is the
-   mechanism behind the reusable client-site model (spec §17).
+   THE ONLY FILE THAT DEFINES A RAW VALUE. base.css and components.css
+   reference these custom properties and never declare a literal colour, font
+   stack, or spacing value — a re-skin for a future client site is a token
+   change, not a component rewrite (spec §17).
 
-   The visual direction (A Blueprint / B Plainspoken Trust / C Proof-Led) is NOT
-   chosen yet. The values below are a deliberately neutral, accessible starting
-   point — not a design. When the direction is selected, this file is what
-   changes; components stay untouched.
+   ONE DELIBERATE TECHNICAL SUBSTITUTION, NOT A VISUAL ONE: the mockup links
+   Archivo and IBM Plex Mono from fonts.googleapis.com. The locked architecture
+   (spec §13) forbids Google Fonts — a request to Google's servers transmits
+   the visitor's IP, and it costs a third-party round trip. Both faces are
+   self-hosted here instead: identical typefaces, identical look, different
+   delivery. See the @font-face block below and src/assets/fonts/.
 
-   Contrast: every text/background pair defined here meets WCAG 2.2 AA
-   (≥ 4.5:1 body, ≥ 3:1 large text and UI boundaries). Verify again after any
-   palette change — accessibility is a functional requirement here (spec §13).
+   ONE DELIBERATE UNIT SUBSTITUTION: the mockup runs its `clamp()` fluid sizes
+   in `cqw` (container query width) because the mockup tool renders the page
+   inside a resizable device-preview frame. On the real site the viewport IS
+   the container, so every `cqw` in the source becomes `vw` here at the same
+   numeric value — the computed sizes are unchanged.
    ========================================================================= */
+
+/* --- Self-hosted fonts -----------------------------------------------------
+   Variable weight range covers every weight the design uses (400 body / 500
+   mono-medium / 600 headings). Filenames are NOT content-hashed: if a face is
+   ever replaced, RENAME the file, or the year-long cache in src/_headers will
+   keep serving the old one. */
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/assets/fonts/archivo-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/assets/fonts/archivo-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF,
+    U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/ibm-plex-mono-400-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/ibm-plex-mono-400-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF,
+    U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/assets/fonts/ibm-plex-mono-500-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/assets/fonts/ibm-plex-mono-500-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7,
+    U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF,
+    U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
 
 :root {
   /* --- Typography ----------------------------------------------------------
-     Self-hosted faces only; no Google Fonts (spec §13) — a request to Google's
-     font servers transmits visitor IPs and adds a third-party round trip.
-     The actual face ships with the design direction. Until then these resolve
-     to the system stack, which costs nothing and renders instantly.
-     TO ADD A FACE: drop woff2 files in src/assets/fonts/, declare @font-face
-     here, and put the family name at the front of the stack below. */
-  --font-sans:
-    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
-    Arial, "Noto Sans", sans-serif;
-  --font-mono:
-    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
-    "Liberation Mono", monospace;
+     Archivo (body + headings) paired with IBM Plex Mono (eyebrow labels,
+     stat figures, process durations) — the exact pairing in the design
+     source. Fallback stacks are real system fonts, not generic placeholders. */
+  --font-sans: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
 
-  /* Type scale — 1.200 (minor third). Body stays 16px minimum on mobile. */
-  --text-xs: 0.8125rem;   /* 13px — captions, legal fine print */
-  --text-sm: 0.9375rem;   /* 15px — secondary UI */
-  --text-base: 1rem;      /* 16px — body floor, never smaller */
-  --text-lg: 1.125rem;    /* 18px — lead paragraphs */
-  --text-xl: 1.375rem;    /* 22px */
-  --text-2xl: 1.75rem;    /* 28px */
-  --text-3xl: 2.25rem;    /* 36px */
-  --text-4xl: 3rem;       /* 48px */
+  /* Fluid type scale — ported from the design's clamp() calls (cqw -> vw, see
+     file header). One deliberate correction against the direct port: spec §13
+     sets a hard floor of 16px for body text on mobile. Several of the
+     design's own reading-length text sizes (the "why" list descriptions, FAQ
+     answers) had a low end of 14.5px, which is a real conflict between the
+     visual source and the locked accessibility requirement, not a stylistic
+     choice to preserve. Every token used for sentence-length copy is floored
+     at 16px; every token used for short captions, eyebrows or labels (never
+     more than a few words, never the thing a visitor is asked to READ) keeps
+     its original size, since the 16px rule targets reading text, not labels. */
+  --text-2xs: clamp(0.625rem, 0.85vw, 0.75rem);        /* 10-12px: mono eyebrow labels only */
+  --text-xs: clamp(0.71875rem, 0.9vw, 0.8125rem);      /* 11.5-13px: mono captions (URLs, stat units) */
+  --text-sm: clamp(0.8125rem, 1.05vw, 0.9375rem);      /* 13-15px: short meta/captions, never paragraphs */
 
-  --leading-tight: 1.15;
-  --leading-snug: 1.35;
-  --leading-normal: 1.6;
-  --leading-relaxed: 1.75;
+  /* Reading text. Floored at 16px per spec §13, not the design's original
+     14.5-15.5px low end; upper bound kept from the source or lifted by ~1px
+     where the source's own max also sat under 16px. */
+  --text-body-sm: clamp(1rem, 1.05vw, 1rem);           /* 16px: "why" list & compare-table descriptions */
+  --text-base: clamp(1rem, 1.15vw, 1.0625rem);         /* 16-17px: FAQ answers, general paragraphs */
+  --text-md: clamp(1rem, 1.35vw, 1.125rem);            /* 16-18px: hero sub, aiPos body */
+  --text-lg: clamp(1.0625rem, 1.4vw, 1.1875rem);       /* 17-19px: AI band body, FAQ questions */
+
+  --text-xl: clamp(1.375rem, 2vw, 1.6875rem);          /* 22-27px: built-by cards, honest-box heading */
+  --text-2xl: clamp(1.625rem, 2.8vw, 2.25rem);         /* 26-36px: section headings (Why, FAQ, Process) */
+  --text-3xl: clamp(1.75rem, 3.2vw, 2.625rem);         /* 28-42px: aiPos heading, final CTA */
+  --text-4xl: clamp(1.875rem, 3.6vw, 3.125rem);        /* 30-50px: AI band heading */
+  --text-5xl: clamp(2.0625rem, 4.1vw, 3.5rem);         /* 33-56px: hero H1 */
+  --text-stat: clamp(4.625rem, 10vw, 8.25rem);         /* 74-132px: hero primary stat figure */
+  --text-stat-sm: clamp(1.625rem, 3vw, 2.5rem);        /* 26-40px: hero secondary stat figures */
+
+  --leading-tight: 1.04;
+  --leading-snug: 1.15;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+  --leading-loose: 1.7;
 
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-semibold: 600;
   --weight-bold: 700;
 
-  --tracking-tight: -0.02em;
+  --tracking-tight: -0.035em;
+  --tracking-snug: -0.02em;
   --tracking-normal: 0;
-  --tracking-wide: 0.08em;   /* uppercase labels only */
+  --tracking-wide: 0.08em;
+  --tracking-widest: 0.16em; /* mono eyebrow labels */
 
-  /* Running text stays near 65 characters. */
-  --measure: 65ch;
-  --measure-narrow: 48ch;
+  --measure: 44em;   /* body copy blocks in the design cap around this width */
+  --measure-wide: 65ch;
 
-  /* --- Spacing -------------------------------------------------------------
-     4px base. Used with flex/grid `gap`, not per-element margins, so sibling
-     spacing cannot collapse or double. */
-  --space-3xs: 0.25rem;   /*  4px */
-  --space-2xs: 0.5rem;    /*  8px */
-  --space-xs: 0.75rem;    /* 12px */
-  --space-sm: 1rem;       /* 16px */
-  --space-md: 1.5rem;     /* 24px */
-  --space-lg: 2rem;       /* 32px */
-  --space-xl: 3rem;       /* 48px */
-  --space-2xl: 4rem;      /* 64px */
-  --space-3xl: 6rem;      /* 96px */
+  /* --- Spacing ---------------------------------------------------------- */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
 
-  /* Section rhythm, fluid between mobile and desktop. */
-  --section-y: clamp(3rem, 8vw, 6rem);
+  /* Section padding — fluid, ported directly from the design's clamp() values. */
+  --section-y-sm: clamp(1.875rem, 4.4vw, 4rem);
+  --section-y-md: clamp(2rem, 4.4vw, 4.75rem);
+  --section-y-lg: clamp(2.25rem, 5.5vw, 5.5rem);
+  --section-x: clamp(1.125rem, 3.5vw, 3rem);
 
-  /* --- Layout -------------------------------------------------------------- */
-  --container-max: 72rem;      /* 1152px */
-  --container-narrow: 48rem;   /* 768px — prose */
-  --container-wide: 84rem;     /* 1344px */
-  --gutter: clamp(1rem, 4vw, 2rem);   /* never below 16px at any width */
+  /* --- Layout --------------------------------------------------------------
+     The design frame caps at 1280px (its "DESKTOP 1280" preview width). */
+  --container-max: 80rem;      /* 1280px */
+  --container-narrow: 48rem;
+  --gutter: clamp(1rem, 3.5vw, 2rem);
 
-  /* --- Radius & elevation -------------------------------------------------- */
-  --radius-sm: 3px;
-  --radius-md: 6px;
-  --radius-lg: 10px;
-  --radius-pill: 999px;
+  /* --- Radius & elevation ----------------------------------------------
+     THE DESIGN USES ZERO RADIUS EVERYWHERE except perfect circles (the
+     mobile-nav active-page dot). No rounded rectangles anywhere — this is a
+     deliberate part of the brand's sharp, architectural character, not an
+     oversight. The design also uses NO box-shadow on any real page element;
+     the two shadows in the source file belong to the mockup tool's own
+     device-preview chrome, not the site, and are correctly omitted here. */
+  --radius: 0;
+  --radius-circle: 50%;
 
-  --shadow-sm: 0 1px 2px rgb(16 20 26 / 6%), 0 1px 1px rgb(16 20 26 / 4%);
-  --shadow-md: 0 2px 8px rgb(16 20 26 / 8%), 0 1px 3px rgb(16 20 26 / 6%);
+  /* --- Colour ----------------------------------------------------------
+     Ported 1:1 from the design's oklch() values, named by role. "ink" is the
+     dominant colour in the source (61 occurrences) — it is the primary
+     button fill, heading colour and structural border colour all at once,
+     which is why this palette has so few named surfaces: the design works in
+     ink/paper contrast plus two accents, not a large neutral ramp. */
+  --color-ink: oklch(0.22 0.012 255);
+  --color-ink-soft: oklch(0.42 0.012 255);   /* hero subhead, aiPos body */
+  --color-ink-hover: oklch(0.32 0.012 255);  /* primary button hover fill */
 
-  /* --- Colour -------------------------------------------------------------
-     Neutrals carry a slight cool bias toward the accent so they read as chosen
-     rather than inherited. */
-  --color-bg: #f7f8fa;
-  --color-surface: #ffffff;
-  --color-surface-sunk: #eef0f4;
+  --color-paper: oklch(0.985 0.004 95);      /* page background, header bg */
+  --color-paper-raised: oklch(0.99 0.003 95);
+  --color-surface-sunk: oklch(0.965 0.004 95); /* AI band, FAQ, founder section bg */
 
-  --color-text: #16191f;
-  --color-text-soft: #4a515c;
-  --color-text-faint: #767e8b;
-  --color-text-invert: #ffffff;
+  --color-text: var(--color-ink);
+  --color-text-soft: oklch(0.45 0.012 255);   /* why-list descriptions, FAQ answers */
+  --color-text-faint: oklch(0.5 0.012 255);   /* eyebrow labels (grey variant), stat captions */
+  --color-text-invert: var(--color-paper);
+  --color-text-invert-soft: oklch(0.82 0.008 255); /* body text on ink background */
 
-  --color-border: #dde1e7;
-  --color-border-strong: #c3c9d2;
+  --color-border: oklch(0.86 0.006 255);      /* default hairline divider */
+  --color-border-soft: oklch(0.88 0.006 255);
+  --color-border-strong: var(--color-ink);    /* structural 1-2px section borders */
 
-  --color-accent: #0b5fa5;
-  --color-accent-hover: #094d86;
-  --color-accent-soft: #e8f0f8;
-  --color-accent-text: #ffffff;
+  --color-accent-blue: oklch(0.55 0.12 248);       /* links, hover states, active-page dot */
+  --color-accent-blue-hover: oklch(0.42 0.1 248);
+  --color-accent-amber: oklch(0.62 0.13 48);       /* eyebrow labels, popular badge, honest-box */
 
-  /* Semantic — separate from the accent, used for state only. */
-  --color-success: #0f6b45;
-  --color-success-soft: #e3f1ea;
-  --color-warning: #92560a;
-  --color-warning-soft: #fbf0dd;
-  --color-error: #a82c22;
-  --color-error-soft: #fbe9e7;
+  --color-focus: var(--color-accent-blue);
 
-  --color-focus: #0b5fa5;
-
-  /* --- Motion -------------------------------------------------------------- */
+  /* --- Motion ------------------------------------------------------------- */
   --duration-fast: 120ms;
-  --duration-base: 200ms;
+  --duration-base: 180ms;
   --easing: cubic-bezier(0.2, 0, 0.2, 1);
 
-  /* --- Accessibility ------------------------------------------------------- */
+  /* --- Accessibility -------------------------------------------------------- */
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
-  /* WCAG 2.2 AA minimum interactive target. Never reduce. */
   --target-min: 44px;
 }
 
-/* Breakpoints, for reference — CSS custom properties cannot be used in media
-   queries, so these values are repeated literally in base.css/components.css.
-   Keep them in sync with this list:
+/* Breakpoints, for reference — repeated literally where needed, since CSS
+   custom properties cannot be used inside a media query:
      sm   480px
      md   768px
      lg  1024px

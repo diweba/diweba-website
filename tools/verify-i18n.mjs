@@ -113,16 +113,29 @@ else fail("canonical problems", canonicalErrors.join("\n        "));
 // ---------------------------------------------------------------------------
 // 4. Language switch resolves to the correct sibling
 //    This is bug #2 above, made impossible.
+//
+//    The header renders BOTH languages as .lang-switch links (the current one
+//    marked aria-current="true", a clearer pattern than a single toggle) —
+//    so there are now two elements with this class per page, not one. The
+//    element that actually switches language is identified by its hreflang
+//    attribute, which is set to the OTHER language specifically for this
+//    purpose — unambiguous regardless of DOM order.
 // ---------------------------------------------------------------------------
 const switchErrors = [];
 for (const [url, file] of byUrl) {
   const html = readFileSync(file, "utf8");
-  const m = html.match(/<a[^>]*class="lang-switch"[^>]*href="([^"]+)"/i)
-    || html.match(/<a[^>]*href="([^"]+)"[^>]*class="lang-switch"/i);
-  if (!m) continue; // pages without a header (none yet) are not an error
-
   const isEn = url.startsWith("/en/");
   const otherLang = isEn ? "de" : "en";
+
+  const re = new RegExp(
+    `<a[^>]*class="lang-switch"[^>]*hreflang="${otherLang}"[^>]*href="([^"]+)"` +
+      `|<a[^>]*href="([^"]+)"[^>]*class="lang-switch"[^>]*hreflang="${otherLang}"` +
+      `|<a[^>]*class="lang-switch"[^>]*href="([^"]+)"[^>]*hreflang="${otherLang}"`,
+    "i"
+  );
+  const raw = html.match(re);
+  const m = raw ? [raw[0], raw[1] || raw[2] || raw[3]] : null;
+  if (!m) continue; // pages without a header (none yet) are not an error
 
   // Find the registry entry whose current-language path is this URL.
   const entry = Object.values(routes).find((r) => r[isEn ? "en" : "de"] === url);

@@ -27,9 +27,10 @@ export default {
     home: "Startseite",
 
     nav: {
+      home: "Startseite",
       pricing: "Pakete & Preise",
+      aiSearch: "KI-Sichtbarkeit",
       process: "Ablauf",
-      aiSearch: "KI-Suche",
       about: "Über DIWEBA",
       contact: "Kontakt",
     },
@@ -38,6 +39,12 @@ export default {
       imprint: "Impressum",
       privacy: "Datenschutz",
     },
+
+    /** Reused across header, mobile nav, hero and closing CTA — same target
+     *  (the contact route) with a more action-oriented label than the plain
+     *  "Kontakt" nav link. Matches the design's own dual treatment. */
+    ctaPrimary: "Projekt anfragen",
+    ctaSecondary: "Preise ansehen",
 
     pricePrefix: "ab",
     priceOnce: "einmalig",
@@ -87,9 +94,10 @@ export default {
     home: "Home",
 
     nav: {
+      home: "Home",
       pricing: "Packages & Pricing",
+      aiSearch: "AI visibility",
       process: "Process",
-      aiSearch: "AI Search",
       about: "About DIWEBA",
       contact: "Contact",
     },
@@ -98,6 +106,9 @@ export default {
       imprint: "Imprint",
       privacy: "Privacy",
     },
+
+    ctaPrimary: "Start a project",
+    ctaSecondary: "See pricing",
 
     pricePrefix: "from",
     priceOnce: "one-time",

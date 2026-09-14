@@ -28,20 +28,29 @@
  */
 
 export default {
+  // nav:true and this object's own property order together define the header
+  // nav bar, left to right. Order here matches the approved design source
+  // (DIWEBA/DIWEBA Website.dc.html) exactly: Home, Pricing, AI search,
+  // Process, About. The design's nav also lists "Wissen" (blog) after About
+  // and before Contact — deliberately absent here because the knowledge
+  // section is defined in the content model but not enabled at launch
+  // (spec §3, "deliberately deferred"). Add it back in this position once
+  // that collection ships.
   home: {
     de: "/",
     en: "/en/",
-    nav: false, // the logo links home; it is not a nav item
-  },
-
-  service: {
-    de: "/website-erstellen-lassen/",
-    en: "/en/website-development/",
+    nav: true,
   },
 
   pricing: {
     de: "/pakete-preise/",
     en: "/en/pricing/",
+    nav: true,
+  },
+
+  aiSearch: {
+    de: "/ki-suche-optimierung/",
+    en: "/en/ai-search-optimization/",
     nav: true,
   },
 
@@ -51,21 +60,20 @@ export default {
     nav: true,
   },
 
-  smallBusiness: {
-    de: "/webdesign-kleine-unternehmen/",
-    en: "/en/small-business-web-design/",
-  },
-
-  aiSearch: {
-    de: "/ki-suche-optimierung/",
-    en: "/en/ai-search-optimization/",
-    nav: true,
-  },
-
   about: {
     de: "/ueber-uns/",
     en: "/en/about/",
     nav: true,
+  },
+
+  service: {
+    de: "/website-erstellen-lassen/",
+    en: "/en/website-development/",
+  },
+
+  smallBusiness: {
+    de: "/webdesign-kleine-unternehmen/",
+    en: "/en/small-business-web-design/",
   },
 
   faq: {
@@ -73,11 +81,14 @@ export default {
     en: "/en/faq/",
   },
 
+  // Appears twice in the header, matching the design exactly: once as a plain
+  // nav link (like every other item above) and once as the standalone
+  // "Start a project" CTA button (ui.ctaPrimary), which is not part of the
+  // nav loop and is rendered separately in header/footer/mobile-nav.
   contact: {
     de: "/kontakt/",
     en: "/en/contact/",
     nav: true,
-    cta: true,
   },
 
   // Conversion confirmation. Returns HTTP 200 so the GA4 event registers, but is

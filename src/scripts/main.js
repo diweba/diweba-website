@@ -16,7 +16,7 @@
      with aria-expanded="false" and toggles both that and a class. If this
      script fails to load, the nav is still in the DOM and reachable. */
   const toggle = document.querySelector("[data-nav-toggle]");
-  const nav = document.getElementById("site-nav");
+  const nav = document.getElementById("mobile-nav");
 
   if (toggle && nav) {
     const label = toggle.querySelector(".visually-hidden");

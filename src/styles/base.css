@@ -17,9 +17,7 @@ html {
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -29,7 +27,7 @@ html {
 
 body {
   margin: 0;
-  background: var(--color-bg);
+  background: var(--color-paper);
   color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--text-base);
@@ -38,9 +36,9 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* --- Headings -------------------------------------------------------------
-   Sizes only. Heading LEVEL communicates document structure and must follow a
-   logical order; use a class to change appearance, never the wrong level. */
+/* --- Headings --------------------------------------------------------------
+   Sizes only. Heading LEVEL communicates document structure; use a class to
+   change appearance, never the wrong level. */
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
   font-weight: var(--weight-semibold);
@@ -49,45 +47,34 @@ h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
 }
 
-h1 { font-size: var(--text-4xl); }
-h2 { font-size: var(--text-3xl); }
-h3 { font-size: var(--text-2xl); }
-h4 { font-size: var(--text-xl); }
-h5 { font-size: var(--text-lg); }
-h6 { font-size: var(--text-base); }
-
-@media (max-width: 768px) {
-  h1 { font-size: var(--text-3xl); }
-  h2 { font-size: var(--text-2xl); }
-  h3 { font-size: var(--text-xl); }
-}
+h1 { font-size: var(--text-5xl); }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); }
+h4 { font-size: var(--text-lg); font-weight: var(--weight-semibold); }
+h5 { font-size: var(--text-base); }
+h6 { font-size: var(--text-sm); }
 
 p { margin: 0; max-width: var(--measure); }
 
-/* --- Links ---------------------------------------------------------------- */
+/* --- Links -------------------------------------------------------------- */
 a {
-  color: var(--color-accent);
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
-  text-decoration-thickness: 0.06em;
+  color: var(--color-accent-blue);
+  text-decoration: none;
 }
-
-a:hover { color: var(--color-accent-hover); }
+a:hover { color: var(--color-accent-blue-hover); }
 
 /* Focus is never removed. Visible keyboard focus is a functional requirement. */
 :focus-visible {
   outline: var(--focus-ring-width) solid var(--color-focus);
   outline-offset: var(--focus-ring-offset);
-  border-radius: var(--radius-sm);
 }
 
-/* --- Media ---------------------------------------------------------------- */
+/* --- Media --------------------------------------------------------------- */
 img, picture, video, canvas, svg {
   display: block;
   max-width: 100%;
   height: auto;
 }
-
 /* Images must carry explicit width/height attributes so the browser reserves
    space from the real aspect ratio — this is what keeps CLS at zero. */
 
@@ -96,72 +83,52 @@ input, button, textarea, select {
   font: inherit;
   color: inherit;
 }
-
 button { cursor: pointer; }
 
 /* --- Lists ---------------------------------------------------------------- */
 ul, ol { margin: 0; padding: 0; }
 li { list-style: none; }
 
-/* Prose lists opt back in. */
 .prose ul { list-style: disc; padding-left: var(--space-md); }
 .prose ol { list-style: decimal; padding-left: var(--space-md); }
 .prose li { list-style: inherit; margin-bottom: var(--space-2xs); }
 
-/* --- Tables --------------------------------------------------------------- */
+/* --- Tables ---------------------------------------------------------------- */
 table { border-collapse: collapse; width: 100%; }
 
-/* Wide content scrolls inside its own container so the page body never scrolls
-   sideways. Wrap any table or code block in <div class="scroll-x">. */
 .scroll-x {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 
-/* --- Layout containers ---------------------------------------------------- */
+/* --- Layout containers ------------------------------------------------------
+   The design mockup wraps its preview in a bordered, drop-shadowed "device
+   frame" (simulating a browser window at 1280px). That frame is the mockup
+   TOOL's own chrome, not part of the site — the real page is not meant to
+   look like a screenshot of itself, so no border or shadow is ported here.
+   Only the 1280px content width and the internal border-bottom section
+   dividers (which ARE real design elements) carry over. */
 .container {
   width: 100%;
   max-width: var(--container-max);
   margin-inline: auto;
-  padding-inline: var(--gutter);
 }
 
 .container--narrow { max-width: var(--container-narrow); }
-.container--wide { max-width: var(--container-wide); }
 
-.section { padding-block: var(--section-y); }
-
-/* Vertical rhythm via gap, not stacked margins. */
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-}
-
+/* Layout primitives — spacing via `gap`, never stacked margins (so it cannot
+   silently collapse or double). Used throughout home-body.njk; several
+   sections also set grid-template-columns inline and rely on `.grid` here
+   for the display:grid that makes that inline value take effect. */
+.stack { display: flex; flex-direction: column; gap: var(--space-md); }
 .stack--sm { gap: var(--space-sm); }
 .stack--lg { gap: var(--space-lg); }
-.stack--xl { gap: var(--space-xl); }
 
-.cluster {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-  align-items: center;
-}
+.cluster { display: flex; flex-wrap: wrap; gap: var(--space-sm); align-items: center; }
 
-.grid {
-  display: grid;
-  gap: var(--space-md);
-}
+.grid { display: grid; gap: var(--space-md); }
 
-/* Auto-fitting grid. Items fill the row rather than leaving one stranded. */
-.grid--auto {
-  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-}
-
-/* --- Utilities ------------------------------------------------------------ */
-
-/* Visually hidden but available to assistive technology. */
+/* --- Utilities -------------------------------------------------------------- */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -175,7 +142,6 @@ table { border-collapse: collapse; width: 100%; }
   border: 0;
 }
 
-/* Skip link — first focusable element, visible once focused. */
 .skip-link {
   position: absolute;
   top: 0;
@@ -183,26 +149,26 @@ table { border-collapse: collapse; width: 100%; }
   z-index: 100;
   transform: translateY(-150%);
   padding: var(--space-2xs) var(--space-sm);
-  background: var(--color-accent);
-  color: var(--color-accent-text);
+  background: var(--color-ink);
+  color: var(--color-paper);
   text-decoration: none;
-  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  font-weight: var(--weight-semibold);
   transition: transform var(--duration-fast) var(--easing);
 }
+.skip-link:focus-visible { transform: translateY(0); color: var(--color-paper); }
 
-.skip-link:focus-visible {
-  transform: translateY(0);
-  color: var(--color-accent-text);
-}
-
-/* main receives focus from the skip link but must not show a focus ring when
-   reached that way. */
 main:focus { outline: none; }
 
 .text-soft { color: var(--color-text-soft); }
 .text-faint { color: var(--color-text-faint); }
 .measure { max-width: var(--measure); }
-.measure-narrow { max-width: var(--measure-narrow); }
-
-/* Figures that line up in columns. */
 .tabular { font-variant-numeric: tabular-nums; }
+
+.eyebrow {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+}

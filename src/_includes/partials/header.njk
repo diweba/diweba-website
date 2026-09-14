@@ -1,64 +1,84 @@
 {#
-  Site header.
+  Site header — ported from DIWEBA/DIWEBA Website.dc.html.
+
+  Two independent widgets share the class "site-nav"/"mobile-nav" split at
+  1024px (components.css): a horizontal text nav + CTA button above that
+  width, a hamburger-triggered overlay below it. Both are always present in
+  the DOM — CSS decides which is visible — so the page works with JavaScript
+  disabled (the overlay just never opens; every link in it is still reachable
+  via the always-rendered footer nav).
 
   The language switch resolves the CURRENT page's sibling from the route
-  registry — `routes[routeKey][otherLang]`. It never points at the section index
-  and never derives the URL by string manipulation, which cannot work once slugs
-  are translated (/pakete-preise/ shares no substring with /en/pricing/).
+  registry (`routes[routeKey][otherLang]`) — never a section index, never
+  derived by string manipulation, which cannot work once slugs are translated
+  (/pakete-preise/ shares no substring with /en/pricing/).
 
-  Nav items come from routes.js entries flagged `nav: true`, so adding a page to
-  the navigation is a registry change, not a template edit.
-
-  Every nav item is a real <a href> — never a JavaScript handler — so it is
-  crawlable and works without JS (spec §3).
+  "Kontakt"/"Contact" appears twice, matching the design: once as a plain nav
+  link like every other item, and once as the standalone ctaPrimary button,
+  which is not part of the nav loop.
 #}
 {%- set t = ui[lang] -%}
 {%- set otherLang = "en" if lang == "de" else "de" -%}
 
 <header class="site-header">
-  <div class="container site-header__inner">
+  <div class="container">
+    <div class="site-header__inner">
 
-    <a class="site-header__brand" href="{{ "home" | route(lang) }}">
-      <span class="site-header__brand-name">{{ company.brand }}</span>
-    </a>
+      <a class="site-header__brand" href="{{ "home" | route(lang) }}">
+        <span class="site-header__logo">{% include "partials/logo-mark.njk" %}</span>
+        <span class="site-header__wordmark">
+          <span class="site-header__brand-name">{{ company.brand }}</span>
+          <span class="site-header__underline" aria-hidden="true"></span>
+        </span>
+      </a>
 
-    <button class="site-header__toggle" type="button"
-            aria-expanded="false" aria-controls="site-nav"
-            data-nav-toggle
-            data-label-open="{{ t.menuOpen }}"
-            data-label-close="{{ t.menuClose }}">
-      <span class="visually-hidden">{{ t.menuOpen }}</span>
-      <span class="site-header__toggle-icon" aria-hidden="true"></span>
-    </button>
-
-    <nav id="site-nav" class="site-nav" aria-label="{{ t.mainNavAria }}">
-      <ul class="site-nav__list">
+      <nav class="site-nav" aria-label="{{ t.mainNavAria }}">
         {%- for key, entry in routes %}
-          {%- if entry.nav and not entry.cta %}
-        <li class="site-nav__item">
-          <a class="site-nav__link{% if key == routeKey %} is-current{% endif %}"
-             href="{{ key | route(lang) }}"
-             {% if key == routeKey %}aria-current="page"{% endif %}>{{ t.nav[key] }}</a>
-        </li>
+          {%- if entry.nav %}
+        <a class="site-nav__link" href="{{ key | route(lang) }}"
+           {% if key == routeKey %}aria-current="page"{% endif %}>
+          <span>{{ t.nav[key] }}</span>
+          {%- if key == routeKey %}<span class="site-nav__underline" aria-hidden="true"></span>{% endif %}
+        </a>
           {%- endif %}
         {%- endfor %}
-      </ul>
+      </nav>
 
-      <div class="site-nav__actions">
-        {#- Language switch: sibling page in the other language, from the registry. -#}
-        <a class="lang-switch"
-           href="{{ routes[routeKey][otherLang] }}"
-           hreflang="{{ otherLang }}"
-           lang="{{ otherLang }}"
-           aria-label="{{ t.switchAria }}">{{ t.switchToCode }}</a>
-
-        {%- for key, entry in routes %}
-          {%- if entry.cta %}
-        <a class="btn btn--primary site-nav__cta" href="{{ key | route(lang) }}">{{ t.nav[key] }}</a>
-          {%- endif %}
-        {%- endfor %}
+      <div class="site-header__actions">
+        <div class="lang-switch-group">
+          <a class="lang-switch" href="{{ routes[routeKey][lang] }}" aria-current="true">{{ lang | upper }}</a>
+          <span class="lang-switch-group__divider" aria-hidden="true"></span>
+          <a class="lang-switch" href="{{ routes[routeKey][otherLang] }}" hreflang="{{ otherLang }}" lang="{{ otherLang }}">{{ otherLang | upper }}</a>
+        </div>
+        <a class="btn btn--primary site-header__cta" href="{{ "contact" | route(lang) }}">{{ t.ctaPrimary }}</a>
       </div>
-    </nav>
 
+      <button class="site-header__toggle" type="button"
+              aria-expanded="false" aria-controls="mobile-nav"
+              data-nav-toggle
+              data-label-open="{{ t.menuOpen }}"
+              data-label-close="{{ t.menuClose }}">
+        <span class="visually-hidden">{{ t.menuOpen }}</span>
+        <span class="site-header__toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+
+    </div>
+
+    <nav id="mobile-nav" class="mobile-nav" aria-label="{{ t.mainNavAria }}">
+      {%- for key, entry in routes %}
+        {%- if entry.nav %}
+      <a class="mobile-nav__link" href="{{ key | route(lang) }}"
+         {% if key == routeKey %}aria-current="page"{% endif %}>
+        <span>{{ t.nav[key] }}</span>
+        {%- if key == routeKey %}<span class="mobile-nav__dot" aria-hidden="true"></span>{% endif %}
+      </a>
+        {%- endif %}
+      {%- endfor %}
+      <div class="mobile-nav__langs">
+        <a class="mobile-nav__lang-btn" href="{{ routes[routeKey][lang] }}" aria-current="true">{{ lang | upper }}</a>
+        <a class="mobile-nav__lang-btn" href="{{ routes[routeKey][otherLang] }}" hreflang="{{ otherLang }}" lang="{{ otherLang }}">{{ otherLang | upper }}</a>
+      </div>
+      <a class="btn btn--primary mobile-nav__cta" href="{{ "contact" | route(lang) }}">{{ t.ctaPrimary }}</a>
+    </nav>
   </div>
 </header>

@@ -1,0 +1,205 @@
+{#
+  Homepage body — ported section-for-section from the approved design source
+  (DIWEBA/DIWEBA Website.dc.html, the `isHome` block) via src/_data/home.js.
+  Shared between src/content/de/index.njk and en/index.njk so the markup
+  exists once; only the data (home[lang]) differs.
+
+  Heading structure is a deliberate semantic upgrade over the source, which is
+  an interactive mockup built from styled <div>s with no heading tags at all.
+  Every section below gets a real <h2> (a few get <h3> sub-headings), chosen
+  from whichever of the section's own strings is doing the job of a headline
+  in the visual design — not invented text. See the Phase 2 report for the
+  full mapping. Single H1, no skipped levels.
+
+  Three intentional departures from the literal source markup, all documented
+  in src/_data/home.js: no testimonial cards (dashed bracket-placeholder cards
+  replaced by the design's own honest empty-state copy), no founder photo (the
+  source's image-slot is labelled with a stale demo name, and no real portrait
+  exists), and the "Insight Wert" reference is a genuine <a href> to the real
+  site rather than plain text, since it is a real, verifiable, live project.
+#}
+{%- set t = ui[lang] -%}
+{%- set h = home[lang] -%}
+
+<section class="row row--edge-bottom">
+  <div class="container">
+    <div class="row-grid row-grid--split">
+      <div class="stack stack--sm" style="justify-content:center">
+        <p class="eyebrow" style="color:var(--color-accent-amber)">{{ h.tag }}</p>
+        <h1 style="font-size:var(--text-5xl)">{{ h.hero.h }}</h1>
+        <p class="text-soft measure" style="font-size:var(--text-md);line-height:var(--leading-relaxed)">{{ h.hero.sub }}</p>
+        <div class="cluster" style="margin-top:6px">
+          <a class="btn btn--primary" href="{{ "contact" | route(lang) }}">{{ t.ctaPrimary }}</a>
+          <a class="btn btn--secondary" href="{{ "pricing" | route(lang) }}">{{ t.ctaSecondary }}</a>
+        </div>
+      </div>
+      <div class="stack" style="border-left:1px solid var(--color-ink);padding-left:var(--section-x);justify-content:center">
+        <div class="stat-primary">
+          <span class="stat-primary__n tabular">{{ h.hero.stats[0].n }}</span>
+          <span class="stat-primary__meta">
+            <span class="stat-primary__u">{{ h.hero.stats[0].u }}</span>
+            <span class="stat-primary__d">{{ h.hero.stats[0].d }}</span>
+          </span>
+        </div>
+        <div style="height:2px;background:var(--color-ink)"></div>
+        <div class="grid" style="grid-template-columns:1fr 1fr">
+          <div>
+            <div class="stat-secondary__n tabular">{{ h.hero.stats[1].n }}</div>
+            <div class="stat-secondary__u">{{ h.hero.stats[1].u }}</div>
+            <div class="stat-secondary__d">{{ h.hero.stats[1].d }}</div>
+          </div>
+          <div style="border-left:1px solid var(--color-border);padding-left:var(--space-md)">
+            <div class="stat-secondary__n tabular">{{ h.hero.stats[2].n }}</div>
+            <div class="stat-secondary__u">{{ h.hero.stats[2].u }}</div>
+            <div class="stat-secondary__d">{{ h.hero.stats[2].d }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="row--ink">
+  <div class="container">
+    <div class="row row--no-border">
+      <h2 class="eyebrow" style="color:var(--color-accent-amber);margin-bottom:var(--space-md)">{{ h.refs.builtLabel }}</h2>
+      <div class="row-grid row-grid--2" style="margin-bottom:var(--space-lg)">
+        {%- for b in h.refs.built %}
+        <div class="ref-card">
+          <div class="ref-card__head">
+            <h3 class="ref-card__name">{{ b.n }}</h3>
+            {%- if b.href %}
+            <a class="ref-card__url" href="{{ b.href }}">{{ b.url }}</a>
+            {%- else %}
+            <span class="ref-card__url">{{ b.url }}</span>
+            {%- endif %}
+          </div>
+          <span class="ref-card__tag">{{ b.tag }}</span>
+          <p class="ref-card__desc">{{ b.d }}</p>
+        </div>
+        {%- endfor %}
+      </div>
+
+      <h3 class="eyebrow" style="color:var(--color-accent-amber);margin-bottom:var(--space-2xs)">{{ h.refs.voicesLabel }}</h3>
+      <p style="font-size:var(--text-base);color:oklch(0.75 0.01 255);max-width:42em">{{ h.refs.voicesNote }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="proof-note" style="margin-block:clamp(1.375rem, 3vw, 2.5rem);margin-inline:var(--section-x)">
+    <div class="proof-note__left">
+      <h2 class="proof-note__heading">{{ h.refs.honestH }}</h2>
+      <span class="proof-note__pay">{{ h.refs.payLine }}</span>
+    </div>
+    <div class="proof-note__right">
+      <p class="proof-note__body">{{ h.refs.honestBody }}</p>
+      <a class="btn btn--inverse" style="align-self:flex-start" href="{{ "contact" | route(lang) }}">{{ t.ctaPrimary }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="row">
+  <div class="container">
+    <div class="row-grid row-grid--2">
+      <div class="stack stack--sm">
+        <h2 class="eyebrow">{{ h.problemLabel }}</h2>
+        <p class="text-soft" style="font-size:var(--text-md);line-height:var(--leading-loose)">{{ h.problem }}</p>
+      </div>
+      <div class="stack stack--sm">
+        <h2 class="eyebrow">{{ h.solutionLabel }}</h2>
+        <p style="font-size:var(--text-lg);line-height:var(--leading-relaxed);letter-spacing:var(--tracking-snug)">{{ h.solution }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="row row--sunk">
+  <div class="container stack stack--sm">
+    <p class="eyebrow" style="color:var(--color-accent-amber)">{{ h.aiBand.label }}</p>
+    <h2 style="font-size:var(--text-4xl);max-width:22em">{{ h.aiBand.h }}</h2>
+    <p class="text-soft" style="font-size:var(--text-lg);line-height:var(--leading-relaxed);max-width:44em">{{ h.aiBand.body }}</p>
+    <a href="{{ "aiSearch" | route(lang) }}" style="font-size:var(--text-md);font-weight:var(--weight-semibold);border-bottom:2px solid var(--color-accent-blue);align-self:flex-start;padding-bottom:3px;margin-top:6px">{{ h.aiBand.link }} →</a>
+  </div>
+</section>
+
+<section class="row">
+  <div class="container">
+    <h2 style="margin-bottom:var(--space-lg)">{{ h.whyLabel }}</h2>
+    <div class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(20.625rem, 1fr))">
+      {%- for w in h.why %}
+      <div class="why-row">
+        <span class="why-row__num tabular">{{ loop.index }}</span>
+        <div class="stack" style="gap:5px">
+          <h3 class="why-row__title">{{ w.t }}</h3>
+          <p class="why-row__desc">{{ w.d }}</p>
+        </div>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="row">
+  <div class="container row-grid row-grid--split" style="align-items:start">
+    <h2 style="font-size:var(--text-3xl)">{{ h.aiPos.h }}</h2>
+    <p class="text-soft" style="font-size:var(--text-md);line-height:var(--leading-loose)">{{ h.aiPos.body }}</p>
+  </div>
+</section>
+
+<section class="row row--sunk">
+  <div class="container">
+    <div class="stack" style="max-width:40rem">
+      <p class="eyebrow">{{ h.founder.label }}</p>
+      <h2 style="font-size:var(--text-2xl)">{{ h.founder.h }}</h2>
+      <p class="text-soft" style="font-size:var(--text-md);line-height:var(--leading-relaxed)">{{ h.founder.body }}</p>
+      <div class="stack" style="gap:2px;margin-top:4px">
+        <span style="font-size:var(--text-md);font-weight:var(--weight-semibold)">{{ company.legalName }}</span>
+        <span class="eyebrow" style="color:var(--color-text-faint)">{{ h.founder.role }}</span>
+      </div>
+      <p class="text-faint" style="font-size:var(--text-sm)">{{ h.founder.note }}</p>
+      <a href="{{ "about" | route(lang) }}" style="font-size:var(--text-md);font-weight:var(--weight-semibold);border-bottom:2px solid var(--color-accent-blue);align-self:flex-start;padding-bottom:3px;margin-top:4px">{{ t.nav.about }} →</a>
+    </div>
+  </div>
+</section>
+
+<section class="row">
+  <div class="container">
+    <h2 style="margin-bottom:var(--space-lg)">{{ h.process.label }}</h2>
+    <div class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(14.375rem, 1fr))">
+      {%- for step in h.process.steps %}
+      <div class="process-step">
+        <span class="process-step__num tabular">{{ loop.index }}</span>
+        <div class="process-step__rule" aria-hidden="true"></div>
+        <h3 class="process-step__title">{{ step.t }}</h3>
+        <span class="process-step__dur">{{ step.dur }}</span>
+        <p class="process-step__desc">{{ step.d }}</p>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="row row--sunk">
+  <div class="container">
+    <h2 style="margin-bottom:var(--space-lg)">{{ h.faqLabel }}</h2>
+    <div class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(21.25rem, 1fr));gap:var(--space-lg) clamp(1.75rem, 4vw, 4rem)">
+      {%- for f in h.faq %}
+      <div class="faq-entry">
+        <h3 class="faq-entry__q">{{ f.q }}</h3>
+        <p class="faq-entry__a">{{ f.a }}</p>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="row row--edge-top row--no-border">
+  <div class="container cluster" style="justify-content:space-between;align-items:center">
+    <div class="stack" style="gap:8px">
+      <h2 style="font-size:var(--text-3xl);max-width:20em">{{ h.finalH }}</h2>
+      <p class="text-soft" style="font-size:var(--text-base)">{{ h.finalSub }}</p>
+    </div>
+    <a class="btn btn--primary" href="{{ "contact" | route(lang) }}">{{ t.ctaPrimary }}</a>
+  </div>
+</section>
