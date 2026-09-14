@@ -406,6 +406,28 @@ recording whether DIWEBA is *mentioned, cited, recommended, misrepresented or ab
 which third-party domains appear instead. Presence, readiness and business impact tracked
 separately rather than collapsed into a single score.
 
+### llms.txt (added Phase 2.5) — optional, explicitly not an SEO requirement
+
+`/llms.txt` (`src/llms.njk`) is a curated, machine-readable summary of DIWEBA: identity,
+founder, packages and current pricing, scope boundaries, and links to every public page in
+both languages. It is generated from the same registries as everything else — `routes.js`
+for URLs, `packages.js` for pricing, `company.js` for identity — so it cannot drift from the
+sitemap or the nav the way a hand-maintained duplicate would.
+
+**Status, stated precisely because it is easy to overclaim:**
+
+- Google Search does not require llms.txt.
+- Google has said it has no positive or negative effect on Google Search visibility or
+  rankings — it is not part of the ranking system in any documented way.
+- It is maintained regardless, because other AI/agent tooling may consume it, and because a
+  registry-generated file costs nothing to keep in sync.
+
+No public page, and no future documentation, should describe llms.txt as required for SEO,
+required for AI Overviews or AI Mode, a ranking factor, or a guarantee of inclusion in any
+AI system's output. The core SEO foundation this document defines elsewhere — crawlability,
+semantic HTML, real internal linking, accurate structured data (§10-§12) — is what does the
+actual work; llms.txt is a convenience layer next to it, not a substitute for it.
+
 ---
 
 ## 12. Final structured-data strategy

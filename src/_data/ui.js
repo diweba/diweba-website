@@ -23,8 +23,20 @@ export default {
     menuClose: "Menü schließen",
     mainNavAria: "Hauptnavigation",
     footerNavAria: "Fußzeilen-Navigation",
+    /** Distinguishes the footer's second <nav> (legal links) from the first
+     *  (page links) — both used t.footerNavAria until Phase 2.5's audit,
+     *  which left two landmarks on the page with an identical accessible
+     *  name and nothing to tell them apart in a screen reader's landmark
+     *  list. */
+    footerLegalNavAria: "Rechtliches",
     breadcrumbAria: "Brotkrumen-Navigation",
     home: "Startseite",
+
+    /** Language-switch links render bare "DE"/"EN" text (see header.njk,
+     *  footer.njk) — visually unambiguous next to each other, but "DE" alone
+     *  conveys nothing to a screen reader out of that visual context. These
+     *  back an aria-label on every such link, current and other alike. */
+    currentLanguage: "Aktuelle Sprache: Deutsch",
 
     nav: {
       home: "Startseite",
@@ -90,8 +102,11 @@ export default {
     menuClose: "Close menu",
     mainNavAria: "Main navigation",
     footerNavAria: "Footer navigation",
+    footerLegalNavAria: "Legal",
     breadcrumbAria: "Breadcrumb",
     home: "Home",
+
+    currentLanguage: "Current language: English",
 
     nav: {
       home: "Home",

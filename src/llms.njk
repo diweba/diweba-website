@@ -1,0 +1,85 @@
+---
+permalink: /llms.txt
+eleventyExcludeFromCollections: true
+---
+{#
+  ============================================================================
+  llms.txt — optional AI/agent-readiness layer. NOT an SEO or ranking signal.
+  ============================================================================
+
+  STATUS, DOCUMENTED PRECISELY (see docs/DIWEBA_PHASE_0_SPEC.md and CLAUDE.md
+  for the long version; this is the short version, next to the code):
+
+    - Google Search does NOT require llms.txt.
+    - Google has stated llms.txt has NO positive or negative effect on Google
+      Search visibility or rankings.
+    - It is maintained anyway because other AI/agent systems may read it, and
+      because it costs nothing to keep accurate once it exists.
+
+  Never let copy describing this file (here or on any public page) claim it
+  is required for SEO, required for AI Overviews or AI Mode, a ranking
+  factor, or any kind of guarantee of AI or ChatGPT visibility. The site's
+  actual SEO foundation is unchanged by this file: crawlable HTML, semantic
+  structure, real internal links, and accurate structured data (spec §10-12).
+
+  SOURCE OF TRUTH, NOT A SECOND ONE
+  Every URL and price below is pulled from the same registries the rest of
+  the site already uses -- routes.js for URLs, packages.js for pricing,
+  company.js for identity. Nothing here is a hand-typed duplicate that could
+  drift from the sitemap, the nav, or the pricing page. The few sentences of
+  prose are excerpts of copy already approved and already rendered elsewhere
+  (src/_data/home.js, DIWEBA/diweba-site.js's "oneThing" scope statement) --
+  nothing here is written fresh for this file.
+
+  Mirrors robots.txt's environment behaviour: a non-production build emits a
+  minimal stub rather than the real content, so a preview deploy never
+  exposes production URLs or gets treated as the canonical file by anything
+  that fetches it.
+#}
+{%- set extraLabels = {
+  de: { service: "Website erstellen lassen", smallBusiness: "Webdesign für kleine Unternehmen", faq: "Häufige Fragen" },
+  en: { service: "Website Development", smallBusiness: "Small Business Web Design", faq: "FAQ" }
+} -%}
+{%- if site.indexable -%}
+# {{ company.brand }}
+
+> {{ home.de.tag }} — {{ home.de.hero.sub }}
+
+{{ company.brand }} builds fixed-price, fixed-scope websites for small and medium businesses in Germany and Europe. Founded and operated by {{ company.legalName }}, who also built [Insight Wert](https://insightwert.de/de/), a marketing data analytics project — the same techniques and the same person behind both.
+
+Scope is deliberately narrow: {{ company.brand }} builds one thing, websites that bring inquiries. Not included: online shops, booking systems, customer accounts, or custom software — these are separate trades, and {{ company.brand }} says so upfront rather than overselling.
+
+## Packages
+
+Exactly two, both fixed-scope and fixed-price. No third package exists.
+
+{%- for item in packages.items %}
+- **{{ item.name }}** — {{ item.priceOnce | price("de", packages.currency) }} one-time + {{ item.priceMonthly | price("de", packages.currency) }}/month operation. {{ item.summary.en }}
+{%- endfor %}
+
+All prices exclude VAT. Prices and scope are authoritative on the pricing page; this file is a summary, not the source.
+
+## Pages (German — primary)
+
+{%- for key, entry in routes %}
+{%- if not entry.noindex %}
+- [{{ (ui.de.nav[key] or ui.de.legal[key] or extraLabels.de[key]) | safe }}]({{ entry.de | absolute(site.url) }})
+{%- endif %}
+{%- endfor %}
+
+## Pages (English)
+
+{%- for key, entry in routes %}
+{%- if not entry.noindex %}
+- [{{ (ui.en.nav[key] or ui.en.legal[key] or extraLabels.en[key]) | safe }}]({{ entry.en | absolute(site.url) }})
+{%- endif %}
+{%- endfor %}
+
+## Contact
+
+{{ company.email }}
+{%- else -%}
+# {{ company.brand }} ({{ site.env }} build — not for indexing)
+
+This is a non-production build. The real llms.txt is only published from the production deployment.
+{%- endif %}

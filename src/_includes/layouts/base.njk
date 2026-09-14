@@ -71,8 +71,25 @@
 
     {#- Fonts are self-hosted (spec §13): no request to Google's font servers,
         which would transmit visitor IPs and add a third-party round trip.
-        The face itself is chosen with the design direction — until then the
-        token stack falls back to system fonts. See src/styles/tokens.css. -#}
+        Archivo + IBM Plex Mono, ported from the approved design (see
+        tokens.css's @font-face block for the full provenance note).
+
+        Preloaded (Phase 2.5, agent-readiness audit): all three files below
+        render above-the-fold content on every page built so far — Archivo
+        for the H1/body, IBM Plex Mono 400 for eyebrow labels, IBM Plex Mono
+        500 for the hero's secondary stat figures. font-display:swap avoids
+        invisible text while waiting, but without a preload hint the request
+        only starts once the stylesheet is parsed and the glyph is actually
+        needed — late enough to cause a visible swap-driven reflow, which is
+        exactly the kind of avoidable layout shift the audit was checking
+        for. Only the "latin" subset is preloaded, not "latin-ext": German
+        content (this site's primary language) sits entirely within the
+        "latin" unicode-range (U+0000-00FF covers ä/ö/ü/ß), so latin-ext is
+        never actually requested — preloading it would reserve bandwidth on
+        the critical path for a file no visitor triggers. -#}
+    <link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/assets/fonts/ibm-plex-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/assets/fonts/ibm-plex-mono-500-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="/assets/css/tokens.css">
     <link rel="stylesheet" href="/assets/css/base.css">
     <link rel="stylesheet" href="/assets/css/components.css">

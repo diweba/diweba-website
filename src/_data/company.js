@@ -34,8 +34,13 @@ export default {
 
   // --- Unresolved — must not be published ----------------------------------
 
-  /** Required by §5 DDG for the Impressum. BLOCKS LAUNCH. */
-  email: null,
+  /**
+   * Confirmed 2026 (Phase 2.5 instruction). This was the single most-cited
+   * blocker through Phase 0-2: it gates the Impressum (§5 DDG) and the
+   * Organization JSON-LD contactPoint. Both now resolve automatically from
+   * this one value — nothing else needed to change.
+   */
+  email: "hello@diweba.de",
 
   /** Optional for the site; affects ContactPoint schema and Google Business Profile. */
   phone: null,

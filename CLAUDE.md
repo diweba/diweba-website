@@ -152,6 +152,26 @@ improved and what cannot be guaranteed.
 **Never do:** keyword stuffing, doorway/city pages, near-duplicate pages, FAQ schema
 everywhere, hidden text, or copy written to sound "AI-readable".
 
+### llms.txt — optional, not an SEO requirement
+
+`/llms.txt` exists (`src/llms.njk`, added Phase 2.5). Get the framing right whenever this
+comes up, because it is easy to overstate:
+
+- **Google Search does not require it.** Google has stated it has no positive or negative
+  effect on Google Search visibility or rankings.
+- It is maintained anyway because other AI/agent systems may read it, and because — once
+  it's generated from the route registry, packages, and company data instead of hand-typed —
+  it costs nothing to keep accurate.
+- **Never** describe it on a public page, in a commit, or in a conversation as required for
+  SEO, required for AI Overviews/AI Mode, a ranking factor, or any guarantee of AI or
+  ChatGPT visibility. It is a curated summary, not a mechanism that produces citations.
+
+The site's actual SEO foundation does not change because this file exists: crawlable HTML,
+semantic structure, real internal links, and accurate structured data (the principles above)
+remain the whole story. llms.txt sits alongside `robots.txt` and `sitemap.xml` as one more
+generated, registry-sourced file — see `src/llms.njk`'s header comment for the exact
+provenance of every line it outputs.
+
 ---
 
 ## Technical architecture

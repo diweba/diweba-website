@@ -46,9 +46,9 @@
 
       <div class="site-header__actions">
         <div class="lang-switch-group">
-          <a class="lang-switch" href="{{ routes[routeKey][lang] }}" aria-current="true">{{ lang | upper }}</a>
+          <a class="lang-switch" href="{{ routes[routeKey][lang] }}" aria-current="true" aria-label="{{ t.currentLanguage }}">{{ lang | upper }}</a>
           <span class="lang-switch-group__divider" aria-hidden="true"></span>
-          <a class="lang-switch" href="{{ routes[routeKey][otherLang] }}" hreflang="{{ otherLang }}" lang="{{ otherLang }}">{{ otherLang | upper }}</a>
+          <a class="lang-switch" href="{{ routes[routeKey][otherLang] }}" hreflang="{{ otherLang }}" lang="{{ otherLang }}" aria-label="{{ t.switchAria }}">{{ otherLang | upper }}</a>
         </div>
         <a class="btn btn--primary site-header__cta" href="{{ "contact" | route(lang) }}">{{ t.ctaPrimary }}</a>
       </div>
@@ -75,8 +75,8 @@
         {%- endif %}
       {%- endfor %}
       <div class="mobile-nav__langs">
-        <a class="mobile-nav__lang-btn" href="{{ routes[routeKey][lang] }}" aria-current="true">{{ lang | upper }}</a>
-        <a class="mobile-nav__lang-btn" href="{{ routes[routeKey][otherLang] }}" hreflang="{{ otherLang }}" lang="{{ otherLang }}">{{ otherLang | upper }}</a>
+        <a class="mobile-nav__lang-btn" href="{{ routes[routeKey][lang] }}" aria-current="true" aria-label="{{ t.currentLanguage }}">{{ lang | upper }}</a>
+        <a class="mobile-nav__lang-btn" href="{{ routes[routeKey][otherLang] }}" hreflang="{{ otherLang }}" lang="{{ otherLang }}" aria-label="{{ t.switchAria }}">{{ otherLang | upper }}</a>
       </div>
       <a class="btn btn--primary mobile-nav__cta" href="{{ "contact" | route(lang) }}">{{ t.ctaPrimary }}</a>
     </nav>

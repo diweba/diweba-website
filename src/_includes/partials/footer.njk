@@ -10,6 +10,11 @@
   The address is shown only when `publishAddressPublicly` is true — see
   company.js and spec §12 for why that is a separate decision from the
   Impressum's legal requirement to state it somewhere on the site.
+
+  Two <nav> landmarks below use DIFFERENT aria-labels (footerNavAria vs.
+  footerLegalNavAria) on purpose — Phase 2.5's agent-readiness audit found
+  both using the same label, which leaves a screen reader's landmark list
+  showing "Fußzeilen-Navigation" twice with nothing to tell them apart.
 #}
 {%- set t = ui[lang] -%}
 {%- set otherLang = "en" if lang == "de" else "de" -%}
@@ -35,16 +40,16 @@
     {%- endfor %}
   </nav>
 
-  <nav class="site-footer__col" aria-label="{{ t.footerNavAria }}">
+  <nav class="site-footer__col" aria-label="{{ t.footerLegalNavAria }}">
     {%- for key, entry in routes %}
       {%- if entry.legal %}
     <a class="site-footer__link" href="{{ key | route(lang) }}">{{ t.legal[key] }}</a>
       {%- endif %}
     {%- endfor %}
     <div class="site-footer__langs">
-      <a href="{{ routes[routeKey][lang] }}" aria-current="true">{{ lang | upper }}</a>
+      <a href="{{ routes[routeKey][lang] }}" aria-current="true" aria-label="{{ t.currentLanguage }}">{{ lang | upper }}</a>
       <span class="site-footer__langs-divider" aria-hidden="true"></span>
-      <a href="{{ routes[routeKey][otherLang] }}" hreflang="{{ otherLang }}" lang="{{ otherLang }}">{{ otherLang | upper }}</a>
+      <a href="{{ routes[routeKey][otherLang] }}" hreflang="{{ otherLang }}" lang="{{ otherLang }}" aria-label="{{ t.switchAria }}">{{ otherLang | upper }}</a>
     </div>
   </nav>
 </footer>
