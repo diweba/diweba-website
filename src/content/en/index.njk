@@ -1,0 +1,29 @@
+---
+routeKey: home
+title: "DIWEBA — Fixed-price websites"
+description: "DIWEBA builds websites for small and medium businesses at a fixed price with a fixed scope."
+---
+{#
+  FOUNDATION SEED PAGE — not the real homepage. See the German counterpart.
+  Replaced in Phase 3 with CMS-driven content and the chosen design direction.
+#}
+<section class="section">
+  <div class="container">
+    <div class="stack">
+      <h1>Fixed-price websites</h1>
+      <p class="text-soft measure">
+        DIWEBA builds websites for small and medium businesses — with a fixed
+        scope and a fixed price.
+      </p>
+
+      <div class="cluster">
+        <a class="btn btn--primary" href="{{ "pricing" | route(lang) }}">
+          {{ ui[lang].nav.pricing }}
+        </a>
+        <a class="btn btn--secondary" href="{{ "contact" | route(lang) }}">
+          {{ ui[lang].nav.contact }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

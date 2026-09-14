@@ -1,0 +1,43 @@
+# Build output — regenerated on every build, never edit or commit
+_site/
+.eleventy-cache/
+
+# Dependencies
+node_modules/
+
+# Secrets — NEVER commit. .env.example documents the variable names instead.
+.env
+.env.*
+!.env.example
+
+# Cloudflare
+.wrangler/
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# Legacy design-tool exports kept for reference, not part of the build.
+# DIWEBA/ holds the Claude Design canvases, contract templates and the legacy
+# copy deck. It contains DEMO DATA (Schreinerei Baumann) that must never be
+# published — see CLAUDE.md. Excluded from the repo to remove any chance of it
+# being deployed or mistaken for source content.
+DIWEBA/
+DIWEBA.zip
+
+# Stray assets from the InsightWert project that were sitting in this folder
+# before the repo existed. Not DIWEBA content and not part of the build (the
+# build input is src/). Left on disk untouched rather than deleted — they belong
+# to another project and are not this repo's to remove.
+/assets/

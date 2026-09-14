@@ -1,0 +1,46 @@
+---
+permalink: /404.html
+lang: de
+routeKey: home
+noindex: true
+sitemap: false
+eleventyExcludeFromCollections: true
+title: "Seite nicht gefunden — DIWEBA"
+description: "Diese Seite existiert nicht oder wurde verschoben."
+layout: layouts/base.njk
+---
+{#
+  Bilingual 404.
+
+  Cloudflare serves this for unmatched routes with a genuine 404 status — the
+  Worker sets the status code; serving it as 200 would let Google index an error
+  page (spec §10).
+
+  Both languages appear because the failed URL may be in either, and a German-only
+  error page is unhelpful to an English visitor who mistyped a /en/ path.
+
+  routeKey is `home` purely so the layout's canonical/hreflang machinery has a
+  valid entry to resolve; the page itself is noindex and excluded from the
+  sitemap, so neither is used for indexing.
+#}
+<section class="section">
+  <div class="container container--narrow">
+    <div class="stack stack--lg">
+
+      <div class="stack">
+        <h1>{{ ui.de.error404.title }}</h1>
+        <p class="text-soft">{{ ui.de.error404.body }}</p>
+        <p><a class="btn btn--primary" href="{{ routes.home.de }}">{{ ui.de.error404.back }}</a></p>
+      </div>
+
+      <hr>
+
+      <div class="stack" lang="en">
+        <h2>{{ ui.en.error404.title }}</h2>
+        <p class="text-soft">{{ ui.en.error404.body }}</p>
+        <p><a class="btn btn--secondary" href="{{ routes.home.en }}">{{ ui.en.error404.back }}</a></p>
+      </div>
+
+    </div>
+  </div>
+</section>

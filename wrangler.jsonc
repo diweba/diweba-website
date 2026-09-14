@@ -1,0 +1,69 @@
+{
+  // DIWEBA — Cloudflare Worker deployment configuration.
+  //
+  // NO SECRETS IN THIS FILE. It is committed to the repository.
+  // Secrets are set with:  wrangler secret put <NAME>
+  // Local Worker dev reads them from .dev.vars (gitignored).
+  //
+  // The `vars` block below is for NON-SECRET values only.
+
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "diweba-site",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+
+  "assets": {
+    // Eleventy build output.
+    "directory": "./_site",
+    "binding": "ASSETS",
+    // Serve /path/ from /path/index.html and normalise the trailing slash, which
+    // is the canonical form the route registry uses.
+    "html_handling": "auto-trailing-slash",
+    // The Worker converts this into a real 404 with the error page.
+    "not_found_handling": "none",
+    // Assets are served without invoking the Worker unless the path matches an
+    // API route, so static delivery stays at edge speed.
+    "run_worker_first": ["/api/*"]
+  },
+
+  "kv_namespaces": [
+    {
+      // Per-IP rate limit for the contact endpoint.
+      // CREATE BEFORE FIRST DEPLOY:  wrangler kv namespace create RATE_LIMIT
+      // then paste the returned id here.
+      "binding": "RATE_LIMIT",
+      "id": "PLACEHOLDER_CREATE_WITH_WRANGLER_KV_NAMESPACE_CREATE"
+    }
+  ],
+
+  "vars": {
+    // Non-secret, non-environment-specific defaults.
+    // SITE_URL and SITE_ENV are supplied per environment below.
+  },
+
+  "env": {
+    "production": {
+      "vars": {
+        "SITE_URL": "https://diweba.de",
+        "SITE_ENV": "production"
+      }
+      // "routes": [{ "pattern": "diweba.de/*", "zone_name": "diweba.de" }]
+      // ^ Enable once DNS has moved to Cloudflare. The domain is currently
+      //   parked at IONOS (spec §18).
+    },
+
+    "preview": {
+      "vars": {
+        "SITE_ENV": "preview"
+      }
+      // Preview must be noindex + robots-disallowed + access-controlled.
+      // SITE_ENV=preview already forces noindex site-wide and disables
+      // analytics; access control is configured in the Cloudflare dashboard.
+    }
+  },
+
+  "observability": {
+    "enabled": true
+  }
+}

@@ -1,0 +1,36 @@
+# Cloudflare edge headers.
+#
+# Each blank-line-separated block is a URL pattern followed by indented header
+# lines, applied to static-asset responses. It does NOT apply to responses the
+# Worker generates itself (the form endpoint, redirects) — those set their own.
+#
+# NOTE ON CSP: no Content-Security-Policy is set yet. GTM and Usercentrics both
+# inject scripts and require specific allowances, and a CSP written before those
+# are configured would either break the CMP or be so permissive it is
+# decorative. It is added in Phase 6 alongside the real analytics setup, and
+# verified against a live consent flow (spec §14).
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
+
+# Self-hosted fonts are immutable and content-stable. Filenames are NOT
+# content-hashed, so if a face is ever replaced, RENAME the file rather than
+# overwriting it — otherwise browsers keep the cached copy for up to a year.
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# CSS and JS are not fingerprinted yet. A short cache keeps deploys visible
+# without a hard refresh. Revisit if/when asset hashing is added.
+/assets/css/*
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/assets/js/*
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# CMS interface — never indexed, never cached.
+/admin/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store

@@ -1,0 +1,50 @@
+{#
+  Site footer.
+
+  The legal-entity block prints ONLY confirmed facts. Contact email, telephone,
+  Rechtsform and tax details are null in src/_data/company.js and are not
+  rendered here — see that file for why they are null rather than placeholders.
+
+  The address is shown only when `publishAddressPublicly` is true. It is a
+  private residential address: it must appear in the Impressum by law, but
+  publishing it in the footer is a separate, deliberate decision (spec §12).
+#}
+{%- set t = ui[lang] -%}
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+
+    <div class="site-footer__identity">
+      <span class="site-footer__brand">{{ company.brand }}</span>
+      <p class="site-footer__legal-name">{{ company.legalName }}</p>
+      {%- if company.publishAddressPublicly %}
+      <address class="site-footer__address">
+        {{ company.address.street }}<br>
+        {{ company.address.postalCode }} {{ company.address.city }}<br>
+        {{ company.address.country }}
+      </address>
+      {%- endif %}
+    </div>
+
+    <nav class="site-footer__nav" aria-label="{{ t.footerNavAria }}">
+      <ul class="site-footer__list">
+        {%- for key, entry in routes %}
+          {%- if not entry.noindex and not entry.legal and key != "home" %}
+        <li><a href="{{ key | route(lang) }}">{{ t.nav[key] or key }}</a></li>
+          {%- endif %}
+        {%- endfor %}
+      </ul>
+
+      <ul class="site-footer__list site-footer__list--legal">
+        {%- for key, entry in routes %}
+          {%- if entry.legal %}
+        <li><a href="{{ key | route(lang) }}">{{ t.legal[key] }}</a></li>
+          {%- endif %}
+        {%- endfor %}
+      </ul>
+    </nav>
+
+    <p class="site-footer__copyright">&copy; {% year %} {{ company.brand }}</p>
+
+  </div>
+</footer>

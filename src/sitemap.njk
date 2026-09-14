@@ -1,0 +1,35 @@
+---
+permalink: /sitemap.xml
+eleventyExcludeFromCollections: true
+---
+{#
+  XML sitemap — canonical, indexable URLs only.
+
+  Driven by the route registry, so it cannot drift from the pages that actually
+  exist. Excluded automatically:
+    - routes flagged noindex (thank-you pages)
+    - /admin/ (not in the registry at all)
+    - 404
+  Each entry carries its xhtml:link alternates, which is the sitemap-level
+  counterpart to the on-page hreflang cluster.
+
+  Emitted only for production builds; a preview sitemap would invite indexing.
+#}
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+{%- if site.indexable -%}
+{%- for key, entry in routes %}
+{%- if not entry.noindex %}
+{%- for lang in site.languages %}
+  <url>
+    <loc>{{ entry[lang] | absolute(site.url) }}</loc>
+    <xhtml:link rel="alternate" hreflang="de" href="{{ entry.de | absolute(site.url) }}"/>
+    <xhtml:link rel="alternate" hreflang="en" href="{{ entry.en | absolute(site.url) }}"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ entry.de | absolute(site.url) }}"/>
+  </url>
+{%- endfor %}
+{%- endif %}
+{%- endfor %}
+{%- endif %}
+</urlset>

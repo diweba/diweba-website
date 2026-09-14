@@ -1,0 +1,33 @@
+{
+  // DIWEBA — TypeScript configuration.
+  //
+  // SCOPE: the Cloudflare Worker only. Templates are Nunjucks and the Eleventy
+  // config and build tooling are plain ESM JavaScript — see docs §7 for why a
+  // typed component layer is not used here.
+  //
+  // This config type-checks; it does not emit. Wrangler compiles the Worker
+  // itself at deploy time.
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["@cloudflare/workers-types"],
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "exactOptionalPropertyTypes": false,
+
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "noEmit": true
+  },
+  "include": ["worker/**/*.ts"],
+  "exclude": ["node_modules", "_site"]
+}

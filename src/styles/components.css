@@ -1,0 +1,403 @@
+/* ============================================================================
+   DIWEBA — COMPONENT PRIMITIVES
+   ============================================================================
+
+   The reusable pieces the pages will be assembled from in Phase 3: buttons,
+   links, form controls, cards, navigation, breadcrumbs.
+
+   NOT page layouts. No hero, no pricing table, no homepage sections — those
+   arrive with the chosen design direction.
+
+   Specificity is kept flat (single class, one level deep) so that direction-
+   specific styles can override cleanly without !important or selector wars.
+   ========================================================================= */
+
+/* ---------------------------------------------------------------------------
+   Buttons
+   Minimum target 44×44px in every variant — WCAG 2.2 AA, not negotiable.
+   --------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xs);
+  min-height: var(--target-min);
+  padding: var(--space-2xs) var(--space-md);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background-color var(--duration-fast) var(--easing),
+    border-color var(--duration-fast) var(--easing),
+    color var(--duration-fast) var(--easing);
+}
+
+.btn--primary {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-accent-text);
+}
+
+.btn--primary:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  color: var(--color-accent-text);
+}
+
+.btn--secondary {
+  background: var(--color-surface);
+  border-color: var(--color-border-strong);
+  color: var(--color-text);
+}
+
+.btn--secondary:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--color-accent);
+}
+
+.btn--ghost:hover { background: var(--color-accent-soft); }
+
+.btn[aria-disabled="true"],
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ---------------------------------------------------------------------------
+   Header / navigation
+   --------------------------------------------------------------------------- */
+.site-header {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  min-height: 4rem;
+}
+
+.site-header__brand {
+  font-weight: var(--weight-bold);
+  font-size: var(--text-lg);
+  letter-spacing: var(--tracking-tight);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.site-header__toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--target-min);
+  height: var(--target-min);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.site-nav__list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.site-nav__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-min);
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
+  text-decoration: none;
+}
+
+.site-nav__link:hover,
+.site-nav__link.is-current {
+  color: var(--color-text);
+}
+
+.site-nav__link.is-current { font-weight: var(--weight-medium); }
+
+.site-nav__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Language switch — a real link to the sibling page, never a dropdown that
+   needs JavaScript to resolve a destination. */
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--target-min);
+  min-height: var(--target-min);
+  padding-inline: var(--space-2xs);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+}
+
+.lang-switch:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+@media (max-width: 768px) {
+  .site-header__toggle { display: inline-flex; }
+
+  .site-nav {
+    display: none;
+    position: absolute;
+    inset-inline: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--gutter);
+    background: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .site-nav.is-open { display: flex; }
+  .site-nav__list { flex-direction: column; align-items: stretch; gap: 0; }
+  .site-header__inner { position: relative; flex-wrap: wrap; }
+}
+
+/* ---------------------------------------------------------------------------
+   Breadcrumbs — visible trail matching BreadcrumbList structured data.
+   --------------------------------------------------------------------------- */
+.breadcrumb__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-size: var(--text-sm);
+  color: var(--color-text-faint);
+}
+
+.breadcrumb__item { display: flex; align-items: center; gap: var(--space-2xs); }
+
+.breadcrumb__item + .breadcrumb__item::before {
+  content: "/";
+  color: var(--color-border-strong);
+}
+
+.breadcrumb__link { color: var(--color-text-soft); }
+
+/* ---------------------------------------------------------------------------
+   Cards
+   Border, fill and shadow are spent by role, not stamped on every block.
+   --------------------------------------------------------------------------- */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.card--raised {
+  border-color: transparent;
+  box-shadow: var(--shadow-md);
+}
+
+.card--accent { border-color: var(--color-accent); }
+
+.card__title { font-size: var(--text-xl); }
+
+.card__body {
+  color: var(--color-text-soft);
+  font-size: var(--text-base);
+}
+
+/* ---------------------------------------------------------------------------
+   Forms
+   Every control has a visible, associated <label>. Placeholders are never used
+   as labels. Errors are announced, not only coloured.
+   --------------------------------------------------------------------------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+}
+
+.field__label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+}
+
+.field__hint {
+  font-size: var(--text-sm);
+  color: var(--color-text-faint);
+}
+
+.field__required {
+  color: var(--color-error);
+  margin-inline-start: 0.15em;
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  min-height: var(--target-min);
+  padding: var(--space-2xs) var(--space-xs);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  color: var(--color-text);
+}
+
+.textarea {
+  min-height: 8rem;
+  resize: vertical;
+  line-height: var(--leading-normal);
+}
+
+.input:hover,
+.textarea:hover,
+.select:hover { border-color: var(--color-text-faint); }
+
+/* State is carried by more than colour: the border weight changes too, so the
+   cue survives for users who cannot distinguish the hue. */
+.input[aria-invalid="true"],
+.textarea[aria-invalid="true"],
+.select[aria-invalid="true"] {
+  border-color: var(--color-error);
+  border-width: 2px;
+}
+
+.field__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3xs);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-error);
+}
+
+/* Honeypot. Hidden from sight and from assistive technology, but present in the
+   DOM for bots to fill. Never display:none — some bots skip those. */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form-status {
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+}
+
+.form-status--error {
+  background: var(--color-error-soft);
+  color: var(--color-error);
+}
+
+.form-status--success {
+  background: var(--color-success-soft);
+  color: var(--color-success);
+}
+
+/* ---------------------------------------------------------------------------
+   Footer
+   --------------------------------------------------------------------------- */
+.site-footer {
+  margin-top: var(--section-y);
+  padding-block: var(--space-xl);
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  font-size: var(--text-sm);
+}
+
+.site-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  justify-content: space-between;
+}
+
+.site-footer__brand {
+  font-weight: var(--weight-bold);
+  font-size: var(--text-base);
+}
+
+.site-footer__legal-name { color: var(--color-text-soft); }
+
+.site-footer__address {
+  color: var(--color-text-soft);
+  font-style: normal;
+}
+
+.site-footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xl);
+}
+
+.site-footer__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.site-footer__list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  color: var(--color-text-soft);
+  text-decoration: none;
+}
+
+.site-footer__list a:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.site-footer__copyright {
+  width: 100%;
+  color: var(--color-text-faint);
+  font-size: var(--text-xs);
+}
+
+/* ---------------------------------------------------------------------------
+   Prose — long-form content blocks from the CMS.
+   --------------------------------------------------------------------------- */
+.prose {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: var(--measure);
+}
+
+.prose > h2 { margin-top: var(--space-lg); }
+.prose > h3 { margin-top: var(--space-md); }
+.prose > :first-child { margin-top: 0; }

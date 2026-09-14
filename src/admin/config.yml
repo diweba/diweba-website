@@ -1,0 +1,84 @@
+# ============================================================================
+# DIWEBA — Sveltia CMS configuration
+# ============================================================================
+#
+# PHASE 1 SCAFFOLD. Collections here cover only what Phase 1 actually builds.
+# The full content model (packages, FAQs, process steps, case studies,
+# knowledge) arrives in Phase 2 alongside the templates that consume it.
+#
+# *** THE RULE THAT MATTERS MOST ***
+# A git-based CMS SILENTLY DROPS front-matter keys that are not declared here.
+# If `routeKey` were undeclared, the first time the owner saved a page the key
+# would vanish, the permalink would fail to resolve, and the build would break —
+# with no error at save time. Every key a template reads must be declared:
+# editable ones as typed widgets, structural ones as `hidden`.
+#
+# tools/verify-cms-config.mjs (Phase 2) cross-checks this file against the
+# actual front matter in src/content/ and fails CI on any undeclared key.
+#
+# NEVER PUT IN THE CMS:
+#   - consent or analytics configuration (spec §8)
+#   - API keys or any secret
+#   - anything under src/_data/company.js — legal facts are not content
+
+backend:
+  name: github
+  # TODO(Phase 2): replace with the real repository once it exists on GitHub.
+  repo: OWNER/REPO
+  branch: main
+  # Commits from the CMS land on main, which triggers the deploy workflow.
+
+# Editorial workflow is intentionally OFF for a single owner-operator: it adds a
+# PR review step that nobody would review. Revisit if more editors are added.
+publish_mode: simple
+
+media_folder: "src/assets/img/uploads"
+public_folder: "/assets/img/uploads"
+
+# --- Internationalisation ---------------------------------------------------
+# German and English are separate files under src/content/<lang>/, matching the
+# directory structure the build already uses.
+i18n:
+  structure: multiple_folders
+  locales: [de, en]
+  default_locale: de
+
+collections:
+  # --------------------------------------------------------------------------
+  # Pages — the eleven core routes.
+  # Phase 1 has only the homepage; the rest are added with their templates.
+  # --------------------------------------------------------------------------
+  - name: pages
+    label: "Seiten"
+    label_singular: "Seite"
+    i18n: true
+    files:
+      - name: home
+        label: "Startseite"
+        file: "src/content/{{locale}}/index.njk"
+        i18n: true
+        fields:
+          # --- Editable ---------------------------------------------------
+          - { name: title, label: "SEO-Titel", widget: string, i18n: true }
+          - {
+              name: description,
+              label: "Meta-Beschreibung",
+              widget: text,
+              i18n: true,
+              hint: "Rund 150–160 Zeichen. Erscheint in Suchergebnissen.",
+            }
+          - {
+              name: ogImage,
+              label: "Social-Bild",
+              widget: image,
+              required: false,
+              i18n: true,
+            }
+          - { name: body, label: "Inhalt", widget: markdown, i18n: true }
+
+          # --- Structural: hidden, but MUST be declared --------------------
+          # Undeclared keys are destroyed on save. See the note at the top.
+          - { name: routeKey, widget: hidden }
+          - { name: layout, widget: hidden, required: false }
+          - { name: lang, widget: hidden, required: false }
+          - { name: noindex, widget: hidden, required: false }

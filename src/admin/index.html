@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Never indexed. Also enforced in robots.txt and src/_headers. -->
+  <meta name="robots" content="noindex, nofollow">
+  <title>DIWEBA — Content</title>
+</head>
+<body>
+  <!--
+    Sveltia CMS.
+
+    Git-based: edits are committed to the repository, which triggers the GitHub
+    Actions build and deploy. The public site stays statically generated — the
+    CMS never renders anything to visitors (spec §5, §7).
+
+    PHASE 2 completes this. The collections in config.yml currently cover only
+    what Phase 1 actually has. Adding a collection before its content model and
+    templates exist would create fields that write front matter nothing reads.
+
+    AUTHENTICATION: Sveltia authenticates via GitHub. It needs a GitHub OAuth
+    app (or the Sveltia-hosted auth flow) configured against this repository
+    before login will work — see docs/DIWEBA_PHASE_0_SPEC.md §5.
+  -->
+  <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js" type="module"></script>
+</body>
+</html>

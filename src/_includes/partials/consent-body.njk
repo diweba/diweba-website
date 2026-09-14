@@ -1,0 +1,9 @@
+{#
+  GTM <noscript> fallback. Must be the first element inside <body>.
+  Renders only when analytics is configured AND enabled — see consent-head.njk
+  for the single integration point and the full ordering rationale.
+#}
+{%- if site.analytics.enabled %}
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ site.analytics.gtmId }}"
+    height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe></noscript>
+{%- endif %}

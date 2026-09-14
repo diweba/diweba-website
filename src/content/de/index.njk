@@ -1,0 +1,37 @@
+---
+routeKey: home
+title: "DIWEBA — Websites zum Festpreis"
+description: "DIWEBA baut Websites für kleine und mittlere Unternehmen zum Festpreis mit festem Leistungsumfang."
+---
+{#
+  FOUNDATION SEED PAGE — not the real homepage.
+
+  Phase 1 builds the foundation only. This page exists to prove that routing,
+  i18n, the language switch, metadata generation and the layout chain work
+  end-to-end. It carries the minimum viable copy and no marketing claims.
+
+  The real homepage is built in Phase 3, from CMS content, once the chosen
+  design direction and the outstanding business decisions are available.
+
+  Nothing here may be treated as approved copy.
+#}
+<section class="section">
+  <div class="container">
+    <div class="stack">
+      <h1>Websites zum Festpreis</h1>
+      <p class="text-soft measure">
+        DIWEBA baut Websites für kleine und mittlere Unternehmen — mit festem
+        Leistungsumfang und festem Preis.
+      </p>
+
+      <div class="cluster">
+        <a class="btn btn--primary" href="{{ "pricing" | route(lang) }}">
+          {{ ui[lang].nav.pricing }}
+        </a>
+        <a class="btn btn--secondary" href="{{ "contact" | route(lang) }}">
+          {{ ui[lang].nav.contact }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

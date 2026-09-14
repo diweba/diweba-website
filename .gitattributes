@@ -1,0 +1,16 @@
+# Normalise line endings so the repo is consistent regardless of contributor OS.
+# Without this, a Windows checkout commits CRLF and every file looks modified on
+# a Linux CI runner.
+* text=auto eol=lf
+
+# Binary — never normalise.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
+*.zip binary

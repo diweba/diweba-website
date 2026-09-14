@@ -1,0 +1,117 @@
+# ============================================================================
+# DIWEBA — build, verify, deploy
+# ============================================================================
+#
+# WHY THIS IS MANDATORY, NOT A CONVENIENCE (spec §16)
+# The CMS commits directly to `main`. With manual deployment the owner would
+# save a change in Sveltia and nothing would appear until a developer ran a
+# command — which defeats the purpose of having a CMS. Automated deploy on push
+# is therefore a hard requirement of the CMS decision.
+#
+# The verification suite runs BEFORE deploy and blocks it on failure, so a bad
+# content edit cannot reach production.
+#
+# SECRETS — set as repository secrets, never in this file:
+#   CLOUDFLARE_API_TOKEN    scoped to Workers deploy + zone settings write
+#   CLOUDFLARE_ACCOUNT_ID
+#
+# BUILD-TIME CONFIG — set as repository *variables* (public by design, they end
+# up in the HTML):
+#   SITE_URL, USERCENTRICS_SETTINGS_ID, GTM_CONTAINER_ID,
+#   GA4_MEASUREMENT_ID, TURNSTILE_SITE_KEY
+#
+# Leaving the analytics variables unset is valid: the consent block renders
+# nothing and the site builds and deploys normally.
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  # A rapid series of CMS saves should not race each other onto production.
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Type-check Worker
+        run: npm run worker:types
+
+      - name: Build
+        env:
+          # Pull requests build as preview: noindex site-wide, analytics off.
+          SITE_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+          SITE_URL: ${{ vars.SITE_URL }}
+          USERCENTRICS_SETTINGS_ID: ${{ vars.USERCENTRICS_SETTINGS_ID }}
+          GTM_CONTAINER_ID: ${{ vars.GTM_CONTAINER_ID }}
+          GA4_MEASUREMENT_ID: ${{ vars.GA4_MEASUREMENT_ID }}
+          TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
+        run: npm run build
+
+      - name: Verify
+        run: npm run verify
+
+      - name: Upload build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: _site
+          retention-days: 7
+
+  deploy:
+    name: Deploy to Cloudflare
+    needs: build
+    # Only main deploys. Pull requests build and verify but never publish.
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build
+        env:
+          SITE_ENV: production
+          SITE_URL: ${{ vars.SITE_URL }}
+          USERCENTRICS_SETTINGS_ID: ${{ vars.USERCENTRICS_SETTINGS_ID }}
+          GTM_CONTAINER_ID: ${{ vars.GTM_CONTAINER_ID }}
+          GA4_MEASUREMENT_ID: ${{ vars.GA4_MEASUREMENT_ID }}
+          TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
+        run: npm run build
+
+      - name: Verify
+        run: npm run verify
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --env production

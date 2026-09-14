@@ -1,0 +1,114 @@
+{#
+  ============================================================================
+  CONSENT + ANALYTICS — the only integration point for these IDs
+  ============================================================================
+
+  *** THIS IS WHERE GTM / GA4 / USERCENTRICS ARE WIRED IN. ***
+
+  No identifier is hardcoded here. All three come from environment variables,
+  surfaced through src/_data/site.js. To activate analytics:
+
+      1. Put the values in `.env` (local) or GitHub Actions variables (CI):
+
+             USERCENTRICS_SETTINGS_ID=...      from the Usercentrics admin UI
+             GTM_CONTAINER_ID=GTM-XXXXXXX
+             GA4_MEASUREMENT_ID=G-XXXXXXXXXX   (configured inside GTM;
+                                                recorded for the privacy policy)
+
+      2. Set SITE_ENV=production.
+
+      3. Rebuild. This partial then emits the blocks below, in order.
+
+  Until BOTH the Usercentrics ID and the GTM ID exist, this partial renders
+  NOTHING AT ALL. That is deliberate:
+
+      - A half-configured state is worse than none. GTM without a CMP would load
+        Google tags with no way to collect consent.
+      - There is no stub, no fake banner and no placeholder consent system. The
+        spec forbids implementing a fake consent mechanism, and a stub would give
+        a false sense that consent had been handled.
+
+  Analytics also stays off outside production even when IDs are present, so
+  preview traffic never reaches the real GA4 property (see site.analytics.enabled).
+
+  ---------------------------------------------------------------------------
+  ORDER IS LOAD-BEARING — DO NOT REORDER (spec §8)
+  ---------------------------------------------------------------------------
+      1. <meta charset>              in base.njk, above this include
+      2. Consent Mode v2 defaults    THIS FILE, first
+      3. Usercentrics CMP loader     THIS FILE, second
+      4. GTM container               THIS FILE, third
+
+  GTM is itself a Google tag: it starts evaluating triggers the moment it loads.
+  Consent Mode only works if the "nothing consented yet" state is already in the
+  dataLayer before anything reads it. Usercentrics must initialise before GTM so
+  a returning visitor's stored decision is applied rather than raced.
+
+  On a comparable project this exact ordering bug shipped: the CMP was delivered
+  as a tag *inside* GTM, so it could only run after GTM had already begun firing.
+  Measured result: analytics scripts loading before any consent decision.
+
+  ---------------------------------------------------------------------------
+  CONSENT MODE GATES GOOGLE TAGS ONLY
+  ---------------------------------------------------------------------------
+  Consent Mode v2 governs Google tags. It does NOT gate non-Google scripts —
+  Meta Pixel, LinkedIn Insight, Microsoft Clarity and similar fire regardless of
+  consent state unless each is given an explicit consent-based trigger in GTM or
+  is blocked by Usercentrics directly. If any such tag is added later it must be
+  gated explicitly and re-verified on a fresh visit.
+
+  ---------------------------------------------------------------------------
+  DEFAULTS ARE NOT INVENTED
+  ---------------------------------------------------------------------------
+  Everything denied except security_storage, plus ads_data_redaction. This is the
+  most restrictive starting state; the CMP relaxes it only on an explicit
+  decision. wait_for_update gives the CMP time to report a stored decision before
+  Google tags act on the defaults.
+
+  Google Ads in the EEA requires Consent Mode v2, so this is a prerequisite for
+  the planned acquisition campaigns, not optional compliance decoration.
+
+  ---------------------------------------------------------------------------
+  NOT CMS-EDITABLE
+  ---------------------------------------------------------------------------
+  Consent configuration must never become editable content. Which tags require
+  which consent category is managed in GTM and Usercentrics by the owner.
+
+  LOCAL DEVELOPMENT: Usercentrics validates the requesting domain against an
+  allow-list and throws CMP_NOT_ALLOWED on localhost. Consent behaviour cannot be
+  verified locally — it needs an allow-listed preview domain (spec §15).
+#}
+{%- if site.analytics.enabled %}
+    <!-- Consent Mode v2 defaults - must run before any Google tag -->
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied',
+        'functionality_storage': 'denied',
+        'personalization_storage': 'denied',
+        'security_storage': 'granted',
+        'wait_for_update': 500
+    });
+    gtag('set', 'ads_data_redaction', true);
+    </script>
+    <!-- End Consent Mode v2 defaults -->
+
+    <!-- Usercentrics CMP - must load before GTM -->
+    <script id="usercentrics-cmp"
+            src="https://web.cmp.usercentrics.eu/ui/loader.js"
+            data-settings-id="{{ site.analytics.usercentricsId }}"
+            async></script>
+    <!-- End Usercentrics CMP -->
+
+    <!-- Google Tag Manager - must come after the CMP -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','{{ site.analytics.gtmId }}');</script>
+    <!-- End Google Tag Manager -->
+{%- endif %}

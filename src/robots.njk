@@ -1,0 +1,42 @@
+---
+permalink: /robots.txt
+eleventyExcludeFromCollections: true
+---
+{#
+  robots.txt — generated, not hand-maintained.
+
+  Search and AI crawlers must NOT be blocked (spec §10, §11). OAI-SearchBot is
+  named explicitly because OpenAI's publisher documentation states that blocking
+  it removes the site from ChatGPT Search citations — the opposite of the goal.
+
+  Non-production builds disallow everything. An indexable staging site is an SEO
+  incident, and this makes that impossible by default rather than by remembering
+  (spec §15).
+#}
+{%- if site.indexable -%}
+# {{ company.brand }} — {{ site.url }}
+
+User-agent: *
+Allow: /
+
+# Search crawlers — explicitly permitted.
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# AI search. Blocking this removes the site from ChatGPT Search citations.
+User-agent: OAI-SearchBot
+Allow: /
+
+# CMS interface. Not content; excluded from indexing and from the sitemap.
+User-agent: *
+Disallow: /admin/
+
+Sitemap: {{ site.url }}/sitemap.xml
+{%- else -%}
+# Non-production build ({{ site.env }}). Indexing disabled.
+User-agent: *
+Disallow: /
+{%- endif %}

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:developers.google.com)",
+      "Bash(find / -maxdepth 6 -iname \"*diweba*\" -type d 2>/dev/null)",
+      "Bash(kill %1)",
+      "Bash(jobs)"
+    ]
+  }
+}

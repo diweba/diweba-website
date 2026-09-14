@@ -1,0 +1,144 @@
+/* ============================================================================
+   DIWEBA — DESIGN TOKENS
+   ============================================================================
+
+   THE ONLY FILE THAT DEFINES A RAW VALUE.
+
+   base.css and components.css reference these custom properties and never
+   declare a literal colour, font stack, or spacing value. That is what makes a
+   re-skin a token change rather than a component rewrite — which is the
+   mechanism behind the reusable client-site model (spec §17).
+
+   The visual direction (A Blueprint / B Plainspoken Trust / C Proof-Led) is NOT
+   chosen yet. The values below are a deliberately neutral, accessible starting
+   point — not a design. When the direction is selected, this file is what
+   changes; components stay untouched.
+
+   Contrast: every text/background pair defined here meets WCAG 2.2 AA
+   (≥ 4.5:1 body, ≥ 3:1 large text and UI boundaries). Verify again after any
+   palette change — accessibility is a functional requirement here (spec §13).
+   ========================================================================= */
+
+:root {
+  /* --- Typography ----------------------------------------------------------
+     Self-hosted faces only; no Google Fonts (spec §13) — a request to Google's
+     font servers transmits visitor IPs and adds a third-party round trip.
+     The actual face ships with the design direction. Until then these resolve
+     to the system stack, which costs nothing and renders instantly.
+     TO ADD A FACE: drop woff2 files in src/assets/fonts/, declare @font-face
+     here, and put the family name at the front of the stack below. */
+  --font-sans:
+    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  /* Type scale — 1.200 (minor third). Body stays 16px minimum on mobile. */
+  --text-xs: 0.8125rem;   /* 13px — captions, legal fine print */
+  --text-sm: 0.9375rem;   /* 15px — secondary UI */
+  --text-base: 1rem;      /* 16px — body floor, never smaller */
+  --text-lg: 1.125rem;    /* 18px — lead paragraphs */
+  --text-xl: 1.375rem;    /* 22px */
+  --text-2xl: 1.75rem;    /* 28px */
+  --text-3xl: 2.25rem;    /* 36px */
+  --text-4xl: 3rem;       /* 48px */
+
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.75;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.08em;   /* uppercase labels only */
+
+  /* Running text stays near 65 characters. */
+  --measure: 65ch;
+  --measure-narrow: 48ch;
+
+  /* --- Spacing -------------------------------------------------------------
+     4px base. Used with flex/grid `gap`, not per-element margins, so sibling
+     spacing cannot collapse or double. */
+  --space-3xs: 0.25rem;   /*  4px */
+  --space-2xs: 0.5rem;    /*  8px */
+  --space-xs: 0.75rem;    /* 12px */
+  --space-sm: 1rem;       /* 16px */
+  --space-md: 1.5rem;     /* 24px */
+  --space-lg: 2rem;       /* 32px */
+  --space-xl: 3rem;       /* 48px */
+  --space-2xl: 4rem;      /* 64px */
+  --space-3xl: 6rem;      /* 96px */
+
+  /* Section rhythm, fluid between mobile and desktop. */
+  --section-y: clamp(3rem, 8vw, 6rem);
+
+  /* --- Layout -------------------------------------------------------------- */
+  --container-max: 72rem;      /* 1152px */
+  --container-narrow: 48rem;   /* 768px — prose */
+  --container-wide: 84rem;     /* 1344px */
+  --gutter: clamp(1rem, 4vw, 2rem);   /* never below 16px at any width */
+
+  /* --- Radius & elevation -------------------------------------------------- */
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+
+  --shadow-sm: 0 1px 2px rgb(16 20 26 / 6%), 0 1px 1px rgb(16 20 26 / 4%);
+  --shadow-md: 0 2px 8px rgb(16 20 26 / 8%), 0 1px 3px rgb(16 20 26 / 6%);
+
+  /* --- Colour -------------------------------------------------------------
+     Neutrals carry a slight cool bias toward the accent so they read as chosen
+     rather than inherited. */
+  --color-bg: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-surface-sunk: #eef0f4;
+
+  --color-text: #16191f;
+  --color-text-soft: #4a515c;
+  --color-text-faint: #767e8b;
+  --color-text-invert: #ffffff;
+
+  --color-border: #dde1e7;
+  --color-border-strong: #c3c9d2;
+
+  --color-accent: #0b5fa5;
+  --color-accent-hover: #094d86;
+  --color-accent-soft: #e8f0f8;
+  --color-accent-text: #ffffff;
+
+  /* Semantic — separate from the accent, used for state only. */
+  --color-success: #0f6b45;
+  --color-success-soft: #e3f1ea;
+  --color-warning: #92560a;
+  --color-warning-soft: #fbf0dd;
+  --color-error: #a82c22;
+  --color-error-soft: #fbe9e7;
+
+  --color-focus: #0b5fa5;
+
+  /* --- Motion -------------------------------------------------------------- */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --easing: cubic-bezier(0.2, 0, 0.2, 1);
+
+  /* --- Accessibility ------------------------------------------------------- */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  /* WCAG 2.2 AA minimum interactive target. Never reduce. */
+  --target-min: 44px;
+}
+
+/* Breakpoints, for reference — CSS custom properties cannot be used in media
+   queries, so these values are repeated literally in base.css/components.css.
+   Keep them in sync with this list:
+     sm   480px
+     md   768px
+     lg  1024px
+     xl  1280px  */

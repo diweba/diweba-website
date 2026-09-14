@@ -1,0 +1,64 @@
+{#
+  Site header.
+
+  The language switch resolves the CURRENT page's sibling from the route
+  registry — `routes[routeKey][otherLang]`. It never points at the section index
+  and never derives the URL by string manipulation, which cannot work once slugs
+  are translated (/pakete-preise/ shares no substring with /en/pricing/).
+
+  Nav items come from routes.js entries flagged `nav: true`, so adding a page to
+  the navigation is a registry change, not a template edit.
+
+  Every nav item is a real <a href> — never a JavaScript handler — so it is
+  crawlable and works without JS (spec §3).
+#}
+{%- set t = ui[lang] -%}
+{%- set otherLang = "en" if lang == "de" else "de" -%}
+
+<header class="site-header">
+  <div class="container site-header__inner">
+
+    <a class="site-header__brand" href="{{ "home" | route(lang) }}">
+      <span class="site-header__brand-name">{{ company.brand }}</span>
+    </a>
+
+    <button class="site-header__toggle" type="button"
+            aria-expanded="false" aria-controls="site-nav"
+            data-nav-toggle
+            data-label-open="{{ t.menuOpen }}"
+            data-label-close="{{ t.menuClose }}">
+      <span class="visually-hidden">{{ t.menuOpen }}</span>
+      <span class="site-header__toggle-icon" aria-hidden="true"></span>
+    </button>
+
+    <nav id="site-nav" class="site-nav" aria-label="{{ t.mainNavAria }}">
+      <ul class="site-nav__list">
+        {%- for key, entry in routes %}
+          {%- if entry.nav and not entry.cta %}
+        <li class="site-nav__item">
+          <a class="site-nav__link{% if key == routeKey %} is-current{% endif %}"
+             href="{{ key | route(lang) }}"
+             {% if key == routeKey %}aria-current="page"{% endif %}>{{ t.nav[key] }}</a>
+        </li>
+          {%- endif %}
+        {%- endfor %}
+      </ul>
+
+      <div class="site-nav__actions">
+        {#- Language switch: sibling page in the other language, from the registry. -#}
+        <a class="lang-switch"
+           href="{{ routes[routeKey][otherLang] }}"
+           hreflang="{{ otherLang }}"
+           lang="{{ otherLang }}"
+           aria-label="{{ t.switchAria }}">{{ t.switchToCode }}</a>
+
+        {%- for key, entry in routes %}
+          {%- if entry.cta %}
+        <a class="btn btn--primary site-nav__cta" href="{{ key | route(lang) }}">{{ t.nav[key] }}</a>
+          {%- endif %}
+        {%- endfor %}
+      </div>
+    </nav>
+
+  </div>
+</header>

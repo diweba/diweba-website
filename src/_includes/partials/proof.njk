@@ -1,0 +1,61 @@
+{#
+  ============================================================================
+  CUSTOMER PROOF SLOT — FAILS SAFE, EMPTY BY DEFAULT
+  ============================================================================
+
+  DIWEBA has NO verified customer proof. See CLAUDE.md and spec §1.
+
+  This partial exists so that verified proof can be added later without
+  restructuring the page. It currently renders NOTHING — no heading, no
+  container, no skeleton, no "coming soon", no hidden element. There is no
+  placeholder in the DOM for a crawler, a screen reader or an AI system to find
+  and misread as a real claim.
+
+  Hiding an empty section with CSS would still put it in the markup. Emitting
+  nothing is the only version that cannot leak.
+
+  TWO GATES BEFORE ANYTHING RENDERS. An entry appears only when BOTH are true:
+
+      verified_by_client  — the client has confirmed the facts are accurate
+      consent_on_file     — written permission to publish their name/logo exists
+
+  Both default to false. Publishing unverified proof therefore requires two
+  deliberate acts, neither of which can happen by accident.
+
+  *** PROHIBITED FOREVER ***
+  The "Schreinerei Baumann" material in DIWEBA/diweba-copy.js and the contract
+  templates under DIWEBA/ is DEMO DATA from a proposal template, not a real
+  customer. Its supporting documents carry placeholder legal text, a dummy SEPA
+  creditor ID and a fake tax number. It must never appear on this website as a
+  testimonial, case study, metric, review or client reference.
+
+  Never generate an example to "show how it would look". If proof is requested
+  and none exists, say so.
+#}
+{%- set verified = [] -%}
+{%- for item in (caseStudies or []) -%}
+  {%- if item.verified_by_client and item.consent_on_file -%}
+    {%- set verified = (verified.push(item), verified) -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if verified.length %}
+<section class="proof" aria-labelledby="proof-heading">
+  <div class="container">
+    <h2 id="proof-heading" class="proof__heading">{{ proofHeading }}</h2>
+    <ul class="proof__list">
+      {%- for item in verified %}
+      <li class="proof__item">
+        <blockquote class="proof__quote">
+          <p>{{ item.quote[lang] }}</p>
+          <footer class="proof__attribution">
+            <cite>{{ item.attribution }}</cite>
+            {%- if item.client %}<span class="proof__client">{{ item.client }}</span>{% endif %}
+          </footer>
+        </blockquote>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+{%- endif %}

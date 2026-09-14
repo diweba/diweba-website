@@ -1,0 +1,102 @@
+{#
+  ============================================================================
+  DIWEBA — base layout
+  ============================================================================
+
+  Every page passes through here. Required front matter:
+
+    routeKey    key in src/_data/routes.js  (drives permalink, canonical,
+                hreflang and the language switch)
+    lang        "de" | "en"
+    title       <title> text
+    description meta description
+
+  Optional:
+    noindex     true to exclude from indexing
+    ogImage     social card override
+    jsonld      array of structured-data objects
+    bodyClass   extra class on <body>
+
+  HEAD ORDER IS LOAD-BEARING — see spec §8. Do not reorder:
+    1. <meta charset>            within the first 1024 bytes
+    2. Consent Mode v2 defaults  before any Google tag reads the dataLayer
+    3. Usercentrics loader       before GTM, so a stored decision is applied
+    4. GTM container             last; GTM is itself a Google tag
+  A meta tag executes nothing, so charset sitting above the consent block does
+  not affect script execution order.
+#}
+{%- set t = ui[lang] -%}
+{%- set self = routes[routeKey] -%}
+{%- set canonicalPath = self[lang] -%}
+<!doctype html>
+<html lang="{{ t.htmlLang }}">
+<head>
+    <meta charset="utf-8">
+{% include "partials/consent-head.njk" %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{{ title }}</title>
+    <meta name="description" content="{{ description }}">
+
+    {#- Indexability. Non-production builds are noindex site-wide regardless of
+        page settings: an indexable staging site is an SEO incident (spec §15). -#}
+    {%- if noindex or self.noindex or not site.indexable %}
+    <meta name="robots" content="noindex, nofollow">
+    {%- else %}
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    {%- endif %}
+
+    <link rel="canonical" href="{{ canonicalPath | absolute(site.url) }}">
+
+    {#- hreflang. Emitted from the route registry so the cluster is always
+        reciprocal, and only for pages that are actually indexable. -#}
+    {%- if not self.noindex and site.indexable %}
+    <link rel="alternate" hreflang="de" href="{{ self.de | absolute(site.url) }}">
+    <link rel="alternate" hreflang="en" href="{{ self.en | absolute(site.url) }}">
+    <link rel="alternate" hreflang="x-default" href="{{ self.de | absolute(site.url) }}">
+    {%- endif %}
+
+    {#- Open Graph / social -#}
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ company.brand }}">
+    <meta property="og:locale" content="{{ "de_DE" if lang == "de" else "en_GB" }}">
+    <meta property="og:title" content="{{ title }}">
+    <meta property="og:description" content="{{ description }}">
+    <meta property="og:url" content="{{ canonicalPath | absolute(site.url) }}">
+    <meta property="og:image" content="{{ (ogImage or site.defaultOgImage) | absolute(site.url) }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ title }}">
+    <meta name="twitter:description" content="{{ description }}">
+    <meta name="twitter:image" content="{{ (ogImage or site.defaultOgImage) | absolute(site.url) }}">
+
+    {#- Fonts are self-hosted (spec §13): no request to Google's font servers,
+        which would transmit visitor IPs and add a third-party round trip.
+        The face itself is chosen with the design direction — until then the
+        token stack falls back to system fonts. See src/styles/tokens.css. -#}
+    <link rel="stylesheet" href="/assets/css/tokens.css">
+    <link rel="stylesheet" href="/assets/css/base.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+
+    <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+
+    {%- for block in jsonld %}
+    <script type="application/ld+json">{{ block | jsonld | safe }}</script>
+    {%- endfor %}
+</head>
+
+<body class="{{ bodyClass }}">
+{% include "partials/consent-body.njk" %}
+
+    <a class="skip-link" href="#main">{{ t.skipToContent }}</a>
+
+{% include "partials/header.njk" %}
+
+    <main id="main" tabindex="-1">
+        {{ content | safe }}
+    </main>
+
+{% include "partials/footer.njk" %}
+
+    <script src="/assets/js/main.js" defer></script>
+</body>
+</html>
