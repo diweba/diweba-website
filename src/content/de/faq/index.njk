@@ -1,0 +1,44 @@
+---
+routeKey: faq
+title: "Häufige Fragen zu Preis, Ablauf und Betrieb | DIWEBA"
+description: "Alle Antworten zu Preis, Cookie-Banner, Vertragsbindung, Eigentum an der Website und was mit einer bestehenden Seite passiert — neun ehrliche Antworten."
+---
+{#
+  /faq/ — the complete 9-item list, ported from src/_data/faq.js (a direct
+  port of DIWEBA/diweba-site.js's `faq.items`). Not part of the design's own
+  navigation (the design never had a dedicated FAQ page — see faq.js and
+  processPage.js headers), but a real, linkable page the homepage and
+  process page both point to.
+#}
+{%- set t = ui[lang] -%}
+{%- set f = faq[lang] -%}
+{#- No separate approved eyebrow/H1 pair exists for a standalone FAQ page
+    (the design never had one) -- f.label serves both roles, matching how
+    the homepage's own Why/Process/FAQ sections already reuse one label as
+    both the small eyebrow tag and the section heading. Nothing invented. -#}
+{%- set heroEyebrow = f.label -%}
+{%- set heroH1 = f.label -%}
+{% include "partials/page-hero.njk" %}
+
+<section class="row row--no-border">
+  <div class="container">
+    <div class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(21.25rem, 1fr));gap:var(--space-lg) clamp(1.75rem, 4vw, 4rem)">
+      {%- for item in f.items %}
+      <div class="faq-entry">
+        <h2 class="faq-entry__q" style="font-size:var(--text-xl)">{{ item.q }}</h2>
+        <p class="faq-entry__a">{{ item.a }}</p>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="row row--edge-top row--no-border">
+  <div class="container cluster" style="justify-content:space-between;align-items:center">
+    <div class="stack" style="gap:8px">
+      <h2 style="font-size:var(--text-3xl);max-width:20em">{{ home.de.finalH }}</h2>
+      <p class="text-soft" style="font-size:var(--text-base)">{{ home.de.finalSub }}</p>
+    </div>
+    <a class="btn btn--primary" href="{{ "contact" | route(lang) }}">{{ t.ctaPrimary }}</a>
+  </div>
+</section>

@@ -107,6 +107,9 @@
     <a class="skip-link" href="#main">{{ t.skipToContent }}</a>
 
 {% include "partials/header.njk" %}
+{%- if routeKey != "home" %}
+{% include "partials/breadcrumbs.njk" %}
+{%- endif %}
 
     <main id="main" tabindex="-1">
         {{ content | safe }}
@@ -115,5 +118,11 @@
 {% include "partials/footer.njk" %}
 
     <script src="/assets/js/main.js" defer></script>
+{%- if routeKey == "pricing" %}
+    {#- Page-specific, not global (spec §13: minimal JavaScript) -- only the
+        pricing page's live configurator needs this; every other page's JS
+        payload is unaffected. See scripts/configurator.js. -#}
+    <script src="/assets/js/configurator.js" defer></script>
+{%- endif %}
 </body>
 </html>

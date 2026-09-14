@@ -45,6 +45,10 @@ export default {
       process: "Ablauf",
       about: "Über DIWEBA",
       contact: "Kontakt",
+      /** Not a nav:true route (routes.js) -- this label is used only by the
+       *  breadcrumb trail and JSON-LD BreadcrumbList on /faq/, never
+       *  rendered as a top-level menu item. Matches faq.js's own `label`. */
+      faq: "Häufige Fragen",
     },
 
     legal: {
@@ -57,6 +61,9 @@ export default {
      *  "Kontakt" nav link. Matches the design's own dual treatment. */
     ctaPrimary: "Projekt anfragen",
     ctaSecondary: "Preise ansehen",
+    /** Wayfinding microcopy (Phase 3A) -- not page content, just a "view
+     *  all" link label, same category as ctaPrimary/ctaSecondary above. */
+    seeAllFaq: "Alle Fragen ansehen",
 
     pricePrefix: "ab",
     priceOnce: "einmalig",
@@ -115,6 +122,7 @@ export default {
       process: "Process",
       about: "About DIWEBA",
       contact: "Contact",
+      faq: "FAQ",
     },
 
     legal: {
@@ -124,6 +132,7 @@ export default {
 
     ctaPrimary: "Start a project",
     ctaSecondary: "See pricing",
+    seeAllFaq: "See all questions",
 
     pricePrefix: "from",
     priceOnce: "one-time",

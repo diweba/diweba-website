@@ -139,33 +139,9 @@ export default {
         },
       ],
     },
-    faqLabel: "Häufige Fragen",
-    faq: [
-      {
-        q: "Warum kommt meine Website ohne Cookie-Banner aus?",
-        a: "Weil wir im Basispaket nichts einbauen, das Ihre Besucher verfolgt. Ohne Verfolgung ist kein Banner nötig. Wenn Sie später Besucherzahlen mit Google Analytics sehen möchten, kommt ein Banner dazu — das sagen wir Ihnen vorher.",
-      },
-      {
-        q: "Kann ich die Website später selbst ändern?",
-        a: "Ja, wenn Sie möchten. Standardmäßig übernehmen wir Änderungen für Sie. Wenn Sie lieber selbst ran wollen, richten wir Ihnen einen einfachen Zugang ein, mit dem Sie Texte, Preise und Öffnungszeiten selbst ändern können.",
-      },
-      {
-        q: "Wie lange bin ich gebunden?",
-        a: "Der Betrieb (Hosting, Sicherheit, Backups) läuft 12 Monate, danach monatlich kündbar. Die Betreuung ist freiwillig und jederzeit kündbar.",
-      },
-      {
-        q: "Gehört die Website mir?",
-        a: "Ja. Domain und Inhalte laufen auf Ihren Namen, Sie können jederzeit umziehen.",
-      },
-      {
-        q: "Ich habe schon eine Website — was passiert damit?",
-        a: "Wir bauen neu und ziehen Ihre Domain um. Ihre alte Seite geht am Tag des Livegangs offline, die Adresse bleibt dieselbe. Ihre E-Mail-Adressen bleiben unberührt — das prüfen wir vor dem Umzug.",
-      },
-      {
-        q: "Warum nicht einfach selbst mit KI bauen?",
-        a: "Können Sie. Eine Seite zu erzeugen ist heute einfach. Die Fragen danach sind die schwierigen: Welches Angebot gehört nach vorne? Wird die Seite überhaupt gefunden? Stimmen Impressum und Datenschutz? Kommt die Anfrage wirklich in Ihrem Postfach an? Und wer schaut in drei Monaten nach, ob es funktioniert?",
-      },
-    ],
+    // faqLabel/faq removed (Phase 3A): now read from the shared src/_data/faq.js
+    // so the homepage's 6-item teaser and the full /faq/ page's 9 items cannot
+    // drift apart. See partials/home-body.njk for the slice(0, 6).
     finalH: "Fragen Sie Ihr Projekt in fünf Minuten an.",
     finalSub: "Kurzes Formular, Antwort am nächsten Werktag.",
   },
@@ -267,30 +243,10 @@ export default {
         },
       ],
     },
-    faqLabel: "Frequent questions",
-    faq: [
-      {
-        q: "Why does my website need no cookie banner?",
-        a: "Because in the base package we build in nothing that tracks your visitors. Without tracking there is no banner to show. If you later want to see visitor numbers with Google Analytics, a banner comes with it — we tell you that beforehand.",
-      },
-      {
-        q: "Can I edit the website myself later?",
-        a: "Yes, if you want. By default we make changes for you. If you'd rather do it yourself, we set up simple access so you can change text, prices and opening hours yourself.",
-      },
-      {
-        q: "How long am I tied in?",
-        a: "Operation (hosting, security, backups) runs 12 months, then month to month. The care plan is optional and cancellable at any time.",
-      },
-      { q: "Do I own the website?", a: "Yes. The domain and content are in your name, and you can move at any time." },
-      {
-        q: "I already have a website — what happens to it?",
-        a: "We build new and move your domain over. Your old site goes offline on launch day, the address stays the same. Your email addresses are untouched — we check that before the move.",
-      },
-      {
-        q: "Why not just build it myself with AI?",
-        a: "You can. Generating a page is easy today. The questions afterward are the hard ones: which offer goes up front? Does the page get found at all? Are the imprint and privacy policy correct? Does the inquiry actually reach your inbox? And who checks in three months whether it's working?",
-      },
-    ],
+    // faqLabel/faq removed (Phase 3A): see the German block's identical note.
+    // (This EN array previously diverged slightly in wording from the
+    // authoritative diweba-site.js translation -- reading from the shared
+    // faq.js, which is a direct port of that source, resolves that drift too.)
     finalH: "Ask about your project in five minutes.",
     finalSub: "Short form, reply on the next working day.",
   },

@@ -42,19 +42,29 @@ export default {
    */
   email: "hello@diweba.de",
 
-  /** Optional for the site; affects ContactPoint schema and Google Business Profile. */
+  /**
+   * Confirmed 2026 (Phase 3A instruction): DELIBERATELY absent, not merely
+   * unresolved. The instruction was explicit — "Do not display or require a
+   * telephone number on the public site" — so unlike email this is not a
+   * fact waiting to be supplied; it is a fact that a phone number is not
+   * part of DIWEBA's public contact surface. ContactPoint schema and any
+   * future contact-form "phone" field must stay optional/absent to match,
+   * not silently reinterpret this as still-unresolved.
+   */
   phone: null,
 
-  /** e.g. Einzelunternehmen. Feeds the Impressum and Organization schema. */
-  legalForm: null,
+  /** Confirmed 2026 (Phase 3A instruction). Feeds the Impressum and Organization schema. */
+  legalForm: "Einzelunternehmen",
 
   /**
-   * Tax status determines the price label and the two options are mutually
-   * exclusive, so the pricing page cannot be written until this is set:
-   *   "kleinunternehmer" -> §19 UStG, no VAT charged, prices must NOT say "zzgl. USt"
-   *   "vat"              -> VAT-registered, prices shown net, must say so
+   * Confirmed 2026 (Phase 3A instruction): Kleinunternehmerregelung nach
+   * §19 UStG. No VAT is charged on any price. Canonical wording (matches the
+   * approved design source exactly, both languages) lives in
+   * src/_data/pricingPage.js's `note` field — every place a price appears
+   * must use that wording verbatim, never an invented shorthand like "VAT
+   * free" and never a VAT ID, since none exists under this regime.
    */
-  taxStatus: null,
+  taxStatus: "kleinunternehmer",
 
   /** Only if VAT-registered. */
   vatId: null,

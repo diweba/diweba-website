@@ -10,6 +10,16 @@
   box-sizing: border-box;
 }
 
+/* The [hidden] attribute's own UA-stylesheet display:none is very low
+   specificity -- any component class that sets `display` on the same
+   element (e.g. `.cfg-addon-inplus { display: block; }`) silently wins over
+   it, and the element stays visible despite `hidden`. Real bug, caught in
+   Phase 3A's configurator (an "included in PLUS" note stayed shown even
+   when hidden was set from JS). Toggle visibility with `el.hidden`
+   throughout this codebase, never `style.display` -- this rule is what
+   makes that reliable everywhere, not just where the bug was first found. */
+[hidden] { display: none !important; }
+
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;

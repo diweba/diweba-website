@@ -1,0 +1,22 @@
+{#
+  Visible breadcrumb trail for non-home pages (spec §10: "breadcrumbs on all
+  non-home pages"). First used Phase 3A; component styles added alongside it
+  in components.css (they did not exist before — nothing in Phase 1/2 needed
+  them, since the homepage IS the root and carries none).
+
+  Each page's own index.11tydata.js emits a matching BreadcrumbList JSON-LD
+  block from the SAME routeKey/label pair rendered here, so the structured
+  data can never describe a trail different from what a visitor actually
+  sees (spec §12: "structured data reflects only what is visible").
+#}
+{%- set t = ui[lang] -%}
+<nav class="breadcrumb" aria-label="{{ t.breadcrumbAria }}">
+  <ol class="breadcrumb__list">
+    <li class="breadcrumb__item">
+      <a class="breadcrumb__link" href="{{ "home" | route(lang) }}">{{ t.home }}</a>
+    </li>
+    <li class="breadcrumb__item">
+      <span class="breadcrumb__current" aria-current="page">{{ t.nav[routeKey] }}</span>
+    </li>
+  </ol>
+</nav>

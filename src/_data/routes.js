@@ -42,9 +42,14 @@ export default {
     nav: true,
   },
 
+  // en: "/en/packages-pricing/" was set explicitly in the Phase 3A instruction
+  // (superseding the "/en/pricing/" placeholder this registry held before any
+  // pricing page existed). Changed here, in the one place that matters --
+  // canonical, hreflang, sitemap, nav and the language switch all follow
+  // automatically from this single edit.
   pricing: {
     de: "/pakete-preise/",
-    en: "/en/pricing/",
+    en: "/en/packages-pricing/",
     nav: true,
   },
 

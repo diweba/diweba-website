@@ -1,0 +1,241 @@
+{#
+  Shared body for /pakete-preise/ and /en/packages-pricing/ — ported from
+  DIWEBA/diweba-site.js's `pricing` object via
+  src/_data/pricingPage.js (page copy) and src/_data/packages.js (the two
+  package's own prices/features, LOCKED). Section order matches the design's
+  isPricing markup: hero -> package cards -> monthly amount -> compare table
+  -> configurator -> scope statement.
+
+  THE CONFIGURATOR IS A REAL COMPONENT, not decoration: real
+  radio/checkbox inputs (never a clickable div — see components.css's
+  header comment), live-recalculated totals via scripts/configurator.js,
+  and a correct default state server-rendered before any JS runs.
+
+  ONE DELIBERATE DEPARTURE FROM THE SOURCE: the design's configurator ends in
+  an inline form that fakes a submission ("Anfrage ist raus" / your request
+  is on its way) with no real backend behind it. The contact form/backend is
+  explicitly out of scope for this phase, and the phase instruction forbids
+  fake submission behaviour — so the configurator instead ends in a real
+  link to the contact route (routes.js's `contact` entry), which the
+  instruction explicitly allows even though that page isn't built yet.
+#}
+{%- set t = ui[lang] -%}
+{%- set pp = pricingPage[lang] -%}
+{%- set heroEyebrow = pp.eyebrow -%}
+{%- set heroH1 = pp.h -%}
+{%- set heroSub = pp.sub -%}
+{% include "partials/page-hero.njk" %}
+
+{#- ===================== Package cards ===================== -#}
+<section class="row row--no-border">
+  <div class="container">
+    <div class="row-grid row-grid--2">
+      {%- for item in packages.items %}
+      <div style="border:2px solid {{ 'var(--color-accent-amber)' if item.recommended else 'var(--color-border-soft)' }};padding:clamp(1.5rem, 3vw, 2.375rem);display:flex;flex-direction:column;gap:16px">
+        <div class="cluster" style="justify-content:space-between;min-height:30px">
+          <h2 style="font-size:clamp(1.625rem, 2.4vw, 2rem);font-weight:var(--weight-bold);letter-spacing:0.05em">{{ item.name }}</h2>
+          {%- if item.badge %}
+          <span style="font-family:var(--font-mono);font-size:0.6875rem;letter-spacing:var(--tracking-wide);text-transform:uppercase;background:var(--color-accent-amber);color:var(--color-paper);padding:5px 9px">{{ item.badge[lang] }}</span>
+          {%- endif %}
+        </div>
+        <div class="cluster" style="align-items:baseline;gap:12px">
+          <span style="font-family:var(--font-mono);font-size:clamp(2.375rem, 3.8vw, 3.25rem);font-weight:var(--weight-medium);letter-spacing:-0.03em">{{ item.priceOnce | price(lang, packages.currency) }}</span>
+          <span style="font-family:var(--font-mono);font-size:var(--text-md);color:var(--color-text-faint)">+ {{ item.priceMonthly | price(lang, packages.currency) }}{{ "/Monat" if lang == "de" else "/month" }}</span>
+        </div>
+        <p style="font-size:var(--text-lg);line-height:1.55;color:var(--color-text-soft)">{{ item.summary[lang] }}</p>
+        <div style="height:1px;background:var(--color-border-soft)"></div>
+        <ul class="stack" style="gap:9px">
+          {%- for feature in item.features[lang] %}
+          <li style="display:grid;grid-template-columns:20px 1fr;gap:10px">
+            <span style="color:var(--color-accent-blue)">✓</span>
+            <span style="font-size:var(--text-body-sm);color:var(--color-text)">{{ feature }}</span>
+          </li>
+          {%- endfor %}
+        </ul>
+        {%- if item.saving %}
+        <p style="font-size:var(--text-sm);color:var(--color-accent-amber);font-weight:var(--weight-semibold)">{{ item.saving[lang] }}</p>
+        {%- endif %}
+        <a class="btn btn--primary" style="margin-top:auto;text-align:center" href="#configurator">{{ pp.cfg.cta }}</a>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+{#- ===================== Monthly amount ===================== -#}
+<section class="row">
+  <div class="container stack">
+    <div class="stack" style="gap:8px">
+      <h2 style="font-size:var(--text-3xl)">{{ pp.monthly.label }}</h2>
+      <p class="text-soft" style="font-size:var(--text-lg);max-width:40em">{{ pp.monthly.sub }}</p>
+    </div>
+    <div class="row-grid row-grid--2">
+      {%- for m in pp.monthly.items %}
+      <div style="border:2px solid {{ 'var(--color-ink)' if loop.first else 'var(--color-border-soft)' }};padding:clamp(1.375rem, 2.6vw, 2rem);display:flex;flex-direction:column;gap:14px">
+        <div class="cluster" style="justify-content:space-between">
+          <span style="font-size:1.375rem;font-weight:var(--weight-semibold)">{{ m.n }}</span>
+          <span style="font-family:var(--font-mono);font-size:0.6875rem;letter-spacing:var(--tracking-wide);text-transform:uppercase;background:{{ 'var(--color-ink)' if loop.first else 'var(--color-accent-amber)' }};color:var(--color-paper);padding:5px 9px">{{ m.req }}</span>
+        </div>
+        <div class="cluster" style="align-items:baseline;gap:6px">
+          <span style="font-family:var(--font-mono);font-size:clamp(2rem, 3.2vw, 2.75rem);font-weight:var(--weight-medium)">{{ ("+" if m.signed else "") + (m.p | price(lang, packages.currency)) }}</span>
+          <span style="font-family:var(--font-mono);font-size:var(--text-md);color:var(--color-text-faint)">{{ "/Monat" if lang == "de" else "/month" }}</span>
+        </div>
+        <p style="font-size:var(--text-md);font-weight:var(--weight-semibold);color:oklch(0.48 0.13 48)">{{ m.term }}</p>
+        <ul class="stack" style="gap:8px;border-top:1px solid var(--color-border-soft);padding-top:12px">
+          {%- for x in m.items %}
+          <li style="display:grid;grid-template-columns:18px 1fr;gap:10px">
+            <span style="color:var(--color-accent-blue)">✓</span><span style="font-size:var(--text-body-sm)">{{ x }}</span>
+          </li>
+          {%- endfor %}
+        </ul>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+{#- ===================== Compare table ===================== -#}
+<section class="row">
+  <div class="container">
+    <h2 class="visually-hidden">{{ pp.compareHead }} — {{ packages.items[0].name }} / {{ packages.items[1].name }}</h2>
+    {#- A real <table>, not styled <div> rows: comparison data is exactly the
+        case screen-reader table navigation (row/column announcements) exists
+        for, and "no unnecessary interactive divs where real elements are
+        appropriate" applies to tabular markup the same way it does to
+        links/buttons. Visual grid columns come from a CSS grid applied
+        directly to <tr>, so the look is unchanged from the design. -#}
+    <div class="scroll-x">
+    <table class="compare-table" style="min-width:36rem">
+      <caption class="visually-hidden">{{ pp.compareHead }}: {{ packages.items[0].name }} {{ "vs." if lang == "en" else "gegen" }} {{ packages.items[1].name }}</caption>
+      <thead>
+        <tr class="compare-table__row eyebrow">
+          <th scope="col" style="text-align:left">{{ pp.compareHead }}</th>
+          {%- for item in packages.items %}<th scope="col" style="text-align:left">{{ item.name }}</th>{% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {%- for row in pp.compareRows %}
+        <tr class="compare-table__row">
+          <th scope="row" style="text-align:left;font-weight:var(--weight-regular)">
+            <span style="display:block;font-size:var(--text-base);color:var(--color-text)">{{ row.k }}</span>
+            {%- if row.sub %}<span class="text-faint" style="display:block;font-size:var(--text-sm);max-width:34em;font-weight:var(--weight-regular)">{{ row.sub }}</span>{% endif %}
+          </th>
+          <td class="tabular" style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--color-text-soft)">{{ row.v[0] }}</td>
+          <td class="tabular" style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--color-text-soft)">{{ row.v[1] }}</td>
+        </tr>
+        {%- endfor %}
+      </tbody>
+    </table>
+    </div>
+    <div class="stack" style="gap:8px;padding-top:16px">
+      <p style="font-size:var(--text-md);font-weight:var(--weight-semibold)">{{ pp.compareNote }}</p>
+      <p style="font-size:var(--text-md);font-weight:var(--weight-semibold);max-width:46em">{{ pp.compareNote2 }} <a href="{{ "process" | route(lang) }}" style="color:var(--color-accent-blue)">→</a></p>
+    </div>
+  </div>
+</section>
+
+{#- ===================== Configurator ===================== -#}
+<section class="row row--sunk" id="configurator">
+  <div class="container stack" style="gap:clamp(1.25rem, 2.6vw, 2.125rem)">
+    <div class="stack" style="gap:10px">
+      <p class="eyebrow" style="color:var(--color-accent-amber)">{{ pp.cfg.label }}</p>
+      <h2 style="font-size:clamp(1.625rem, 3vw, 2.5rem)">{{ pp.cfg.h }}</h2>
+    </div>
+
+    <div class="row-grid row-grid--split" style="align-items:start" data-configurator>
+      <div class="stack" style="gap:clamp(1.25rem, 2.4vw, 1.875rem)">
+
+        <fieldset class="cfg-fieldset">
+          <legend class="cfg-legend">{{ pp.cfg.step1 }}</legend>
+          <div class="cfg-pkg-grid">
+            {%- for item in packages.items %}
+            <div class="cfg-pkg-option">
+              <input type="radio" name="cfg-package" id="cfg-pkg-{{ item.id }}" value="{{ item.id }}"
+                     data-once="{{ item.priceOnce }}" data-mon="{{ item.priceMonthly }}" data-days="{{ item.deliveryDays }}" data-name="{{ item.name }}"
+                     {% if loop.first %}checked{% endif %}>
+              <label class="cfg-pkg-card" for="cfg-pkg-{{ item.id }}">
+                <span class="cfg-pkg-name">{{ item.name }}</span>
+                <span class="cfg-pkg-price">{{ item.priceOnce | price(lang, packages.currency) }} + {{ item.priceMonthly | price(lang, packages.currency) }}{{ "/Mon." if lang == "de" else "/mo." }}</span>
+                {%- if item.badge %}<span class="cfg-pkg-badge">{{ item.badge[lang] }}</span>{% endif %}
+              </label>
+            </div>
+            {%- endfor %}
+          </div>
+        </fieldset>
+
+        <fieldset class="cfg-fieldset">
+          <legend class="cfg-legend">{{ pp.cfg.step2 }}</legend>
+          <p class="text-soft" style="font-size:var(--text-body-sm);max-width:40em;margin-bottom:4px">{{ pp.addonsSub }}</p>
+          <div class="cfg-addons">
+            {%- for addon in pp.addons %}
+            <div class="cfg-addon-row">
+              <input type="checkbox" name="cfg-addon" id="cfg-addon-{{ addon.id }}" value="{{ addon.id }}"
+                     data-once="{{ addon.p }}" data-mon="{{ addon.mon or 0 }}" data-days="{{ addon.days }}"
+                     data-in-plus="{{ 'true' if addon.inPlus else 'false' }}" data-name="{{ addon.n }}"
+                     data-included-label="{{ pp.cfg.inPlusNote }}">
+              <label for="cfg-addon-{{ addon.id }}">
+                <span class="cfg-addon-name">{{ addon.n }}</span>
+                <span class="cfg-addon-desc">{{ addon.d }}</span>
+                {%- if addon.detail %}<span class="cfg-addon-detail">{{ addon.detail }}</span>{% endif %}
+                {%- if addon.inPlus %}<span class="cfg-addon-inplus" data-inplus-note hidden>{{ pp.cfg.inPlusNote }}</span>{% endif %}
+              </label>
+              <span>
+                <span class="cfg-addon-price" data-price-display>{{ addon.p | price(lang, packages.currency) }}{{ ("+" + (addon.mon | price(lang, packages.currency)) + ("/Mon." if lang == "de" else "/mo.")) if addon.mon }}</span>
+                <span class="cfg-addon-days">{% if addon.days %}+{{ addon.days }} {{ pp.cfg.daysUnit }}{% else %}{{ pp.cfg.noDelay }}{% endif %}</span>
+              </span>
+            </div>
+            {%- endfor %}
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="cfg-summary">
+        <span class="cfg-summary__label">{{ pp.cfg.step3 }}</span>
+
+        <div class="cfg-summary__row">
+          <span class="cfg-summary__label">{{ pp.cfg.onceLabel }}</span>
+          <output class="cfg-summary__once" data-total-once>{{ packages.items[0].priceOnce | price(lang, packages.currency) }}</output>
+        </div>
+        <div class="cfg-summary__row">
+          <span class="cfg-summary__label">{{ pp.cfg.monLabel }}</span>
+          <output class="cfg-summary__mon" data-total-mon>{{ packages.items[0].priceMonthly | price(lang, packages.currency) }}</output>
+        </div>
+        <hr class="cfg-summary__rule">
+        <div class="cfg-summary__days">
+          <span class="cfg-summary__label">{{ pp.cfg.daysLabel }}</span>
+          <span class="cfg-summary__days-n" data-total-days>{{ packages.items[0].deliveryDays }}</span>
+          <span class="cfg-summary__days-unit">{{ pp.cfg.daysUnit }}</span>
+        </div>
+        <hr class="cfg-summary__rule">
+
+        <div class="cfg-summary__row" style="gap:7px">
+          <span class="cfg-summary__label">{{ pp.cfg.summaryLabel }}</span>
+          <ul class="cfg-summary__list" data-summary-list>
+            <li><span>{{ packages.items[0].name }}</span><span>{{ packages.items[0].priceOnce | price(lang, packages.currency) }} · {{ packages.items[0].priceMonthly | price(lang, packages.currency) }}</span></li>
+          </ul>
+        </div>
+
+        <div class="cfg-hint" data-hint hidden>{{ pp.cfg.hint }}</div>
+
+        <a class="btn btn--inverse" href="{{ "contact" | route(lang) }}" style="text-align:center">{{ pp.cfg.cta }}</a>
+        <p class="cfg-note">{{ pp.cfg.ctaNote }}</p>
+      </div>
+    </div>
+
+    <p style="font-family:var(--font-mono);font-size:var(--text-xs);line-height:var(--leading-loose);color:var(--color-text-faint);max-width:48em">{{ pp.note }}</p>
+  </div>
+</section>
+
+{#- ===================== Scope statement ===================== -#}
+<section class="row row--no-border">
+  <div class="container stack" style="gap:12px">
+    <p class="eyebrow" style="color:var(--color-accent-amber)">{{ pp.oneThingLabel }}</p>
+    <p style="font-size:clamp(1.1875rem, 1.8vw, 1.5rem);line-height:1.55;letter-spacing:-0.015em;max-width:44em">{{ pp.oneThingBody }}</p>
+  </div>
+</section>
+
+<section class="row row--edge-top row--no-border">
+  <div class="container">
+    <a href="{{ "faq" | route(lang) }}" style="font-size:var(--text-md);font-weight:var(--weight-semibold);border-bottom:2px solid var(--color-accent-blue);padding-bottom:3px">{{ pp.seeFaq }} →</a>
+  </div>
+</section>

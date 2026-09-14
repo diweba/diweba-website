@@ -376,6 +376,135 @@
 .proof-note__body { font-size: var(--text-md); line-height: var(--leading-relaxed); }
 
 /* ---------------------------------------------------------------------------
+   Comparison table (Phase 3A). display:grid on <tr>/<th>/<td> keeps table
+   semantics (thead/tbody/th scope) while getting the design's 5fr/2fr/2fr
+   column layout, rather than browser default table sizing. */
+.compare-table { border-collapse: collapse; width: 100%; }
+.compare-table__row {
+  display: grid;
+  grid-template-columns: 5fr 2fr 2fr;
+  gap: clamp(0.75rem, 2vw, 1.75rem);
+}
+.compare-table thead .compare-table__row { border-bottom: 2px solid var(--color-ink); padding-bottom: 12px; }
+.compare-table tbody .compare-table__row { border-bottom: 1px solid var(--color-border-soft); padding-block: clamp(0.6875rem, 1.2vw, 0.9375rem); align-items: start; }
+.compare-table th, .compare-table td { padding: 0; }
+
+/* ---------------------------------------------------------------------------
+   Pricing configurator (Phase 3A)
+
+   Real <input type="radio">/<input type="checkbox"> throughout -- never a
+   clickable div. Sized up and recoloured with `accent-color`, a standard CSS
+   property native inputs support directly: full native keyboard behaviour,
+   focus ring and screen-reader state come for free, at a visual weight close
+   to the design's custom-drawn controls. The <label> wraps the whole card so
+   the entire card is the click/tap target, not just the small control.
+   --------------------------------------------------------------------------- */
+.cfg-fieldset { border: 0; margin: 0; padding: 0; }
+.cfg-legend { font-family: var(--font-mono); font-size: var(--text-2xs); font-weight: var(--weight-regular); letter-spacing: var(--tracking-widest); text-transform: uppercase; color: var(--color-text-faint); padding: 0; margin-bottom: var(--space-sm); }
+
+.cfg-pkg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(11.25rem, 1fr)); gap: var(--space-sm); }
+.cfg-pkg-option { position: relative; }
+.cfg-pkg-option input[type="radio"] {
+  position: absolute; top: 18px; right: 18px;
+  width: 20px; height: 20px; accent-color: var(--color-accent-blue);
+  margin: 0; cursor: pointer;
+}
+.cfg-pkg-card {
+  display: block; cursor: pointer;
+  border: 2px solid var(--color-border-soft);
+  padding: 18px; display: flex; flex-direction: column; gap: 8px;
+}
+.cfg-pkg-option input[type="radio"]:checked ~ .cfg-pkg-card,
+.cfg-pkg-option input[type="radio"]:checked + .cfg-pkg-card {
+  border-color: var(--color-ink);
+  background: var(--color-surface-sunk);
+}
+.cfg-pkg-option input[type="radio"]:focus-visible ~ .cfg-pkg-card,
+.cfg-pkg-option input[type="radio"]:focus-visible + .cfg-pkg-card {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+}
+.cfg-pkg-name { font-size: 1.25rem; font-weight: var(--weight-bold); letter-spacing: var(--tracking-wide); padding-right: 28px; }
+.cfg-pkg-price { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-text-soft); }
+.cfg-pkg-badge { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--color-accent-amber); }
+
+.cfg-addons { display: flex; flex-direction: column; margin-top: 4px; }
+.cfg-addon-row {
+  position: relative;
+  display: grid; grid-template-columns: 26px 1fr auto;
+  gap: 14px; padding-block: 14px; border-top: 1px solid var(--color-border-soft);
+  align-items: start;
+}
+.cfg-addon-row input[type="checkbox"] {
+  width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--color-accent-blue); cursor: pointer;
+}
+.cfg-addon-row input[type="checkbox"]:disabled { cursor: not-allowed; opacity: 0.65; }
+/* NOT display:contents: that would "promote" the label's own children
+   (name/desc/detail spans) into direct grid items of .cfg-addon-row,
+   scrambling them across the row's 3-column template instead of stacking
+   inside one column — a real bug caught in Phase 3A browser verification
+   (text overflowing/misplaced at 390px). The label stays one normal grid
+   item; its children stack via flex, entirely inside that one column. */
+.cfg-addon-row label { cursor: pointer; display: flex; flex-direction: column; gap: 4px; }
+.cfg-addon-row input[type="checkbox"]:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: var(--focus-ring-offset);
+}
+.cfg-addon-name { font-size: var(--text-md); font-weight: var(--weight-semibold); line-height: 1.3; }
+.cfg-addon-desc { font-size: var(--text-body-sm); color: var(--color-text-soft); margin-top: 4px; }
+.cfg-addon-detail { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-faint); margin-top: 4px; display: block; }
+.cfg-addon-inplus { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--color-accent-amber); margin-top: 4px; display: block; }
+.cfg-addon-price { font-family: var(--font-mono); font-size: var(--text-base); white-space: nowrap; text-align: right; }
+.cfg-addon-days { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-text-faint); white-space: nowrap; text-align: right; display: block; margin-top: 3px; }
+
+.cfg-summary {
+  position: sticky; top: 96px;
+  background: var(--color-ink); color: var(--color-text-invert-soft);
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  display: flex; flex-direction: column; gap: 20px;
+}
+.cfg-summary__label { font-family: var(--font-mono); font-size: var(--text-xs); letter-spacing: var(--tracking-wide); text-transform: uppercase; color: oklch(0.72 0.01 255); }
+.cfg-summary__rule { height: 1px; background: oklch(0.42 0.012 255); border: 0; margin: 0; }
+.cfg-summary__row { display: flex; flex-direction: column; gap: 3px; }
+.cfg-summary__once { font-family: var(--font-mono); font-size: clamp(2.375rem, 3.8vw, 3.25rem); font-weight: var(--weight-medium); letter-spacing: -0.03em; line-height: 1.05; color: var(--color-paper); }
+.cfg-summary__mon { font-family: var(--font-mono); font-size: clamp(1.625rem, 2.4vw, 2.125rem); font-weight: var(--weight-medium); letter-spacing: -0.02em; line-height: 1.05; color: var(--color-paper); }
+.cfg-summary__days { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.cfg-summary__days-n { font-family: var(--font-mono); font-size: clamp(1.375rem, 2vw, 1.75rem); font-weight: var(--weight-medium); color: var(--color-paper); }
+.cfg-summary__days-unit { font-size: var(--text-sm); color: oklch(0.78 0.01 255); }
+.cfg-summary__list { display: flex; flex-direction: column; gap: 7px; list-style: none; padding: 0; margin: 0; }
+.cfg-summary__list li { display: flex; justify-content: space-between; gap: 12px; font-family: var(--font-mono); font-size: var(--text-xs); border-bottom: 1px solid oklch(0.32 0.012 255); padding-bottom: 5px; }
+.cfg-hint {
+  border: 2px solid var(--color-accent-amber); background: var(--color-accent-amber); color: var(--color-paper-raised);
+  padding: 13px 15px; font-size: var(--text-base); font-weight: var(--weight-semibold); line-height: 1.45;
+}
+.cfg-note { font-size: var(--text-sm); line-height: var(--leading-relaxed); color: oklch(0.75 0.01 255); }
+
+/* ---------------------------------------------------------------------------
+   Breadcrumbs (Phase 3A — first page that needed them; not present in
+   Phase 1's component set at all despite base.njk's data model expecting it).
+   --------------------------------------------------------------------------- */
+.breadcrumb {
+  padding-block: var(--space-sm);
+  padding-inline: var(--section-x);
+  border-bottom: 1px solid var(--color-border);
+}
+.breadcrumb__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-size: var(--text-sm);
+  color: var(--color-text-faint);
+}
+.breadcrumb__item { display: flex; align-items: center; gap: var(--space-2xs); }
+.breadcrumb__item + .breadcrumb__item::before {
+  content: "/";
+  color: var(--color-border-strong);
+}
+.breadcrumb__link { color: var(--color-text-soft); }
+.breadcrumb__current { color: var(--color-text-faint); }
+
+/* ---------------------------------------------------------------------------
    Footer
    --------------------------------------------------------------------------- */
 .site-footer {

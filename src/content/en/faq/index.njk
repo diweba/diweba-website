@@ -1,0 +1,36 @@
+---
+routeKey: faq
+title: "Frequently Asked Questions on Pricing, Process & Operation | DIWEBA"
+description: "All the answers on price, cookie banners, contract length, who owns the website, and what happens to an existing site — nine honest answers."
+---
+{#
+  /en/faq/ — see the German version for the full provenance note.
+#}
+{%- set t = ui[lang] -%}
+{%- set f = faq[lang] -%}
+{%- set heroEyebrow = f.label -%}
+{%- set heroH1 = f.label -%}
+{% include "partials/page-hero.njk" %}
+
+<section class="row row--no-border">
+  <div class="container">
+    <div class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(21.25rem, 1fr));gap:var(--space-lg) clamp(1.75rem, 4vw, 4rem)">
+      {%- for item in f.items %}
+      <div class="faq-entry">
+        <h2 class="faq-entry__q" style="font-size:var(--text-xl)">{{ item.q }}</h2>
+        <p class="faq-entry__a">{{ item.a }}</p>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="row row--edge-top row--no-border">
+  <div class="container cluster" style="justify-content:space-between;align-items:center">
+    <div class="stack" style="gap:8px">
+      <h2 style="font-size:var(--text-3xl);max-width:20em">{{ home.en.finalH }}</h2>
+      <p class="text-soft" style="font-size:var(--text-base)">{{ home.en.finalSub }}</p>
+    </div>
+    <a class="btn btn--primary" href="{{ "contact" | route(lang) }}">{{ t.ctaPrimary }}</a>
+  </div>
+</section>

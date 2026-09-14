@@ -1,0 +1,111 @@
+---
+routeKey: process
+title: "Process: Four Steps, Fixed Dates | DIWEBA"
+description: "Short call, fixed-price proposal, build in 10 or 15 working days, then launch. What we need from you and what counts as a revision."
+---
+{#
+  /en/process/ — see the German version (src/content/de/ablauf/index.njk)
+  for the full structural provenance note.
+#}
+{%- set t = ui[lang] -%}
+{%- set p = processPage[lang] -%}
+{%- set h = home[lang] -%}
+{%- set heroEyebrow = p.label -%}
+{%- set heroH1 = p.h -%}
+{%- set heroSub = p.sub -%}
+{% include "partials/page-hero.njk" %}
+
+<section class="row row--no-border" style="padding-bottom:clamp(2.25rem, 5vw, 5rem)">
+  <div class="container">
+    {%- for step in p.steps %}
+    <div class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(16.25rem, 1fr));padding-block:clamp(1.5rem, 3vw, 2.5rem);border-top:2px solid var(--color-border-soft)">
+      <div class="stack" style="gap:10px">
+        <span class="tabular" style="font-size:clamp(3rem, 5vw, 4.5rem);font-weight:var(--weight-semibold);color:oklch(0.84 0.008 255);line-height:0.9;letter-spacing:-0.05em">{{ loop.index }}</span>
+        <h2 style="font-size:clamp(1.3125rem, 1.9vw, 1.625rem)">{{ step.t }}</h2>
+        <span class="eyebrow" style="color:var(--color-accent-blue)">{{ step.dur }}</span>
+      </div>
+      <p class="text-soft" style="font-size:var(--text-lg);line-height:var(--leading-relaxed)">{{ step.d }}</p>
+      <div style="border-left:3px solid var(--color-accent-amber);padding-left:var(--space-md)">
+        <span class="eyebrow" style="color:var(--color-accent-amber);display:block;margin-bottom:6px">{{ p.needLabel }}</span>
+        <p class="text-soft" style="font-size:var(--text-base)">{{ step.need }}</p>
+      </div>
+    </div>
+
+    {%- if loop.first %}
+    <div style="border:2px solid var(--color-border); background:var(--color-surface-sunk); padding:clamp(1.25rem, 2.6vw, 2rem); display:flex; flex-direction:column; gap:14px; margin-bottom:12px">
+      <span class="eyebrow" style="color:var(--color-accent-amber)">{{ p.qLabel }}</span>
+      <p style="font-size:var(--text-lg);line-height:var(--leading-relaxed);max-width:46em">{{ p.qIntro }}</p>
+      <div class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(18.75rem, 1fr))">
+        {%- for q in p.questions %}
+        <div style="display:grid;grid-template-columns:30px 1fr;gap:12px;padding-block:10px;border-top:1px solid var(--color-border-soft)">
+          <span class="eyebrow" style="color:var(--color-accent-blue);padding-top:2px">{{ loop.index }}.</span>
+          <span style="font-size:var(--text-base);line-height:var(--leading-relaxed)">{{ q }}</span>
+        </div>
+        {%- endfor %}
+      </div>
+    </div>
+    {%- endif %}
+    {%- endfor %}
+  </div>
+</section>
+
+<section class="row row--sunk row--edge-top">
+  <div class="container stack" style="gap:var(--space-lg)">
+    <div class="stack" style="gap:10px">
+      <h2 style="font-size:var(--text-3xl)">{{ p.rev.h }}</h2>
+      <p style="font-size:var(--text-lg);color:var(--color-text-soft)">{{ p.rev.lead }}</p>
+    </div>
+
+    <div class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(15.625rem, 1fr))">
+      {%- for stage in p.rev.stages %}
+      <div class="stack" style="gap:10px">
+        <span class="tabular" style="font-size:clamp(1.875rem, 3vw, 2.625rem);font-weight:var(--weight-semibold);color:oklch(0.84 0.008 255);line-height:1;letter-spacing:-0.04em">{{ loop.index }}</span>
+        <div style="height:2px;background:var(--color-ink)"></div>
+        <h3 style="font-size:var(--text-lg)">{{ stage.t }}</h3>
+        <p class="text-soft" style="font-size:var(--text-body-sm)">{{ stage.d }}</p>
+      </div>
+      {%- endfor %}
+    </div>
+
+    <div class="row-grid row-grid--2">
+      <div style="border:2px solid var(--color-ink);background:var(--color-paper-raised);padding:clamp(1.25rem, 2.4vw, 1.875rem);display:flex;flex-direction:column;gap:12px">
+        <h3 style="font-size:1.3125rem">{{ p.rev.inLabel }}</h3>
+        <ul class="stack" style="gap:9px">
+          {%- for item in p.rev.inItems %}
+          <li style="display:grid;grid-template-columns:20px 1fr;gap:10px">
+            <span style="color:var(--color-accent-blue)">✓</span><span style="font-size:var(--text-base)">{{ item }}</span>
+          </li>
+          {%- endfor %}
+        </ul>
+      </div>
+      <div style="border:2px solid var(--color-accent-amber);padding:clamp(1.25rem, 2.4vw, 1.875rem);display:flex;flex-direction:column;gap:12px">
+        <h3 style="font-size:1.3125rem;color:oklch(0.48 0.13 48)">{{ p.rev.outLabel }}</h3>
+        <ul class="stack" style="gap:9px">
+          {%- for item in p.rev.outItems %}
+          <li style="display:grid;grid-template-columns:20px 1fr;gap:10px">
+            <span style="color:var(--color-accent-amber)">→</span><span style="font-size:var(--text-base)">{{ item }}</span>
+          </li>
+          {%- endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="row-grid row-grid--2">
+      <p class="text-soft" style="font-size:var(--text-base)">{{ p.rev.close1 }}</p>
+      <p class="text-soft" style="font-size:var(--text-base)">{{ p.rev.close2 }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="row row--no-border">
+  <div class="container">
+    <a href="{{ "faq" | route(lang) }}" style="font-size:var(--text-md);font-weight:var(--weight-semibold);border-bottom:2px solid var(--color-accent-blue);padding-bottom:3px">{{ p.seeFaq }} →</a>
+  </div>
+</section>
+
+<section class="row row--edge-top row--no-border">
+  <div class="container cluster" style="justify-content:space-between;align-items:center">
+    <h2 style="font-size:var(--text-3xl);max-width:20em">{{ h.finalH }}</h2>
+    <a class="btn btn--primary" href="{{ "contact" | route(lang) }}">{{ t.ctaPrimary }}</a>
+  </div>
+</section>
