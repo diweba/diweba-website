@@ -1,84 +1,523 @@
 # ============================================================================
-# DIWEBA — Sveltia CMS configuration
+# DIWEBA — Sveltia CMS configuration (Phase 5)
 # ============================================================================
 #
-# PHASE 1 SCAFFOLD. Collections here cover only what Phase 1 actually builds.
-# The full content model (packages, FAQs, process steps, case studies,
-# knowledge) arrives in Phase 2 alongside the templates that consume it.
-#
 # *** THE RULE THAT MATTERS MOST ***
-# A git-based CMS SILENTLY DROPS front-matter keys that are not declared here.
-# If `routeKey` were undeclared, the first time the owner saved a page the key
-# would vanish, the permalink would fail to resolve, and the build would break —
-# with no error at save time. Every key a template reads must be declared:
-# editable ones as typed widgets, structural ones as `hidden`.
+# A git-based CMS SILENTLY DROPS front-matter/data keys that are not declared
+# here. Every key a template reads must be declared: editable ones as typed
+# widgets, structural ones as `hidden`. tools/verify-cms-config.mjs
+# cross-checks this file against the real content model and fails
+# `npm run verify` on any undeclared or stale key.
 #
-# tools/verify-cms-config.mjs (Phase 2) cross-checks this file against the
-# actual front matter in src/content/ and fails CI on any undeclared key.
+# ARCHITECTURE (Phase 5 decision — see the Phase 5 report for the full
+# reasoning)
+# ----------------------------------------------------------------------------
+# The site's content already lives in two distinct places, and the CMS edits
+# each of them AS THEY ARE — nothing was invented to fit a CMS shape, and
+# nothing here is a second copy of a fact that lives somewhere else:
 #
-# NEVER PUT IN THE CMS:
+#   1. PER-PAGE SEO METADATA (`content` front matter: title, description) —
+#      lives in each page's own .njk file under src/content/<lang>/. Edited
+#      by the `pages` collection below, one file entry per real page per
+#      language (asymmetric DE/EN slugs, e.g. /pakete-preise/ vs
+#      /en/packages-pricing/, rule out Sveltia's {{locale}} path templating,
+#      which needs identical relative paths across locales).
+#
+#   2. EDITORIAL BODY CONTENT — the six genuinely owner-editable content
+#      areas below now live in src/_data/*.yml (converted from .js in this
+#      phase, byte-identical — see git history). Eleventy reads a .yml data
+#      file exactly like a .js one; only Sveltia's ability to read/write it
+#      changed. Edited by the `content` collection, one file entry per area,
+#      using Sveltia's `i18n: single_file` structure: both languages live as
+#      top-level `de:`/`en:` keys in ONE file, matching the shape every one
+#      of these files already had before the CMS existed.
+#
+# WHAT IS DELIBERATELY *NOT* IN THE CMS, AND WHY
+# ----------------------------------------------------------------------------
+#   - src/_data/company.js       — legal identity facts (name, address, VAT
+#                                   status, email). Never content; several
+#                                   fields are `null` on purpose and gated by
+#                                   the `required()` build filter. A CMS
+#                                   field here could silently republish a
+#                                   fact that was deliberately withheld.
+#   - src/_data/routes.js        — the URL registry. Editing a slug here
+#                                   without also moving the physical page
+#                                   file breaks the site; this is a code
+#                                   change, not a content edit.
+#   - src/_data/packages.js      — START/PLUS prices and scope. LOCKED
+#                                   (CLAUDE.md). "Do not change these prices"
+#                                   is a standing rule this project has
+#                                   enforced every phase; a free-text CMS
+#                                   field is the opposite of that guarantee.
+#   - src/_data/pricingPage.js   — NOT split into editable/locked parts this
+#                                   phase. Its prose (compareNote, oneThing*,
+#                                   cfg.*) is genuinely editorial, but it sits
+#                                   directly next to contract-term wording
+#                                   ("Keine Mindestlaufzeit" — corrected once
+#                                   already after drifting out of sync, see
+#                                   git history), priced add-ons, and the
+#                                   exact required §19 UStG sentence. Cleanly
+#                                   separating "safe to edit" from
+#                                   "business-critical" at the field level
+#                                   needs a more careful pass than this phase
+#                                   budget allows — see the Phase 5 report.
+#   - src/_data/site.js          — build-time config resolved from
+#                                   environment variables (analytics/Turnstile
+#                                   state). Not static content at all.
+#   - src/_data/ui.js            — UI chrome: nav labels, ARIA text, form
+#                                   error states, button labels consumed
+#                                   directly by data-* attributes in
+#                                   scripts/*.js. Site-wide blast radius and
+#                                   tightly bound to behaviour/accessibility,
+#                                   not page editorial prose.
+#   - src/_data/impressumPage.js
+#     src/_data/datenschutzPage.js — legal-page STRUCTURE (section headings,
+#                                   the conditional Turnstile/analytics gate).
+#                                   No legal prose exists yet on purpose
+#                                   (Phase 3F); exposing even the headings to
+#                                   free editing risks breaking the
+#                                   `body: null` → "pending" detection the
+#                                   templates rely on. Stays code-controlled
+#                                   until real, lawyer-reviewed text exists.
+#   - consent / analytics / Turnstile / Cloudflare configuration — all
+#                                   environment variables, never files a CMS
+#                                   touches (spec §8, §14).
+#
+# NEVER PUT IN THE CMS (unchanged from Phase 1):
 #   - consent or analytics configuration (spec §8)
 #   - API keys or any secret
 #   - anything under src/_data/company.js — legal facts are not content
+#   - legal-page prose — see docs/DIWEBA_PHASE_0_SPEC.md §1, "no placeholder
+#     legal text that could be published by accident"
 
 backend:
   name: github
-  # TODO(Phase 2): replace with the real repository once it exists on GitHub.
+  # TODO: replace with the real repository once it exists on GitHub — this
+  # phase deliberately does not connect one (no GitHub push in Phase 5).
   repo: OWNER/REPO
   branch: main
   # Commits from the CMS land on main, which triggers the deploy workflow.
 
-# Editorial workflow is intentionally OFF for a single owner-operator: it adds a
-# PR review step that nobody would review. Revisit if more editors are added.
+# Editorial workflow is intentionally OFF for a single owner-operator: it
+# adds a PR review step that nobody would review. Revisit if more editors
+# are added.
 publish_mode: simple
 
 media_folder: "src/assets/img/uploads"
 public_folder: "/assets/img/uploads"
 
-# --- Internationalisation ---------------------------------------------------
-# German and English are separate files under src/content/<lang>/, matching the
-# directory structure the build already uses.
+# Top-level default: Sveltia only treats i18n as "on" when this block exists
+# at the top of the file (a collection-only declaration is silently ignored
+# — confirmed via the CMS's own runtime console warning). The "content"
+# collection uses exactly this shape; "pages" opts out below with
+# `i18n: false`, since each of its entries is already a genuinely
+# single-locale physical file, not a bilingual one.
 i18n:
-  structure: multiple_folders
+  structure: single_file
   locales: [de, en]
   default_locale: de
 
 collections:
-  # --------------------------------------------------------------------------
-  # Pages — the eleven core routes.
-  # Phase 1 has only the homepage; the rest are added with their templates.
-  # --------------------------------------------------------------------------
-  - name: pages
-    label: "Seiten"
-    label_singular: "Seite"
-    i18n: true
+  # ==========================================================================
+  # Seiteninhalte — the six owner-editable content areas.
+  # ==========================================================================
+  - name: content
+    label: "Seiteninhalte"
+    label_singular: "Seiteninhalt"
+    description: "Redaktionstexte der wichtigsten Seiten. Preise, Firmendaten und rechtliche Angaben werden hier NICHT bearbeitet."
+    # Inherits the top-level i18n block above (single_file, de+en) — every
+    # file below shares that same shape.
     files:
       - name: home
         label: "Startseite"
-        file: "src/content/{{locale}}/index.njk"
-        i18n: true
+        file: "src/_data/home.yml"
         fields:
-          # --- Editable ---------------------------------------------------
-          - { name: title, label: "SEO-Titel", widget: string, i18n: true }
-          - {
-              name: description,
-              label: "Meta-Beschreibung",
-              widget: text,
-              i18n: true,
-              hint: "Rund 150–160 Zeichen. Erscheint in Suchergebnissen.",
-            }
-          - {
-              name: ogImage,
-              label: "Social-Bild",
-              widget: image,
-              required: false,
-              i18n: true,
-            }
-          - { name: body, label: "Inhalt", widget: markdown, i18n: true }
+          - { name: tag, label: "Kurzslogan (über der Hauptüberschrift)", widget: string, i18n: true }
+          - name: hero
+            label: "Hero-Bereich"
+            widget: object
+            i18n: true
+            fields:
+              - { name: h, label: "Überschrift", widget: string }
+              - { name: sub, label: "Unterzeile", widget: text }
+              - name: stats
+                label: "Kennzahlen (genau 3, Reihenfolge fest)"
+                widget: list
+                fields:
+                  - { name: n, label: "Zahl", widget: string }
+                  - { name: u, label: "Einheit", widget: string }
+                  - { name: d, label: "Beschreibung", widget: string }
+          - name: refs
+            label: "Referenzen-Bereich"
+            widget: object
+            i18n: true
+            fields:
+              - { name: builtLabel, label: "Abschnittslabel", widget: string }
+              - name: built
+                label: "Projekte"
+                widget: list
+                fields:
+                  - { name: n, label: "Name", widget: string }
+                  - { name: url, label: "Angezeigte URL / Text", widget: string }
+                  - { name: href, label: "Linkziel (leer lassen = kein Link)", widget: string, required: false }
+                  - { name: tag, label: "Badge-Text", widget: string }
+                  - { name: d, label: "Beschreibung", widget: text }
+              - { name: voicesLabel, label: "Kundenstimmen-Label", widget: string }
+              - { name: voicesNote, label: "Hinweistext (aktuell ungenutzt)", widget: string, required: false }
+              - { name: honestH, label: "Überschrift „Wir sind neu“", widget: string }
+              - { name: honestBody, label: "Text „Wir sind neu“", widget: text }
+              - { name: payLine, label: "Zahlungsbedingung", widget: string }
+          - { name: problemLabel, label: "Label „Wie es sonst läuft“", widget: string, i18n: true }
+          - { name: problem, label: "Text „Wie es sonst läuft“", widget: text, i18n: true }
+          - { name: solutionLabel, label: "Label „Wie wir arbeiten“", widget: string, i18n: true }
+          - { name: solution, label: "Text „Wie wir arbeiten“", widget: text, i18n: true }
+          - name: aiBand
+            label: "KI-Suche-Banner"
+            widget: object
+            i18n: true
+            fields:
+              - { name: label, label: "Label", widget: string }
+              - { name: h, label: "Überschrift", widget: string }
+              - { name: body, label: "Text", widget: text }
+              - { name: link, label: "Link-Text", widget: string }
+          - { name: whyLabel, label: "Label „Warum DIWEBA“", widget: string, i18n: true }
+          - name: why
+            label: "Warum-DIWEBA-Gründe (genau 6, Reihenfolge fest)"
+            widget: list
+            i18n: true
+            fields:
+              - { name: t, label: "Titel", widget: string }
+              - { name: d, label: "Beschreibung", widget: text }
+          - name: aiPos
+            label: "KI-Haltung"
+            widget: object
+            i18n: true
+            fields:
+              - { name: h, label: "Überschrift", widget: string }
+              - { name: body, label: "Text", widget: text }
+          - name: founder
+            label: "Gründer-Bereich"
+            widget: object
+            i18n: true
+            fields:
+              - { name: label, label: "Label", widget: string }
+              - { name: h, label: "Überschrift", widget: string }
+              - { name: body, label: "Text", widget: text }
+              - { name: note, label: "Fußnote", widget: string }
+              - { name: role, label: "Rolle (ohne Ortsangabe — siehe CLAUDE.md)", widget: string }
+              - { name: photoAlt, label: "Alt-Text zum Foto", widget: string }
+          - name: process
+            label: "Ablauf-Vorschau (Kurzfassung der 4 Schritte)"
+            widget: object
+            i18n: true
+            fields:
+              - { name: label, label: "Label", widget: string }
+              - name: steps
+                label: "Schritte (genau 4, Reihenfolge fest)"
+                widget: list
+                fields:
+                  - { name: t, label: "Titel", widget: string }
+                  - { name: dur, label: "Dauer", widget: string }
+                  - { name: d, label: "Beschreibung", widget: text }
+          - { name: finalH, label: "Abschluss-Überschrift (auf mehreren Seiten wiederverwendet)", widget: string, i18n: true }
+          - { name: finalSub, label: "Abschluss-Unterzeile", widget: string, i18n: true }
 
-          # --- Structural: hidden, but MUST be declared --------------------
-          # Undeclared keys are destroyed on save. See the note at the top.
+      - name: faq
+        label: "Häufige Fragen"
+        file: "src/_data/faq.yml"
+        fields:
+          - { name: label, label: "Abschnittslabel", widget: string, i18n: true }
+          - name: items
+            label: "Fragen (genau 9 — die ersten 6 erscheinen zusätzlich auf der Startseite)"
+            widget: list
+            i18n: true
+            fields:
+              - { name: q, label: "Frage", widget: string }
+              - { name: a, label: "Antwort", widget: text }
+
+      - name: process_page
+        label: "Ablauf (vollständige Seite)"
+        file: "src/_data/processPage.yml"
+        fields:
+          - { name: label, label: "Abschnittslabel", widget: string, i18n: true }
+          - { name: h, label: "Überschrift", widget: string, i18n: true }
+          - { name: sub, label: "Unterzeile", widget: text, i18n: true }
+          - name: steps
+            label: "Schritte (genau 4, Reihenfolge fest)"
+            widget: list
+            i18n: true
+            fields:
+              - { name: t, label: "Titel", widget: string }
+              - { name: dur, label: "Dauer", widget: string }
+              - { name: d, label: "Beschreibung", widget: text }
+              - { name: need, label: "„Von Ihnen benötigt“", widget: text }
+          - { name: needLabel, label: "Label „Von Ihnen“", widget: string, i18n: true }
+          - { name: qLabel, label: "Label „Fragen vorab“", widget: string, i18n: true }
+          - { name: qIntro, label: "Einleitungstext zu den Fragen", widget: text, i18n: true }
+          - name: questions
+            label: "Fragen vorab (genau 6, Reihenfolge fest)"
+            widget: list
+            i18n: true
+            field: { name: question, widget: string }
+          - name: rev
+            label: "Korrekturrunden"
+            widget: object
+            i18n: true
+            fields:
+              - { name: h, label: "Überschrift", widget: string }
+              - { name: lead, label: "Einleitung", widget: string }
+              - name: stages
+                label: "Phasen (genau 3, Reihenfolge fest)"
+                widget: list
+                fields:
+                  - { name: t, label: "Titel", widget: string }
+                  - { name: d, label: "Beschreibung", widget: text }
+              - { name: inLabel, label: "Label „Das ist eine Korrektur“", widget: string }
+              - { name: inItems, label: "Beispiele: Korrektur", widget: list, field: { name: item, widget: string } }
+              - { name: outLabel, label: "Label „Das ist eine neue Leistung“", widget: string }
+              - { name: outItems, label: "Beispiele: neue Leistung", widget: list, field: { name: item, widget: string } }
+              - { name: close1, label: "Abschlusstext 1", widget: text }
+              - { name: close2, label: "Abschlusstext 2", widget: text }
+          - { name: seeFaq, label: "Link-Text zur FAQ-Seite", widget: string, i18n: true }
+
+      - name: about
+        label: "Über DIWEBA"
+        file: "src/_data/aboutPage.yml"
+        fields:
+          - { name: eyebrow, label: "Abschnittslabel", widget: string, i18n: true }
+          - { name: h, label: "Überschrift", widget: string, i18n: true }
+          - { name: photoAlt, label: "Alt-Text zum Gründerfoto", widget: string, i18n: true }
+          - { name: story, label: "Gründungsgeschichte (Absätze, Reihenfolge fest)", widget: list, i18n: true, field: { name: paragraph, widget: text } }
+          - { name: insightLabel, label: "Label über dem Insight-Wert-Absatz", widget: string, i18n: true }
+          - name: insight
+            label: "Insight-Wert-Verweis"
+            widget: object
+            i18n: true
+            fields:
+              - { name: before, label: "Text vor dem Link", widget: string }
+              - { name: linkText, label: "Link-Text", widget: string }
+              - { name: href, label: "Link-Ziel", widget: string }
+              - { name: after, label: "Text nach dem Link", widget: string }
+          - { name: contactLabel, label: "Label über der E-Mail-Adresse", widget: string, i18n: true }
+
+      - name: ai_search
+        label: "KI-Sichtbarkeit"
+        file: "src/_data/aiSearchPage.yml"
+        fields:
+          - { name: eyebrow, label: "Abschnittslabel", widget: string, i18n: true }
+          - { name: h, label: "Überschrift", widget: string, i18n: true }
+          - { name: sub, label: "Unterzeile", widget: text, i18n: true }
+          - { name: changeLabel, label: "Label „Was sich gerade ändert“", widget: string, i18n: true }
+          - { name: exampleTag, label: "Beispiel-Hinweis (muss als Beispiel erkennbar bleiben)", widget: string, i18n: true }
+          - { name: changeBody, label: "Text „Was sich gerade ändert“", widget: text, i18n: true }
+          - name: listSide
+            label: "Beispiel: klassische Google-Liste"
+            widget: object
+            i18n: true
+            fields:
+              - { name: label, label: "Label", widget: string }
+              - { name: q, label: "Beispiel-Suchanfrage", widget: string }
+              - name: items
+                label: "Listeneinträge (genau 10 — KEINE echten oder erfundenen Firmennamen, siehe unten)"
+                widget: list
+                field: { name: item, widget: string }
+                hint: "Nur neutrale Bezeichnungen wie „ein lokaler Handwerksbetrieb“. Niemals einen konkreten Firmennamen eintragen — auch keinen erfundenen (CLAUDE.md, Phase 3D)."
+          - name: aiSide
+            label: "Beispiel: KI-Antwort"
+            widget: object
+            i18n: true
+            fields:
+              - { name: label, label: "Label", widget: string }
+              - { name: q, label: "Beispiel-Frage an die KI", widget: string }
+              - name: items
+                label: "Genannte Anbieter (genau 3 — KEINE echten oder erfundenen Firmennamen)"
+                widget: list
+                field: { name: item, widget: string }
+                hint: "Nur neutrale Bezeichnungen wie „Ein lokaler Handwerksbetrieb“. Niemals einen konkreten Firmennamen eintragen — auch keinen erfundenen (CLAUDE.md, Phase 3D)."
+          - { name: decideLabel, label: "Überschrift „Was entscheidet, wer genannt wird“", widget: string, i18n: true }
+          - name: decide
+            label: "Entscheidende Faktoren (genau 4, Reihenfolge fest)"
+            widget: list
+            i18n: true
+            fields:
+              - { name: t, label: "Titel", widget: string }
+              - { name: d, label: "Beschreibung", widget: text }
+          - name: honesty
+            label: "Ehrlichkeits-Block (was wir nicht versprechen / was wir tun)"
+            widget: object
+            i18n: true
+            hint: "Hier steht die zentrale Nicht-Garantie-Aussage. Keine Formulierung wie „garantiert“, „100 %“ oder „Platz 1“ einfügen — siehe CLAUDE.md und Phase 3D."
+            fields:
+              - { name: h1, label: "Überschrift „Was wir nicht versprechen“", widget: string }
+              - { name: b1, label: "Text „Was wir nicht versprechen“", widget: text }
+              - { name: h2, label: "Überschrift „Was wir tun“", widget: string }
+              - { name: b2, label: "Text „Was wir tun“", widget: text }
+          - { name: includedLabel, label: "Überschrift „Was ist wo enthalten“", widget: string, i18n: true }
+          - name: tech
+            label: "Technische Grundlage"
+            widget: object
+            i18n: true
+            fields:
+              - { name: h, label: "Titel", widget: string }
+              - { name: note, label: "Badge-Text", widget: string }
+              - { name: items, label: "Punkte", widget: list, field: { name: item, widget: string } }
+          - name: content
+            label: "Inhaltliche Arbeit (Add-on)"
+            widget: object
+            i18n: true
+            fields:
+              - { name: h, label: "Titel", widget: string }
+              - { name: note, label: "Badge-Text (Preis stammt aus pakete-preise, hier nur Anzeige)", widget: string }
+              - { name: items, label: "Punkte", widget: list, field: { name: item, widget: string } }
+
+      - name: contact
+        label: "Kontaktseite"
+        file: "src/_data/contactPage.yml"
+        fields:
+          - { name: eyebrow, label: "Abschnittslabel", widget: string, i18n: true }
+          - { name: h, label: "Überschrift", widget: string, i18n: true }
+          - { name: sub, label: "Unterzeile", widget: text, i18n: true }
+          - name: fieldPlaceholders
+            label: "Platzhaltertexte in den Formularfeldern"
+            widget: object
+            i18n: true
+            fields:
+              - { name: name, label: "Feld „Name“", widget: string }
+              - { name: company, label: "Feld „Unternehmen“", widget: string }
+              - { name: email, label: "Feld „E-Mail“", widget: string }
+              - { name: message, label: "Feld „Nachricht“", widget: text }
+          - { name: submit, label: "Text auf dem Senden-Button", widget: string, i18n: true }
+          - { name: promiseLabel, label: "Label über dem Antwort-Versprechen", widget: string, i18n: true }
+          - { name: promise, label: "Antwort-Versprechen", widget: string, i18n: true }
+          - { name: directLabel, label: "Label über der E-Mail-Adresse", widget: string, i18n: true }
+          - { name: note, label: "Hinweistext unter dem Formular", widget: text, i18n: true }
+          - name: thanks
+            label: "Dankeseite nach dem Absenden"
+            widget: object
+            i18n: true
+            fields:
+              - { name: title, label: "Seitentitel", widget: string }
+              - { name: heading, label: "Überschrift", widget: string }
+              - { name: body, label: "Text", widget: text }
+              - { name: back, label: "Link „Zurück zur Startseite“", widget: string }
+
+  # ==========================================================================
+  # SEO-Metadaten je Seite — Titel/Beschreibung aus dem Front Matter der
+  # tatsächlichen Seiten-Dateien. Bewusst NICHT die Legal-Seiten (Impressum,
+  # Datenschutz): deren Texte sind noch nicht final — siehe Phase 3F.
+  # ==========================================================================
+  - name: pages
+    label: "SEO — Seitentitel & Beschreibung"
+    label_singular: "Seite"
+    description: "Nur Suchmaschinen-Titel und -Beschreibung. Der eigentliche Seiteninhalt wird über „Seiteninhalte“ bearbeitet."
+    # Opts out of the top-level i18n block: each entry below is already its
+    # own single-locale physical .njk file (DE and EN have different slugs,
+    # not a shared bilingual file), so this collection is not i18n at all.
+    i18n: false
+    files:
+      - name: home_de
+        label: "Startseite — Deutsch"
+        file: "src/content/de/index.njk"
+        fields:
+          - { name: title, label: "SEO-Titel", widget: string }
+          - { name: description, label: "Meta-Beschreibung", widget: text, hint: "Rund 150–160 Zeichen." }
           - { name: routeKey, widget: hidden }
-          - { name: layout, widget: hidden, required: false }
-          - { name: lang, widget: hidden, required: false }
-          - { name: noindex, widget: hidden, required: false }
+          - { name: layout, widget: hidden }
+      - name: home_en
+        label: "Startseite — Englisch"
+        file: "src/content/en/index.njk"
+        fields:
+          - { name: title, label: "SEO title", widget: string }
+          - { name: description, label: "Meta description", widget: text, hint: "About 150–160 characters." }
+          - { name: routeKey, widget: hidden }
+          - { name: layout, widget: hidden }
+
+      - name: pricing_de
+        label: "Pakete & Preise — Deutsch"
+        file: "src/content/de/pakete-preise/index.njk"
+        fields:
+          - { name: title, label: "SEO-Titel", widget: string }
+          - { name: description, label: "Meta-Beschreibung", widget: text }
+          - { name: routeKey, widget: hidden }
+      - name: pricing_en
+        label: "Pakete & Preise — Englisch"
+        file: "src/content/en/packages-pricing/index.njk"
+        fields:
+          - { name: title, label: "SEO title", widget: string }
+          - { name: description, label: "Meta description", widget: text }
+          - { name: routeKey, widget: hidden }
+
+      - name: process_de
+        label: "Ablauf — Deutsch"
+        file: "src/content/de/ablauf/index.njk"
+        fields:
+          - { name: title, label: "SEO-Titel", widget: string }
+          - { name: description, label: "Meta-Beschreibung", widget: text }
+          - { name: routeKey, widget: hidden }
+      - name: process_en
+        label: "Ablauf — Englisch"
+        file: "src/content/en/process/index.njk"
+        fields:
+          - { name: title, label: "SEO title", widget: string }
+          - { name: description, label: "Meta description", widget: text }
+          - { name: routeKey, widget: hidden }
+
+      - name: faq_de
+        label: "Häufige Fragen — Deutsch"
+        file: "src/content/de/faq/index.njk"
+        fields:
+          - { name: title, label: "SEO-Titel", widget: string }
+          - { name: description, label: "Meta-Beschreibung", widget: text }
+          - { name: routeKey, widget: hidden }
+      - name: faq_en
+        label: "Häufige Fragen — Englisch"
+        file: "src/content/en/faq/index.njk"
+        fields:
+          - { name: title, label: "SEO title", widget: string }
+          - { name: description, label: "Meta description", widget: text }
+          - { name: routeKey, widget: hidden }
+
+      - name: contact_de
+        label: "Kontakt — Deutsch"
+        file: "src/content/de/kontakt/index.njk"
+        fields:
+          - { name: title, label: "SEO-Titel", widget: string }
+          - { name: description, label: "Meta-Beschreibung", widget: text }
+          - { name: routeKey, widget: hidden }
+      - name: contact_en
+        label: "Kontakt — Englisch"
+        file: "src/content/en/contact/index.njk"
+        fields:
+          - { name: title, label: "SEO title", widget: string }
+          - { name: description, label: "Meta description", widget: text }
+          - { name: routeKey, widget: hidden }
+
+      - name: about_de
+        label: "Über DIWEBA — Deutsch"
+        file: "src/content/de/ueber-uns/index.njk"
+        fields:
+          - { name: title, label: "SEO-Titel", widget: string }
+          - { name: description, label: "Meta-Beschreibung", widget: text }
+          - { name: routeKey, widget: hidden }
+      - name: about_en
+        label: "Über DIWEBA — Englisch"
+        file: "src/content/en/about/index.njk"
+        fields:
+          - { name: title, label: "SEO title", widget: string }
+          - { name: description, label: "Meta description", widget: text }
+          - { name: routeKey, widget: hidden }
+
+      - name: ai_search_de
+        label: "KI-Sichtbarkeit — Deutsch"
+        file: "src/content/de/ki-suche-optimierung/index.njk"
+        fields:
+          - { name: title, label: "SEO-Titel", widget: string }
+          - { name: description, label: "Meta-Beschreibung", widget: text }
+          - { name: routeKey, widget: hidden }
+      - name: ai_search_en
+        label: "KI-Sichtbarkeit — Englisch"
+        file: "src/content/en/ai-search/index.njk"
+        fields:
+          - { name: title, label: "SEO title", widget: string }
+          - { name: description, label: "Meta description", widget: text }
+          - { name: routeKey, widget: hidden }

@@ -11,7 +11,7 @@
     "dev": "cross-env ELEVENTY_ENV=development eleventy --serve --quiet",
     "build": "cross-env ELEVENTY_ENV=production eleventy",
     "clean": "node tools/clean.mjs",
-    "verify": "node tools/verify-build.mjs && node tools/verify-i18n.mjs",
+    "verify": "node tools/verify-build.mjs && node tools/verify-i18n.mjs && node tools/verify-cms-config.mjs",
     "check": "npm run build && npm run verify",
     "worker:types": "tsc --noEmit -p tsconfig.json",
     "worker:dev": "wrangler dev",
@@ -21,6 +21,7 @@
     "@11ty/eleventy": "^3.0.0",
     "@cloudflare/workers-types": "^4.20250109.0",
     "cross-env": "^7.0.3",
+    "js-yaml": "^4.3.2",
     "typescript": "^5.7.0",
     "wrangler": "^3.99.0"
   }

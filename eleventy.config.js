@@ -12,6 +12,7 @@
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import yaml from "js-yaml";
 
 // Load .env without a dependency. Node >=20.12 provides this natively.
 // Missing .env is fine: every consumer treats absent config as "not configured".
@@ -22,6 +23,19 @@ try {
 }
 
 export default function (eleventyConfig) {
+  // ---------------------------------------------------------------------------
+  // Data extensions
+  // ---------------------------------------------------------------------------
+  // Phase 5: the genuinely owner-editable content areas (home, faq, process,
+  // about, ai-search, contact page copy) moved from src/_data/*.js to
+  // src/_data/*.yml -- same global data key either way (Eleventy resolves the
+  // key from the filename, not the format), but YAML is what Sveltia CMS
+  // actually reads and writes. Files that stay .js (company, packages,
+  // pricingPage, routes, site, ui, the two legal-page skeletons) are
+  // deliberately NOT in the CMS -- see src/admin/config.yml's header comment
+  // for the full editable/code-controlled split and the reasoning.
+  eleventyConfig.addDataExtension("yml,yaml", (contents) => yaml.load(contents));
+
   // ---------------------------------------------------------------------------
   // Passthrough
   // ---------------------------------------------------------------------------

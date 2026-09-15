@@ -1,0 +1,30 @@
+de:
+  eyebrow: Über DIWEBA
+  h: Hinter DIWEBA steht eine Person, kein Callcenter.
+  photoAlt: Porträt von Baki Cirak, Gründer und Systemarchitekt von DIWEBA
+  story:
+    - "Ich komme aus der Marketing-Datenanalyse und habe immer wieder dasselbe gesehen: Unternehmen mit einer Website, aber ohne eine einzige verlässliche Zahl darüber, was sie bringt."
+    - "Auf die Frage „Wie viele Anfragen kommen über Ihre Website?“ folgte fast immer dieselbe Antwort: „Ich glaube, ein paar.“ Die Website war da, aber niemand wusste, ob sie arbeitet."
+    - "DIWEBA ist die Antwort darauf. Kein Gestaltungsbüro, sondern eine feste Bauleistung: eine Website, die in zehn Arbeitstagen steht, für Google und für KI-Suche lesbar ist, und danach betreut wird. Fester Umfang, fester Preis, und am Ende eine Zahl, an der man sieht, ob es funktioniert."
+  insightLabel: Auch
+  insight:
+    before: "Auch "
+    linkText: Insight Wert
+    href: https://insightwert.de/de/
+    after: " — Datenanalyse und Auswertung für Marketing-Entscheidungen. Dasselbe Team, dieselbe Handschrift."
+  contactLabel: Direkt erreichbar
+en:
+  eyebrow: About DIWEBA
+  h: There is a person behind DIWEBA, not a call centre.
+  photoAlt: Portrait of Baki Cirak, founder and systems architect of DIWEBA
+  story:
+    - "I come from marketing data analysis and kept seeing the same thing: companies with a website, but without a single reliable number about what it brings in."
+    - "The question “how many inquiries come through your website?” was almost always followed by the same answer: “A few, I think.” The website was there, but nobody knew whether it was working."
+    - "DIWEBA is the answer to that. Not a design studio, but a defined build: a website that stands in ten working days, is readable for Google and for AI search, and is looked after afterward. Fixed scope, fixed price, and at the end a number that shows whether it works."
+  insightLabel: Also
+  insight:
+    before: "Also "
+    linkText: Insight Wert
+    href: https://insightwert.de/en/
+    after: " — data analysis and reporting for marketing decisions. Same team, same hand."
+  contactLabel: Reachable directly

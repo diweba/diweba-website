@@ -15,9 +15,11 @@
     Actions build and deploy. The public site stays statically generated — the
     CMS never renders anything to visitors (spec §5, §7).
 
-    PHASE 2 completes this. The collections in config.yml currently cover only
-    what Phase 1 actually has. Adding a collection before its content model and
-    templates exist would create fields that write front matter nothing reads.
+    Phase 5 completed the content model: config.yml now covers the six
+    owner-editable content areas (src/_data/*.yml) plus per-page SEO
+    title/description. tools/verify-cms-config.mjs cross-checks this file
+    against the real data on every `npm run verify` — see config.yml's own
+    header comment for the full editable/code-controlled split.
 
     AUTHENTICATION: Sveltia authenticates via GitHub. It needs a GitHub OAuth
     app (or the Sveltia-hosted auth flow) configured against this repository

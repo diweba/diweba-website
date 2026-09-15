@@ -1,0 +1,38 @@
+de:
+  eyebrow: Kontakt
+  h: Fünf Minuten, und wir wissen beide, ob es passt.
+  sub: Schreiben Sie kurz, worum es geht. Sie erhalten eine Antwort am nächsten Werktag — von der Person, die auch die Website baut.
+  fieldPlaceholders:
+    name: Vor- und Nachname
+    company: Firmenname
+    email: name@beispiel.de
+    message: "Zum Beispiel: Wir haben eine alte Website und bekommen kaum Anfragen. Fünf Seiten würden reichen."
+  submit: Anfrage senden
+  promiseLabel: Antwort
+  promise: Antwort am nächsten Werktag
+  directLabel: Direkt
+  note: Kein Kauf über die Website. Auf die Anfrage folgt ein kurzes Gespräch und danach ein Angebot mit festem Preis.
+  thanks:
+    title: Anfrage gesendet — DIWEBA
+    heading: Anfrage ist raus.
+    body: Wir haben Ihre Nachricht erhalten und melden uns am nächsten Werktag.
+    back: Zurück zur Startseite
+en:
+  eyebrow: Contact
+  h: Five minutes, and we both know whether it fits.
+  sub: Write briefly what it is about. You get a reply on the next working day — from the person who also builds the website.
+  fieldPlaceholders:
+    name: First and last name
+    company: Company name
+    email: name@example.com
+    message: "For example: we have an old website and get almost no inquiries. Five pages would be enough."
+  submit: Send inquiry
+  promiseLabel: Reply
+  promise: Reply on the next working day
+  directLabel: Direct
+  note: No purchase through the website. Your inquiry is followed by a short call and then a proposal with a fixed price.
+  thanks:
+    title: Inquiry sent — DIWEBA
+    heading: Your request is on its way.
+    body: We've received your message and will get back to you on the next working day.
+    back: Back to home
