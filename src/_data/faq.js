@@ -24,7 +24,12 @@ export default {
       },
       {
         q: "Wie lange bin ich gebunden?",
-        a: "Der Betrieb (Hosting, Sicherheit, Backups) läuft 12 Monate, danach monatlich kündbar. Die Betreuung ist freiwillig und jederzeit kündbar.",
+        /** Corrected (confirmed 2026): Betrieb has no minimum term -- see
+         *  pricingPage.js's matching cross-reference comment on its
+         *  `monthly` object. An earlier version of this answer said "läuft
+         *  12 Monate, danach monatlich kündbar", which was never the actual
+         *  business model. */
+        a: "Der Betrieb (Hosting, Sicherheit, Backups) hat keine Mindestlaufzeit und ist monatlich kündbar. Die Betreuung ist optional und jederzeit kündbar.",
       },
       {
         q: "Gehört die Website mir?",
@@ -66,7 +71,7 @@ export default {
       },
       {
         q: "How long am I tied in?",
-        a: "Operation (hosting, security, backups) runs for 12 months, then month to month. The care plan is voluntary and can be cancelled at any time.",
+        a: "Operation (hosting, security, backups) has no minimum term and can be cancelled monthly. The care plan is optional and can be cancelled at any time.",
       },
       {
         q: "Do I own the website?",

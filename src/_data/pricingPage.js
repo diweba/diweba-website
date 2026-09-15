@@ -19,25 +19,28 @@ export default {
     h: "Fester Umfang, fester Preis.",
     sub: "Zwei Pakete, beide mit der technischen Grundlage für Google und KI-Suche. Add-ons können Sie einzeln dazunehmen.",
 
+    /**
+     * CANONICAL CONTRACT-TERM FACT (confirmed 2026): Betrieb carries no
+     * minimum term at all -- cancellable on a rolling monthly basis, from
+     * day one. Betreuung is optional and cancellable any time. This replaces
+     * an earlier, incorrect "12 Monate, danach monatlich kündbar" /
+     * "Pflicht" wording that briefly existed here and in faq.js's "Wie lange
+     * bin ich gebunden?" answer -- both independently asserted a 12-month
+     * minimum term that was never actually the business model, then drifted
+     * out of sync when only one of the two was corrected first. This object
+     * and faq.js's matching answer are the two places this fact is stated in
+     * full sentences; if either changes, check the other -- see faq.js's own
+     * cross-reference comment on that entry.
+     */
     monthly: {
       label: "Der monatliche Betrag",
-      sub: "Zwei getrennte Posten. Der erste ist Pflicht, der zweite nicht.",
+      sub: "Zwei getrennte Posten: Betrieb ohne Mindestlaufzeit, Betreuung optional.",
       items: [
         {
           n: "Betrieb",
           p: 39,
-          /** Corrected wording (post-Phase-3C instruction): the source and
-           *  this file both said "Pflicht" here. The authoritative business
-           *  wording is "Keine Mindestlaufzeit" instead -- changed only on
-           *  the DE side, since no approved EN equivalent of this exact
-           *  phrase exists in DIWEBA/diweba-site.js (the EN row still reads
-           *  "Mandatory", left untouched rather than inventing a
-           *  translation). See this file's other DE/EN rows and faq.js's
-           *  "Wie lange bin ich gebunden?" answer, which still states a
-           *  12-month term for Betrieb -- intentionally NOT touched by this
-           *  fix, which was scoped to this one label pair only. */
           req: "Keine Mindestlaufzeit",
-          term: "12 Monate, danach monatlich kündbar",
+          term: "Monatlich kündbar",
           items: ["Hosting und SSL", "Backups und Sicherheitsupdates", "Rechtstexte aktuell", "Erreichbarkeitsprüfung", "Besucherzahlen"],
         },
         {
@@ -114,15 +117,21 @@ export default {
     h: "Fixed scope, fixed price.",
     sub: "Two packages, both with the technical foundation for Google and AI search. Add-ons can be taken individually.",
 
+    /** Canonical contract-term fact -- see the DE block's matching comment
+     *  above. "No minimum term" / "Month to month" are the confirmed
+     *  English equivalents (not present in DIWEBA/diweba-site.js, which
+     *  only had the withdrawn "Mandatory" / 12-month wording; these are a
+     *  direct translation of the confirmed business rule, not new
+     *  contractual detail). */
     monthly: {
       label: "The monthly amount",
-      sub: "Two separate items. The first is mandatory, the second is not.",
+      sub: "Two separate items: operation with no minimum term, care optional.",
       items: [
         {
           n: "Operation",
           p: 39,
-          req: "Mandatory",
-          term: "12 months, then month to month",
+          req: "No minimum term",
+          term: "Month to month",
           items: ["Hosting and SSL", "Backups and security updates", "Legal texts kept current", "Availability checks", "Visitor numbers"],
         },
         {
