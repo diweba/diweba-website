@@ -69,12 +69,16 @@
           "binding": "RATE_LIMIT",
           "id": "6e70d97b395e498f8d9736ee31b170cc"
         }
-      ]
-      // "routes": [{ "pattern": "diweba.de/*", "zone_name": "diweba.de" }]
-      // ^ DNS has already moved to Cloudflare (confirmed Phase 8C), but this
-      //   stays disabled until secrets are configured and the Worker has
-      //   been verified end-to-end -- enabling this is what actually
-      //   attaches the Worker to the live production domain.
+      ],
+      // Phase 8F: all prerequisites verified end-to-end (KV, all five Worker
+      // secrets, Turnstile allowed hostnames, Brevo SPF/DKIM/DMARC) -- this
+      // is what actually attaches the Worker to the live production domain.
+      // www.diweba.de is deliberately NOT added here: no file in this repo
+      // (routes.js, site.js, docs) defines a www strategy -- SITE_URL and
+      // every canonical/OG/hreflang tag are already consistently the bare
+      // diweba.de domain, so adding www would be inventing a strategy that
+      // doesn't otherwise exist.
+      "routes": [{ "pattern": "diweba.de/*", "zone_name": "diweba.de" }]
     },
 
     "preview": {
