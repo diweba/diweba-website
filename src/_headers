@@ -34,3 +34,16 @@
 /admin/*
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store
+
+# Plain-text files with no internal encoding self-declaration (unlike HTML's
+# <meta charset> or XML's <?xml encoding=...?>). Cloudflare's default MIME
+# mapping serves .txt as `text/plain` with no charset parameter, so a client
+# that doesn't default to UTF-8 has to guess -- and misreading valid UTF-8
+# bytes (e.g. "für" as C3 BC) as Latin-1 is exactly how "Ã¼"-style mojibake
+# happens. The bytes on disk were already correct UTF-8; only this HTTP
+# metadata was missing.
+/robots.txt
+  Content-Type: text/plain; charset=UTF-8
+
+/llms.txt
+  Content-Type: text/plain; charset=UTF-8

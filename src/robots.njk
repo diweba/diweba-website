@@ -9,6 +9,14 @@ eleventyExcludeFromCollections: true
   named explicitly because OpenAI's publisher documentation states that blocking
   it removes the site from ChatGPT Search citations — the opposite of the goal.
 
+  GROUPING SEMANTICS (fixed after a live audit found /admin/ wasn't actually
+  disallowed for these three crawlers): per the Robots Exclusion Protocol, a
+  crawler that matches a specific named User-agent group (Googlebot, Bingbot,
+  OAI-SearchBot) uses ONLY that group's own rules -- it does not also pick up
+  Disallow lines from a separate `User-agent: *` group, even one further down
+  the file. Each named group below therefore repeats its own Disallow:
+  /admin/ rather than relying on the wildcard group to cover it.
+
   Non-production builds disallow everything. An indexable staging site is an SEO
   incident, and this makes that impossible by default rather than by remembering
   (spec §15).
@@ -18,20 +26,21 @@ eleventyExcludeFromCollections: true
 
 User-agent: *
 Allow: /
+Disallow: /admin/
 
-# Search crawlers — explicitly permitted.
+# Search crawlers — explicitly permitted. Each repeats Disallow: /admin/
+# because a named group does not inherit rules from User-agent: * above.
 User-agent: Googlebot
 Allow: /
+Disallow: /admin/
 
 User-agent: Bingbot
 Allow: /
+Disallow: /admin/
 
 # AI search. Blocking this removes the site from ChatGPT Search citations.
 User-agent: OAI-SearchBot
 Allow: /
-
-# CMS interface. Not content; excluded from indexing and from the sitemap.
-User-agent: *
 Disallow: /admin/
 
 Sitemap: {{ site.url }}/sitemap.xml

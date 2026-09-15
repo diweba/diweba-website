@@ -63,7 +63,7 @@ Exactly two, both fixed-scope and fixed-price. No third package exists.
 - **{{ item.name }}** — {{ item.priceOnce | price("de", packages.currency) }} one-time + {{ item.priceMonthly | price("de", packages.currency) }}/month operation. {{ item.summary.en }}
 {%- endfor %}
 
-All prices exclude VAT. Prices and scope are authoritative on the pricing page; this file is a summary, not the source.
+{{ pricingPage.en.note }} Prices and scope are authoritative on the pricing page; this file is a summary, not the source.
 
 ## Pages (German — primary)
 
