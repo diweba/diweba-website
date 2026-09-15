@@ -1,0 +1,86 @@
+{#
+  Shared body for /ueber-uns/ and /en/about/ — ported section-for-section
+  from the design's `isAbout` markup (DIWEBA/DIWEBA Website.dc.html, lines
+  687-727) via src/_data/aboutPage.js. Four blocks, in the source's own
+  order: heading + name/role + portrait (2px ink border-bottom, divider
+  between columns) -> story paragraphs (hairline border-bottom) -> insight +
+  direct-contact (sunk background, hairline border-bottom) -> the site-wide
+  scope-boundary statement (hairline border-top only) -> the same closing
+  CTA block every other secondary page ends with.
+
+  Name/role come from company.js/home.js (not aboutPage.js) and the
+  scope-boundary statement comes from pricingPage.js -- see aboutPage.js's
+  header comment for why nothing here is a second copy of a fact that
+  already lives elsewhere.
+
+  Column order matches the design exactly: text first, portrait second,
+  divided by a border-left -- the SAME two-column technique already used
+  for home-body.njk's own hero/stats split, just with a photo in the second
+  slot instead of numbers. This is a different composition from the
+  homepage's OWN founder section (photo first, sunk background) — that
+  is the design's own choice for that section, not something to
+  reconcile; each section keeps its own approved layout.
+#}
+{%- set t = ui[lang] -%}
+{%- set a = aboutPage[lang] -%}
+{%- set h = home[lang] -%}
+{%- set pp = pricingPage[lang] -%}
+
+<section class="row row--edge-bottom">
+  <div class="container row-grid row-grid--split" style="align-items:center">
+    <div class="stack" style="justify-content:center">
+      <p class="eyebrow" style="color:var(--color-accent-amber)">{{ a.eyebrow }}</p>
+      <h1 style="font-size:clamp(2rem, 3.8vw, 3.25rem)">{{ a.h }}</h1>
+      <div class="stack" style="gap:2px;margin-top:6px">
+        <span style="font-size:var(--text-lg);font-weight:var(--weight-semibold)">{{ company.legalName }}</span>
+        <span class="eyebrow" style="color:var(--color-text-faint)">{{ h.founder.role }}</span>
+      </div>
+    </div>
+    <div style="border-left:1px solid var(--color-ink);padding-left:var(--section-x);display:flex;align-items:center;justify-content:center">
+      <div style="width:100%;max-width:380px">
+        <picture>
+          <source srcset="/assets/img/founder-baki-cirak.webp" type="image/webp">
+          <img src="/assets/img/founder-baki-cirak.jpg" width="320" height="400"
+               alt="{{ a.photoAlt }}"
+               style="width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:var(--radius)"
+               loading="lazy">
+        </picture>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="row">
+  <div class="container stack" style="max-width:46em">
+    {%- for s in a.story %}
+    <p class="text-soft" style="font-size:var(--text-lg);line-height:var(--leading-relaxed);text-wrap:pretty">{{ s }}</p>
+    {%- endfor %}
+  </div>
+</section>
+
+<section class="row row--sunk">
+  <div class="container row-grid" style="grid-template-columns:repeat(auto-fit, minmax(17.5rem, 1fr))">
+    <div class="stack" style="gap:10px">
+      <p class="eyebrow">{{ a.insightLabel }}</p>
+      <p class="text-soft" style="font-size:var(--text-md);line-height:var(--leading-relaxed)">{{ a.insight.before }}<a href="{{ a.insight.href }}" style="color:inherit;text-decoration:underline">{{ a.insight.linkText }}</a>{{ a.insight.after }}</p>
+    </div>
+    <div class="stack" style="gap:10px">
+      <p class="eyebrow">{{ a.contactLabel }}</p>
+      <a href="mailto:{{ company.email }}" style="font-family:var(--font-mono);font-size:var(--text-md);color:var(--color-text)">{{ company.email }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="row row--no-border" style="border-top:1px solid var(--color-border)">
+  <div class="container stack" style="gap:14px">
+    <p class="eyebrow" style="color:var(--color-accent-amber)">{{ pp.oneThingLabel }}</p>
+    <p style="font-size:clamp(1.1875rem, 1.8vw, 1.5rem);line-height:1.55;letter-spacing:-0.015em;max-width:44em">{{ pp.oneThingBody }}</p>
+  </div>
+</section>
+
+<section class="row row--edge-top row--no-border">
+  <div class="container cluster" style="justify-content:space-between;align-items:center">
+    <h2 style="font-size:var(--text-3xl);max-width:20em">{{ h.finalH }}</h2>
+    <a class="btn btn--primary" href="{{ "contact" | route(lang) }}">{{ t.ctaPrimary }}</a>
+  </div>
+</section>
