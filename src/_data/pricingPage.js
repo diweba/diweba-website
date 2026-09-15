@@ -26,7 +26,17 @@ export default {
         {
           n: "Betrieb",
           p: 39,
-          req: "Pflicht",
+          /** Corrected wording (post-Phase-3C instruction): the source and
+           *  this file both said "Pflicht" here. The authoritative business
+           *  wording is "Keine Mindestlaufzeit" instead -- changed only on
+           *  the DE side, since no approved EN equivalent of this exact
+           *  phrase exists in DIWEBA/diweba-site.js (the EN row still reads
+           *  "Mandatory", left untouched rather than inventing a
+           *  translation). See this file's other DE/EN rows and faq.js's
+           *  "Wie lange bin ich gebunden?" answer, which still states a
+           *  12-month term for Betrieb -- intentionally NOT touched by this
+           *  fix, which was scoped to this one label pair only. */
+          req: "Keine Mindestlaufzeit",
           term: "12 Monate, danach monatlich kündbar",
           items: ["Hosting und SSL", "Backups und Sicherheitsupdates", "Rechtstexte aktuell", "Erreichbarkeitsprüfung", "Besucherzahlen"],
         },
