@@ -62,6 +62,11 @@ export default {
        *  partial around a naming coincidence that won't always hold. */
       imprint: "Impressum",
       privacy: "Datenschutz",
+      /** Same pattern again (Phase 7): service/smallBusiness are real
+       *  routes.js entries but not nav:true (they're landing pages, not
+       *  primary navigation), so breadcrumbs.njk needs a label here too. */
+      service: "Website erstellen lassen",
+      smallBusiness: "Webdesign für kleine Unternehmen",
     },
 
     legal: {
@@ -169,6 +174,8 @@ export default {
       thanks: "Inquiry sent",
       imprint: "Imprint",
       privacy: "Privacy",
+      service: "Website Development",
+      smallBusiness: "Small Business Web Design",
     },
 
     legal: {

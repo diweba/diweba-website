@@ -1,0 +1,110 @@
+# DIWEBA — /webdesign-kleine-unternehmen/ and /en/small-business-web-design/
+# content.
+#
+# Phase 7. Same status as servicePage.yml (no design-source markup exists
+# for this page either) -- original copy from confirmed facts, same voice.
+# See servicePage.yml's header comment for the full reasoning; not
+# repeated here.
+#
+# SEARCH INTENT (distinct from both the homepage AND servicePage.yml):
+# "webdesign kleine unternehmen" is an audience-qualification query --
+# someone self-selecting by business size/budget before evaluating vendors,
+# not yet committed to "get a full website built" as a category the way
+# servicePage.yml's visitor is. This page argues the SMB-fit case
+# specifically (right-sized scope, plain language, one point of contact,
+# mobile-first, maintainable) rather than explaining the general service
+# model servicePage.yml already covers.
+#
+# DUPLICATE-CONTENT GUARDS:
+#   - The "who this is NOT for" section reads pricingPage[lang].oneThingBody
+#     directly in the template (landing-body.njk), the same reused sentence
+#     as servicePage.yml -- not re-typed here.
+#   - The FAQ below is a distinct 4 items again, angled at small-business
+#     concerns (technical skill needed, unclear starting point, Google
+#     help) -- not the same questions as faq.yml's 9 or servicePage.yml's 4.
+#   - Process steps are named only, same as servicePage.yml; full
+#     descriptions stay on /ablauf/.
+
+de:
+  eyebrow: "Webdesign für kleine Unternehmen"
+  h: "Webdesign für kleine Unternehmen, das zum Budget und zur Zeit passt."
+  sub: "Kein Konzern-Prozess, keine wochenlangen Abstimmungsrunden. DIWEBA baut Websites für Betriebe, die eine funktionierende Seite brauchen — nicht ein Projekt, das ein Vierteljahr Aufmerksamkeit frisst."
+
+  problemsLabel: "Was an alten Websites meistens nicht mehr stimmt"
+  problems:
+    - "Vor Jahren gebaut, seither nicht angefasst — Preise, Leistungen oder Öffnungszeiten stimmen nicht mehr."
+    - "Nicht für das Handy gedacht: Text zu klein, Buttons schwer zu treffen, Laden dauert."
+    - "Niemand weiß mehr, wie man etwas ändert, weil der ursprüngliche Baukasten oder die Agentur nicht mehr erreichbar ist."
+    - "Kein Google-Unternehmensprofil oder ein veraltetes — Kunden aus der Nähe finden den Betrieb nicht."
+
+  approachLabel: "Wie DIWEBA das anders macht"
+  approachBody: "Jede DIWEBA-Website wird für das Smartphone gebaut, nicht nachträglich angepasst — die meisten Besucher kommen ohnehin von dort. Struktur und Seitenzahl sind von Anfang an festgelegt, nicht wachsend, was Kosten und Bauzeit vorhersehbar hält. Und weil die Seite über ein CMS läuft, können Sie selbst hinein, sobald Sie wollen — ein einfacher Zugang für Texte, Preise und Öffnungszeiten ist als Add-on einrichtbar."
+
+  localLabel: "Für Betriebe mit lokalen Kunden"
+  localBody: "Google-Unternehmensprofil und Search Console richten wir in jedem Paket ein — die zwei Stellen, an denen Kunden aus der Region einen Betrieb überhaupt finden. Was danach passiert, hängt von Suchanfragen, Wettbewerb und vielen Faktoren außerhalb unserer Kontrolle ab; das sagen wir lieber vorher, als es zu verschweigen."
+
+  structureLabel: "Klare Struktur statt Bastelbaukasten"
+  structureBody: "Fünf Seiten bei START, sechs bei PLUS — festgelegt, nicht endlos erweiterbar. Eine klare Handlungsaufforderung pro Seite statt zehn konkurrierender Buttons. Das ist bewusst schmal: Umfang, der zu einem kleinen Betrieb passt, nicht zu einem Konzern mit eigener Marketingabteilung."
+
+  processLabel: "Wie es abläuft"
+  processBody: "Ein kurzes Gespräch reicht als Start — auch wenn Sie noch keine fertige Vorstellung haben. Danach: Festpreis-Angebot, Aufbau, Livegang. Der vollständige Ablauf mit allen Zeiten steht auf der Ablauf-Seite."
+  processSteps:
+    - "Kurzes Gespräch"
+    - "Festpreis-Angebot"
+    - "Aufbau"
+    - "Start und Betrieb"
+
+  notForLabel: "Für wen das nicht passt"
+
+  faqLabel: "Häufige Fragen von kleinen Unternehmen"
+  faq:
+    - q: "Ist DIWEBA auch für ein sehr kleines Unternehmen geeignet?"
+      a: "Ja — START ist genau dafür gedacht: fünf Seiten, ein Festpreis, keine Mindestgröße vorausgesetzt. Wenn Ihr Betrieb mehr braucht als das, sagen wir es im ersten Gespräch."
+    - q: "Brauche ich technisches Wissen, um die Website später zu pflegen?"
+      a: "Nein. Standardmäßig übernehmen wir Änderungen für Sie. Wer lieber selbst ran will, bekommt einen einfachen Zugang für Texte, Preise und Öffnungszeiten — kein technisches Vorwissen nötig."
+    - q: "Was, wenn ich noch keine klare Vorstellung habe, wie die Website aussehen soll?"
+      a: "Das kurze Gespräch am Anfang klärt genau das: was Ihr Betrieb braucht und ob wir passen. Sie müssen nicht mit einem fertigen Konzept kommen."
+    - q: "Hilft mir das auch bei Google?"
+      a: "Wir richten Ihr Google-Unternehmensprofil und die Search Console ein und bauen die Seite technisch lesbar. Eine bestimmte Platzierung kann niemand ehrlich garantieren — das versprechen wir auch nicht."
+
+en:
+  eyebrow: "Web design for small businesses"
+  h: "Web design for small businesses that fits the budget and the schedule."
+  sub: "No corporate process, no weeks of back-and-forth. DIWEBA builds websites for businesses that need a working site — not a project that eats up a quarter of everyone's attention."
+
+  problemsLabel: "What's usually wrong with an old website"
+  problems:
+    - "Built years ago, untouched since — prices, services or opening hours no longer match reality."
+    - "Not built for phones: text too small, buttons hard to hit, slow to load."
+    - "Nobody remembers how to change anything, because the original builder or agency is no longer reachable."
+    - "No Google Business Profile, or an outdated one — nearby customers can't find the business."
+
+  approachLabel: "How DIWEBA does it differently"
+  approachBody: "Every DIWEBA website is built for the phone, not adapted afterward — most visitors arrive from one anyway. Structure and page count are fixed from the start, not open-ended, which keeps cost and build time predictable. And because the site runs on a CMS, you can edit it yourself whenever you want — simple access for text, prices and opening hours is available as an add-on."
+
+  localLabel: "For businesses with local customers"
+  localBody: "We set up a Google Business Profile and Search Console in every package — the two places nearby customers actually find a business at all. What happens after that depends on search queries, competition and many factors outside our control; we'd rather say that upfront than leave it unsaid."
+
+  structureLabel: "Clear structure, not an open-ended kit"
+  structureBody: "Five pages with START, six with PLUS — fixed, not endlessly expandable. One clear call to action per page instead of ten competing buttons. That's deliberately narrow: a scope that fits a small business, not a corporation with its own marketing department."
+
+  processLabel: "How it works"
+  processBody: "A short call is enough to start — even if you don't have a finished idea yet. After that: a fixed-price proposal, the build, launch. The full process with all the timing is on the process page."
+  processSteps:
+    - "Short call"
+    - "Fixed-price proposal"
+    - "Build"
+    - "Launch and operation"
+
+  notForLabel: "Who this isn't for"
+
+  faqLabel: "Frequent questions from small businesses"
+  faq:
+    - q: "Is DIWEBA suitable for a very small business?"
+      a: "Yes — START is built for exactly that: five pages, a fixed price, no minimum size assumed. If your business needs more than that, we'll say so in the first call."
+    - q: "Do I need technical knowledge to maintain the website afterward?"
+      a: "No. By default we make changes for you. If you'd rather do it yourself, you get simple access for text, prices and opening hours — no technical background needed."
+    - q: "What if I don't have a clear idea of what the website should look like?"
+      a: "The short call at the start is exactly for that: working out what your business needs and whether we fit. You don't need to arrive with a finished concept."
+    - q: "Will this help me with Google?"
+      a: "We set up your Google Business Profile and Search Console, and build the site to be technically readable. No one can honestly guarantee a specific ranking — we don't promise one either."

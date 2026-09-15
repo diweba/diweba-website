@@ -1,0 +1,16 @@
+---
+routeKey: smallBusiness
+title: "Webdesign für kleine Unternehmen | DIWEBA"
+description: "Webdesign für kleine Unternehmen: fester Umfang, mobiles Design von Anfang an, verständliche Pflege. Fester Preis statt Konzern-Prozess."
+---
+{#
+  /webdesign-kleine-unternehmen/ (DE). Markup lives in
+  partials/landing-body.njk, shared with /website-erstellen-lassen/ and both
+  EN equivalents — see that file's header comment and
+  src/_data/smallBusinessPage.yml's header comment for the full provenance
+  note (no design source exists for this page, original copy from confirmed
+  facts, the audience-qualification search-intent reasoning distinct from
+  both the homepage and the service-page sibling).
+#}
+{%- set page = smallBusinessPage[lang] -%}
+{% include "partials/landing-body.njk" %}

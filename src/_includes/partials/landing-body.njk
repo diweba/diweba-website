@@ -1,0 +1,190 @@
+{#
+  Shared body for the four Phase 7 landing pages (/website-erstellen-lassen/,
+  /en/website-development/, /webdesign-kleine-unternehmen/,
+  /en/small-business-web-design/). ONE partial for both page concepts,
+  since they share a section vocabulary (hero, a short list block, process
+  reference, boundaries, FAQ, closing CTA) even though the specific blocks
+  each one uses differ -- see servicePage.yml / smallBusinessPage.yml's own
+  header comments for why each field exists and what it must not duplicate.
+
+  Every non-hero block below is conditional on its own data existing, so
+  this one template serves both content shapes without hardcoding either
+  page's specific section list. A future third landing page reusing only
+  SOME of these blocks works without touching this file.
+
+  REUSED, NOT DUPLICATED: the "boundaries" text is pricingPage[lang]'s own
+  oneThingBody (already reused on /pakete-preise/ and /ueber-uns/); process
+  step full descriptions live only on /ablauf/, this page names them and
+  links out; the closing CTA reuses home.js's finalH + ui.js's
+  ctaPrimary/ctaSecondary, the same pattern every secondary page uses.
+
+  EMPTY-STATE PROTECTION: eyebrow/h/sub are required() -- a CMS save that
+  blanks the headline fails the build instead of publishing an incomplete
+  page silently. List/FAQ blocks are conditional rather than required,
+  since which optional sections a given landing page uses is a legitimate
+  per-page editorial choice, not a missing-content bug.
+#}
+{%- set t = ui[lang] -%}
+{%- set pp = pricingPage[lang] -%}
+{%- set h = home[lang] -%}
+{%- set heroEyebrow = page.eyebrow | required("landing page eyebrow") -%}
+{%- set heroH1 = page.h | required("landing page h1") -%}
+{%- set heroSub = page.sub | required("landing page sub") -%}
+{% include "partials/page-hero.njk" %}
+
+{%- if page.forWhoBody %}
+<section class="row">
+  <div class="container stack" style="gap:10px;max-width:46em">
+    <p class="eyebrow">{{ page.forWhoLabel }}</p>
+    <p class="text-soft" style="font-size:var(--text-lg);line-height:var(--leading-relaxed)">{{ page.forWhoBody }}</p>
+  </div>
+</section>
+{%- endif %}
+
+{%- if page.problems %}
+<section class="row">
+  <div class="container">
+    <h2 style="font-size:var(--text-3xl);margin-bottom:clamp(1.125rem, 2.4vw, 1.875rem)">{{ page.problemsLabel }}</h2>
+    <ul class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(19rem, 1fr))">
+      {%- for item in page.problems %}
+      <li style="display:grid;grid-template-columns:22px 1fr;gap:10px;padding-block:12px;border-top:1px solid var(--color-border-soft)">
+        <span style="color:var(--color-accent-amber-strong)">→</span>
+        <span class="text-soft" style="font-size:var(--text-base);line-height:var(--leading-relaxed)">{{ item }}</span>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+{%- endif %}
+
+{%- if page.included %}
+<section class="row row--sunk">
+  <div class="container stack" style="gap:16px">
+    <h2 style="font-size:var(--text-3xl)">{{ page.includedLabel }}</h2>
+    <ul class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(19rem, 1fr))">
+      {%- for item in page.included %}
+      <li style="display:grid;grid-template-columns:20px 1fr;gap:10px;padding-block:8px">
+        <span style="color:var(--color-accent-blue)">✓</span>
+        <span style="font-size:var(--text-base)">{{ item }}</span>
+      </li>
+      {%- endfor %}
+    </ul>
+    {%- if page.includedNote %}
+    <p class="text-faint" style="font-size:var(--text-sm)">{{ page.includedNote }} <a href="{{ "pricing" | route(lang) }}" style="color:inherit;text-decoration:underline">{{ t.nav.pricing }}</a></p>
+    {%- endif %}
+  </div>
+</section>
+{%- endif %}
+
+{%- if page.packagesBody %}
+<section class="row">
+  <div class="container stack" style="gap:10px;max-width:48em">
+    <p class="eyebrow">{{ page.packagesLabel }}</p>
+    <p class="text-soft" style="font-size:var(--text-lg);line-height:var(--leading-relaxed)">{{ page.packagesBody }}</p>
+    <a href="{{ "pricing" | route(lang) }}" style="font-size:var(--text-md);font-weight:var(--weight-semibold);border-bottom:2px solid var(--color-accent-blue);align-self:flex-start;padding-bottom:3px;margin-top:4px">{{ t.nav.pricing }} →</a>
+  </div>
+</section>
+{%- endif %}
+
+{%- if page.approachBody %}
+<section class="row row--sunk">
+  <div class="container stack" style="gap:10px;max-width:48em">
+    <p class="eyebrow">{{ page.approachLabel }}</p>
+    <p class="text-soft" style="font-size:var(--text-lg);line-height:var(--leading-relaxed)">{{ page.approachBody }}</p>
+  </div>
+</section>
+{%- endif %}
+
+{%- if page.structureBody %}
+<section class="row">
+  <div class="container stack" style="gap:10px;max-width:48em">
+    <p class="eyebrow">{{ page.structureLabel }}</p>
+    <p class="text-soft" style="font-size:var(--text-lg);line-height:var(--leading-relaxed)">{{ page.structureBody }}</p>
+    <a href="{{ "pricing" | route(lang) }}" style="font-size:var(--text-md);font-weight:var(--weight-semibold);border-bottom:2px solid var(--color-accent-blue);align-self:flex-start;padding-bottom:3px;margin-top:4px">{{ t.nav.pricing }} →</a>
+  </div>
+</section>
+{%- endif %}
+
+{%- if page.localBody %}
+<section class="row row--sunk">
+  <div class="container stack" style="gap:10px;max-width:48em">
+    <p class="eyebrow">{{ page.localLabel }}</p>
+    <p class="text-soft" style="font-size:var(--text-lg);line-height:var(--leading-relaxed)">{{ page.localBody }}</p>
+    <a href="{{ "aiSearch" | route(lang) }}" style="font-size:var(--text-md);font-weight:var(--weight-semibold);border-bottom:2px solid var(--color-accent-blue);align-self:flex-start;padding-bottom:3px;margin-top:4px">{{ t.nav.aiSearch }} →</a>
+  </div>
+</section>
+{%- endif %}
+
+{%- if page.processBody %}
+<section class="row">
+  <div class="container stack" style="gap:16px">
+    <div class="stack" style="gap:10px;max-width:48em">
+      <p class="eyebrow">{{ page.processLabel }}</p>
+      <p class="text-soft" style="font-size:var(--text-lg);line-height:var(--leading-relaxed)">{{ page.processBody }}</p>
+    </div>
+    <ol class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(13rem, 1fr))">
+      {%- for step in page.processSteps %}
+      <li style="display:flex;align-items:baseline;gap:10px;padding-block:10px;border-top:2px solid var(--color-border-soft)">
+        <span class="tabular" style="font-family:var(--font-mono);color:var(--color-text-faint);font-size:var(--text-sm)">{{ loop.index }}</span>
+        <span style="font-weight:var(--weight-semibold)">{{ step }}</span>
+      </li>
+      {%- endfor %}
+    </ol>
+    <a href="{{ "process" | route(lang) }}" style="font-size:var(--text-md);font-weight:var(--weight-semibold);border-bottom:2px solid var(--color-accent-blue);align-self:flex-start;padding-bottom:3px">{{ t.nav.process }} →</a>
+  </div>
+</section>
+{%- endif %}
+
+{%- if page.operationBody %}
+<section class="row row--sunk">
+  <div class="container stack" style="gap:10px;max-width:48em">
+    <p class="eyebrow">{{ page.operationLabel }}</p>
+    <p class="text-soft" style="font-size:var(--text-lg);line-height:var(--leading-relaxed)">{{ page.operationBody }}</p>
+  </div>
+</section>
+{%- endif %}
+
+{%- if page.afterBody %}
+<section class="row">
+  <div class="container stack" style="gap:10px;max-width:48em">
+    <p class="eyebrow">{{ page.afterLabel }}</p>
+    <p class="text-soft" style="font-size:var(--text-lg);line-height:var(--leading-relaxed)">{{ page.afterBody }}</p>
+  </div>
+</section>
+{%- endif %}
+
+{%- if page.boundariesLabel or page.notForLabel %}
+<section class="row row--no-border" style="border-top:1px solid var(--color-border)">
+  <div class="container stack" style="gap:14px">
+    <p class="eyebrow" style="color:var(--color-accent-amber-strong)">{{ page.boundariesLabel or page.notForLabel }}</p>
+    <p style="font-size:clamp(1.1875rem, 1.8vw, 1.5rem);line-height:1.55;letter-spacing:-0.015em;max-width:44em">{{ pp.oneThingBody }}</p>
+  </div>
+</section>
+{%- endif %}
+
+{%- if page.faq %}
+<section class="row">
+  <div class="container">
+    <h2 style="font-size:var(--text-3xl);margin-bottom:clamp(1.125rem, 2.4vw, 1.875rem)">{{ page.faqLabel }}</h2>
+    <div class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(21.25rem, 1fr));gap:var(--space-lg) clamp(1.75rem, 4vw, 4rem)">
+      {%- for item in page.faq %}
+      <div class="faq-entry">
+        <h3 class="faq-entry__q" style="font-size:var(--text-lg)">{{ item.q }}</h3>
+        <p class="faq-entry__a">{{ item.a }}</p>
+      </div>
+      {%- endfor %}
+    </div>
+    <a href="{{ "faq" | route(lang) }}" style="display:inline-block;margin-top:var(--space-lg);font-size:var(--text-md);font-weight:var(--weight-semibold);border-bottom:2px solid var(--color-accent-blue);padding-bottom:3px">{{ t.seeAllFaq }} →</a>
+  </div>
+</section>
+{%- endif %}
+
+<section class="row row--edge-top row--no-border">
+  <div class="container cluster" style="justify-content:space-between;align-items:center">
+    <h2 style="font-size:var(--text-3xl);max-width:20em">{{ h.finalH }}</h2>
+    <div class="cluster" style="gap:12px">
+      <a class="btn btn--primary" href="{{ "contact" | route(lang) }}">{{ t.ctaPrimary }}</a>
+      <a class="btn btn--secondary" href="{{ "pricing" | route(lang) }}">{{ t.ctaSecondary }}</a>
+    </div>
+  </div>
+</section>

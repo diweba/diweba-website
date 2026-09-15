@@ -1,0 +1,15 @@
+---
+routeKey: service
+title: "Website erstellen lassen: Festpreis, feste Zeit | DIWEBA"
+description: "Website erstellen lassen ohne Angebotsschleifen: fester Umfang, fester Preis, Livegang in 10 oder 15 Arbeitstagen. So funktioniert das DIWEBA-Modell."
+---
+{#
+  /website-erstellen-lassen/ (DE). Markup lives in partials/landing-body.njk,
+  shared with /webdesign-kleine-unternehmen/ and both EN equivalents — see
+  that file's header comment and src/_data/servicePage.yml's header comment
+  for the full provenance note (no design source exists for this page,
+  original copy from confirmed facts, the search-intent/differentiation
+  reasoning, and what this page deliberately does not duplicate).
+#}
+{%- set page = servicePage[lang] -%}
+{% include "partials/landing-body.njk" %}

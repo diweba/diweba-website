@@ -1,0 +1,124 @@
+# DIWEBA — /website-erstellen-lassen/ and /en/website-development/ content.
+#
+# Phase 7. No design-source markup exists for this page (confirmed absent
+# from DIWEBA Website.dc.html / diweba-site.js during the Phase 3E audit) —
+# unlike every other page built so far, there was nothing to port. This is
+# original copy, written from confirmed facts already established
+# elsewhere in this project (company.js, packages.js, pricingPage.yml,
+# processPage.yml, faq.yml) and the same direct, specific, no-hype voice
+# those files already use. Nothing here is a new business fact: every price,
+# scope item, process step and boundary restates something already
+# confirmed and published elsewhere, in this page's own words.
+#
+# SEARCH INTENT (distinct from the homepage): "website erstellen lassen" is
+# a comparison/decision-stage query from someone who has decided to get a
+# website built but hasn't picked an approach yet. This page explains what
+# that means in DIWEBA's specific model -- fixed scope, fixed price, what's
+# included, what happens after launch, what it does NOT cover -- rather
+# than repeating the homepage's broader value-proposition pitch.
+#
+# DUPLICATE-CONTENT GUARDS:
+#   - The "boundaries" paragraph is NOT written fresh here -- the template
+#     reads pricingPage[lang].oneThingBody directly (see landing-body.njk),
+#     the same sentence already reused on /pakete-preise/ and /ueber-uns/.
+#   - The FAQ below is a distinct 4 items, written for this page's own
+#     "which approach, how long, what does it cost, what if I already have
+#     a site" angle -- not a subset or rewording of faq.yml's 9 items.
+#   - Process steps are named, not re-described; the full step
+#     descriptions stay on /ablauf/ and are not duplicated here.
+
+de:
+  eyebrow: "Website erstellen lassen"
+  h: "Website erstellen lassen, ohne Wochen mit Abstimmungen zu verlieren."
+  sub: "Sie haben sich entschieden: Die Website muss neu. DIWEBA baut sie in einem festen Rahmen — fester Umfang, fester Preis, feste Zeit — statt in einer offenen Angebotsschleife ohne Enddatum."
+
+  forWhoLabel: "Für wen das gedacht ist"
+  forWhoBody: "Für kleine und mittlere Betriebe, die eine professionelle Website brauchen, aber keine Zeit haben, sich wochenlang mit einer Agentur abzustimmen. Sie beantworten einen Fragebogen und sehen danach eine fertige Seite — nicht einen leeren Editor, den Sie selbst füllen müssen."
+
+  includedLabel: "Was in jedem Paket steckt"
+  included:
+    - "Eine vollständige Website: Struktur, Texte aus Ihren Antworten, technische Umsetzung"
+    - "Technisch so gebaut, dass Google und KI-Systeme die Seite lesen und verstehen können"
+    - "Google-Unternehmensprofil und Search Console eingerichtet"
+    - "Rechtstexte aus einem lizenzierten Abo, laufend aktuell gehalten"
+    - "Zwei Korrekturrunden, mit Textfreigabe bevor gebaut wird"
+    - "Livegang in 10 bzw. 15 Arbeitstagen, je nach Paket"
+  includedNote: "Die vollständige Liste je Paket steht auf der Preisseite."
+
+  packagesLabel: "START oder PLUS"
+  packagesBody: "START ist die vollständige Basis: 5 Seiten, Blogbereich, in 10 Arbeitstagen fertig. PLUS ergänzt Messung (GTM, GA4, Search Console-Dashboard) und zusätzliche Arbeit an KI-Sichtbarkeit, mit 6 Seiten in 15 Arbeitstagen. Beide laufen mit demselben monatlichen Betrieb."
+
+  processLabel: "Wie es abläuft"
+  processBody: "Vier Schritte, feste Termine: kurzes Gespräch, Festpreis-Angebot, Aufbau, Start. Den vollständigen Ablauf mit allen Zeiten sehen Sie auf der Ablauf-Seite."
+  processSteps:
+    - "Kurzes Gespräch"
+    - "Festpreis-Angebot"
+    - "Aufbau"
+    - "Start und Betrieb"
+
+  operationLabel: "Betrieb und Betreuung"
+  operationBody: "Der Betrieb — Hosting, Sicherheit, Backups — läuft ab Livegang mit, ohne Mindestlaufzeit, für 39 € im Monat. Die Betreuung, bei der wir laufend Änderungen für Sie übernehmen, ist ein separates, freiwilliges Angebot obendrauf."
+
+  afterLabel: "Nach dem Livegang"
+  afterBody: "Die Website gehört Ihnen: Domain und Inhalte laufen auf Ihren Namen. Der Betrieb läuft automatisch weiter. Wenn Sie später selbst Texte, Preise oder Öffnungszeiten ändern möchten, richten wir dafür einen einfachen Zugang ein."
+
+  boundariesLabel: "Was nicht dazugehört"
+
+  faqLabel: "Häufige Fragen zu diesem Angebot"
+  faq:
+    - q: "Wie lange dauert es, bis meine Website steht?"
+      a: "10 Arbeitstage bei START, 15 bei PLUS — gerechnet ab dem Tag, an dem Sie Ihre Angaben und Bilder liefern. Was Sie später und in welcher Reihenfolge liefern müssen, steht im Ablauf."
+    - q: "Muss ich selbst Texte schreiben?"
+      a: "Nein. Sie beantworten einen Fragebogen zu Ihrem Betrieb, wir schreiben daraus die Texte. Sie korrigieren, was nicht stimmt — zwei Runden sind inklusive."
+    - q: "Was kostet eine Website bei DIWEBA wirklich?"
+      a: "Ab 790 € einmalig plus 39 € Betrieb im Monat für START. PLUS beginnt bei 1.490 € einmalig, derselbe monatliche Betrieb. Add-ons stehen mit Preis im Angebot, nicht versteckt."
+    - q: "Ich habe schon eine Website — was passiert damit?"
+      a: "Wir bauen neu und ziehen Ihre Domain um. Die alte Seite geht am Tag des Livegangs offline, die Adresse bleibt dieselbe. Ihre E-Mail-Adressen bleiben unberührt."
+
+en:
+  eyebrow: "Website development"
+  h: "Get a website built, without weeks of back-and-forth."
+  sub: "You've decided: the website has to be new. DIWEBA builds it inside a fixed frame — fixed scope, fixed price, fixed time — instead of an open-ended proposal loop with no end date."
+
+  forWhoLabel: "Who this is for"
+  forWhoBody: "For small and medium businesses that need a professional website but don't have weeks to spend coordinating with an agency. You answer a questionnaire and see a finished page afterward — not an empty editor you have to fill in yourself."
+
+  includedLabel: "What's in every package"
+  included:
+    - "A complete website: structure, copy written from your answers, technical build"
+    - "Built so Google and AI systems can read and understand the page"
+    - "Google Business Profile and Search Console set up"
+    - "Legal texts from a licensed subscription, kept current on an ongoing basis"
+    - "Two revision rounds, with text approval before we build"
+    - "Launch in 10 or 15 working days, depending on the package"
+  includedNote: "The full list per package is on the pricing page."
+
+  packagesLabel: "START or PLUS"
+  packagesBody: "START is the complete foundation: 5 pages, a blog section, done in 10 working days. PLUS adds measurement (GTM, GA4, Search Console dashboard) and extra work on AI visibility, with 6 pages in 15 working days. Both run on the same monthly operation fee."
+
+  processLabel: "How it works"
+  processBody: "Four steps, fixed dates: a short call, a fixed-price proposal, the build, launch. See the full process with all the timing on the process page."
+  processSteps:
+    - "Short call"
+    - "Fixed-price proposal"
+    - "Build"
+    - "Launch and operation"
+
+  operationLabel: "Operation and care"
+  operationBody: "Operation — hosting, security, backups — starts at launch, with no minimum term, for €39 a month. Care, where we take on ongoing changes for you, is a separate, optional service on top."
+
+  afterLabel: "After launch"
+  afterBody: "The website is yours: the domain and content are in your name. Operation keeps running automatically. If you'd rather change text, prices or opening hours yourself later, we set up simple access for that."
+
+  boundariesLabel: "What's not included"
+
+  faqLabel: "Frequent questions about this offer"
+  faq:
+    - q: "How long until my website is live?"
+      a: "10 working days for START, 15 for PLUS — counted from the day you deliver your details and images. What you need to deliver, and in what order, is set out under Process."
+    - q: "Do I have to write the copy myself?"
+      a: "No. You answer a questionnaire about your business, and we write the text from your answers. You correct whatever isn't right — two rounds are included."
+    - q: "What does a DIWEBA website really cost?"
+      a: "From €790 one-time plus €39 operation per month for START. PLUS starts at €1,490 one-time, the same monthly operation fee. Add-ons appear with their price in the proposal, never hidden."
+    - q: "I already have a website — what happens to it?"
+      a: "We build a new one and move your domain across. The old site goes offline on launch day, the address stays the same. Your email addresses are untouched."

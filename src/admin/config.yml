@@ -401,6 +401,65 @@ collections:
               - { name: body, label: "Text", widget: text }
               - { name: back, label: "Link „Zurück zur Startseite“", widget: string }
 
+      - name: service
+        label: "Landingpage: Website erstellen lassen"
+        file: "src/_data/servicePage.yml"
+        fields:
+          - { name: eyebrow, label: "Abschnittslabel", widget: string, i18n: true }
+          - { name: h, label: "Überschrift", widget: string, i18n: true }
+          - { name: sub, label: "Unterzeile", widget: text, i18n: true }
+          - { name: forWhoLabel, label: "Label „Für wen“", widget: string, i18n: true }
+          - { name: forWhoBody, label: "Text „Für wen“", widget: text, i18n: true }
+          - { name: includedLabel, label: "Überschrift „Was enthalten ist“", widget: string, i18n: true }
+          - { name: included, label: "Enthalten-Liste", widget: list, i18n: true, field: { name: item, widget: string } }
+          - { name: includedNote, label: "Hinweis unter der Liste (verlinkt automatisch zur Preisseite)", widget: string, i18n: true }
+          - { name: packagesLabel, label: "Label „START oder PLUS“", widget: string, i18n: true }
+          - { name: packagesBody, label: "Text „START oder PLUS“", widget: text, i18n: true }
+          - { name: processLabel, label: "Label „Wie es abläuft“", widget: string, i18n: true }
+          - { name: processBody, label: "Text „Wie es abläuft“", widget: text, i18n: true }
+          - { name: processSteps, label: "Schritt-Namen (genau 4, Reihenfolge fest)", widget: list, i18n: true, field: { name: step, widget: string } }
+          - { name: operationLabel, label: "Label „Betrieb und Betreuung“", widget: string, i18n: true }
+          - { name: operationBody, label: "Text „Betrieb und Betreuung“", widget: text, i18n: true }
+          - { name: afterLabel, label: "Label „Nach dem Livegang“", widget: string, i18n: true }
+          - { name: afterBody, label: "Text „Nach dem Livegang“", widget: text, i18n: true }
+          - { name: boundariesLabel, label: "Label „Was nicht dazugehört“ (Text kommt automatisch aus den Paketen)", widget: string, i18n: true }
+          - { name: faqLabel, label: "FAQ-Überschrift", widget: string, i18n: true }
+          - name: faq
+            label: "FAQ (genau 4 — eigene Fragen, keine Wiederholung der Haupt-FAQ)"
+            widget: list
+            i18n: true
+            fields:
+              - { name: q, label: "Frage", widget: string }
+              - { name: a, label: "Antwort", widget: text }
+
+      - name: small_business
+        label: "Landingpage: Webdesign für kleine Unternehmen"
+        file: "src/_data/smallBusinessPage.yml"
+        fields:
+          - { name: eyebrow, label: "Abschnittslabel", widget: string, i18n: true }
+          - { name: h, label: "Überschrift", widget: string, i18n: true }
+          - { name: sub, label: "Unterzeile", widget: text, i18n: true }
+          - { name: problemsLabel, label: "Überschrift „Was an alten Websites nicht stimmt“", widget: string, i18n: true }
+          - { name: problems, label: "Probleme (Liste)", widget: list, i18n: true, field: { name: item, widget: text } }
+          - { name: approachLabel, label: "Label „Wie DIWEBA das anders macht“", widget: string, i18n: true }
+          - { name: approachBody, label: "Text „Wie DIWEBA das anders macht“", widget: text, i18n: true }
+          - { name: localLabel, label: "Label „Für Betriebe mit lokalen Kunden“", widget: string, i18n: true }
+          - { name: localBody, label: "Text „Für Betriebe mit lokalen Kunden“", widget: text, i18n: true }
+          - { name: structureLabel, label: "Label „Klare Struktur“", widget: string, i18n: true }
+          - { name: structureBody, label: "Text „Klare Struktur“", widget: text, i18n: true }
+          - { name: processLabel, label: "Label „Wie es abläuft“", widget: string, i18n: true }
+          - { name: processBody, label: "Text „Wie es abläuft“", widget: text, i18n: true }
+          - { name: processSteps, label: "Schritt-Namen (genau 4, Reihenfolge fest)", widget: list, i18n: true, field: { name: step, widget: string } }
+          - { name: notForLabel, label: "Label „Für wen das nicht passt“ (Text kommt automatisch aus den Paketen)", widget: string, i18n: true }
+          - { name: faqLabel, label: "FAQ-Überschrift", widget: string, i18n: true }
+          - name: faq
+            label: "FAQ (genau 4 — eigene Fragen, keine Wiederholung der anderen FAQs)"
+            widget: list
+            i18n: true
+            fields:
+              - { name: q, label: "Frage", widget: string }
+              - { name: a, label: "Antwort", widget: text }
+
   # ==========================================================================
   # SEO-Metadaten je Seite — Titel/Beschreibung aus dem Front Matter der
   # tatsächlichen Seiten-Dateien. Bewusst NICHT die Legal-Seiten (Impressum,
@@ -517,6 +576,36 @@ collections:
       - name: ai_search_en
         label: "KI-Sichtbarkeit — Englisch"
         file: "src/content/en/ai-search/index.njk"
+        fields:
+          - { name: title, label: "SEO title", widget: string }
+          - { name: description, label: "Meta description", widget: text }
+          - { name: routeKey, widget: hidden }
+
+      - name: service_de
+        label: "Website erstellen lassen — Deutsch"
+        file: "src/content/de/website-erstellen-lassen/index.njk"
+        fields:
+          - { name: title, label: "SEO-Titel", widget: string }
+          - { name: description, label: "Meta-Beschreibung", widget: text }
+          - { name: routeKey, widget: hidden }
+      - name: service_en
+        label: "Website erstellen lassen — Englisch"
+        file: "src/content/en/website-development/index.njk"
+        fields:
+          - { name: title, label: "SEO title", widget: string }
+          - { name: description, label: "Meta description", widget: text }
+          - { name: routeKey, widget: hidden }
+
+      - name: small_business_de
+        label: "Webdesign für kleine Unternehmen — Deutsch"
+        file: "src/content/de/webdesign-kleine-unternehmen/index.njk"
+        fields:
+          - { name: title, label: "SEO-Titel", widget: string }
+          - { name: description, label: "Meta-Beschreibung", widget: text }
+          - { name: routeKey, widget: hidden }
+      - name: small_business_en
+        label: "Webdesign für kleine Unternehmen — Englisch"
+        file: "src/content/en/small-business-web-design/index.njk"
         fields:
           - { name: title, label: "SEO title", widget: string }
           - { name: description, label: "Meta description", widget: text }
