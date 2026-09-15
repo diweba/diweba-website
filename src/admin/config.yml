@@ -92,11 +92,12 @@
 
 backend:
   name: github
-  # TODO: replace with the real repository once it exists on GitHub — this
-  # phase deliberately does not connect one (no GitHub push in Phase 5).
-  repo: OWNER/REPO
+  # Connected in Phase 8A. Commits from the CMS land on main.
+  repo: diweba/diweba-website
   branch: main
-  # Commits from the CMS land on main, which triggers the deploy workflow.
+  # Deploy workflow exists (.github/workflows/deploy.yml) but Cloudflare
+  # secrets are deliberately not configured yet — CMS commits will not
+  # trigger a live deploy until that's done in a later, separate phase.
 
 # Editorial workflow is intentionally OFF for a single owner-operator: it
 # adds a PR review step that nobody would review. Revisit if more editors
