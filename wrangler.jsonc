@@ -57,10 +57,24 @@
       "vars": {
         "SITE_URL": "https://diweba.de",
         "SITE_ENV": "production"
-      }
+      },
+      // Cloudflare environments do NOT inherit top-level bindings (confirmed
+      // via a live `wrangler deploy --dry-run --env production` warning,
+      // Phase 8C) -- the top-level kv_namespaces entry above is invisible to
+      // this env unless repeated here. Same binding name, same real
+      // DIWEBA RATE_LIMIT namespace ID as the top-level entry -- not a
+      // second namespace.
+      "kv_namespaces": [
+        {
+          "binding": "RATE_LIMIT",
+          "id": "6e70d97b395e498f8d9736ee31b170cc"
+        }
+      ]
       // "routes": [{ "pattern": "diweba.de/*", "zone_name": "diweba.de" }]
-      // ^ Enable once DNS has moved to Cloudflare. The domain is currently
-      //   parked at IONOS (spec §18).
+      // ^ DNS has already moved to Cloudflare (confirmed Phase 8C), but this
+      //   stays disabled until secrets are configured and the Worker has
+      //   been verified end-to-end -- enabling this is what actually
+      //   attaches the Worker to the live production domain.
     },
 
     "preview": {
