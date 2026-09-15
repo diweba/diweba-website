@@ -73,12 +73,17 @@
       // Phase 8F: all prerequisites verified end-to-end (KV, all five Worker
       // secrets, Turnstile allowed hostnames, Brevo SPF/DKIM/DMARC) -- this
       // is what actually attaches the Worker to the live production domain.
-      // www.diweba.de is deliberately NOT added here: no file in this repo
-      // (routes.js, site.js, docs) defines a www strategy -- SITE_URL and
-      // every canonical/OG/hreflang tag are already consistently the bare
-      // diweba.de domain, so adding www would be inventing a strategy that
-      // doesn't otherwise exist.
-      "routes": [{ "pattern": "diweba.de/*", "zone_name": "diweba.de" }]
+      //
+      // www.diweba.de (added later, same phase family): routed to this same
+      // script, not a second Worker. worker/index.ts's fetch handler 301s
+      // any www.diweba.de request to the bare domain before anything else
+      // runs, preserving path and query. SITE_URL and every canonical/OG/
+      // hreflang tag stay the bare diweba.de domain -- this route exists
+      // only so www requests have somewhere to land, never to serve content.
+      "routes": [
+        { "pattern": "diweba.de/*", "zone_name": "diweba.de" },
+        { "pattern": "www.diweba.de/*", "zone_name": "diweba.de" }
+      ]
     },
 
     "preview": {

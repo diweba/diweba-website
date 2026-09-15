@@ -2,9 +2,10 @@
  * DIWEBA — Cloudflare Worker entry point.
  *
  * Responsibilities:
- *   1. POST /api/contact — form handling (Turnstile, validation, rate limit, Brevo)
- *   2. Correct 404 status for unmatched routes
- *   3. Everything else passes through to static assets
+ *   1. www.diweba.de/* — 301 redirect to the canonical https://diweba.de/*
+ *   2. POST /api/contact — form handling (Turnstile, validation, rate limit, Brevo)
+ *   3. Correct 404 status for unmatched routes
+ *   4. Everything else passes through to static assets
  *
  * WHY worker/ AND NOT functions/
  * Cloudflare Pages Functions use a functions/ directory with file-based routing.
@@ -12,6 +13,18 @@
  * point instead — one fetch handler that decides between API routes and assets.
  * Pages is in maintenance mode; Workers is Cloudflare's current recommendation
  * and is what the spec selected (§7).
+ *
+ * WHY A WORKER REDIRECT, NOT A DASHBOARD REDIRECT RULE
+ * Cloudflare's zone-level Redirect Rules would normally be the simplest fix for
+ * www -> apex, but the Cloudflare account token available in this environment
+ * has no Rules/Page Rules read or write access (confirmed empirically — every
+ * rulesets/pagerules API call returns an authentication error, the same gap
+ * already seen for DNS-record and zone-SSL-setting reads). www.diweba.de
+ * already has its own proxied DNS record (unchanged by this fix); it just had
+ * no route/handler behind it, hence the 525. Routing it to this same Worker
+ * (not a second Worker) via a second `routes` entry in wrangler.jsonc, and
+ * redirecting at the top of this fetch handler, needs only the
+ * workers_routes permission this token already has.
  *
  * PHASE 1 SCOPE
  * The contact endpoint's structure, validation and boundaries are complete, but
@@ -38,6 +51,14 @@ const THANKS_PATH = {
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
+
+    // Canonical host is the bare domain (SITE_URL, every canonical/OG/hreflang
+    // tag). www.diweba.de is proxied at the DNS level but has no content of
+    // its own -- redirect the whole path + query, never just the homepage.
+    if (url.hostname === "www.diweba.de") {
+      url.hostname = "diweba.de";
+      return Response.redirect(url.toString(), 301);
+    }
 
     if (url.pathname === "/api/contact") {
       if (request.method !== "POST") {
