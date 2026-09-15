@@ -35,6 +35,12 @@ eleventyExcludeFromCollections: true
   minimal stub rather than the real content, so a preview deploy never
   exposes production URLs or gets treated as the canonical file by anything
   that fetches it.
+
+  `key in collections.routeKeys` (added Phase 4 audit): routes.js can carry
+  an entry before its page is built (service/smallBusiness, since Phase 3E)
+  -- without this check this file listed both as real pages pointing at a
+  404. See eleventy.config.js's `routeKeys` collection and sitemap.njk's
+  matching fix.
 #}
 {%- set extraLabels = {
   de: { service: "Website erstellen lassen", smallBusiness: "Webdesign für kleine Unternehmen", faq: "Häufige Fragen" },
@@ -62,7 +68,7 @@ All prices exclude VAT. Prices and scope are authoritative on the pricing page; 
 ## Pages (German — primary)
 
 {%- for key, entry in routes %}
-{%- if not entry.noindex %}
+{%- if not entry.noindex and key in collections.routeKeys %}
 - [{{ (ui.de.nav[key] or ui.de.legal[key] or extraLabels.de[key]) | safe }}]({{ entry.de | absolute(site.url) }})
 {%- endif %}
 {%- endfor %}
@@ -70,7 +76,7 @@ All prices exclude VAT. Prices and scope are authoritative on the pricing page; 
 ## Pages (English)
 
 {%- for key, entry in routes %}
-{%- if not entry.noindex %}
+{%- if not entry.noindex and key in collections.routeKeys %}
 - [{{ (ui.en.nav[key] or ui.en.legal[key] or extraLabels.en[key]) | safe }}]({{ entry.en | absolute(site.url) }})
 {%- endif %}
 {%- endfor %}

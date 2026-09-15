@@ -127,6 +127,22 @@ export default function (eleventyConfig) {
       .filter((item) => typeof item.page.url === "string" && item.page.url !== false)
   );
 
+  /**
+   * Every routeKey that actually has a built page, indexable or not (e.g.
+   * the noindex thank-you page still counts here). routes.js can and does
+   * carry entries for pages not built yet (Phase 3E audit: service,
+   * smallBusiness) -- sitemap.njk and llms.njk both iterate the full route
+   * registry and must check membership here before emitting a URL, or they
+   * advertise a 404 as a real page. Found by Phase 4's pre-launch audit:
+   * both templates' own header comments claimed this couldn't happen
+   * ("cannot drift from the pages that actually exist") but neither
+   * actually checked against real build output -- this collection is what
+   * makes that claim true.
+   */
+  eleventyConfig.addCollection("routeKeys", (c) =>
+    [...new Set(c.getAll().map((item) => item.data.routeKey).filter(Boolean))]
+  );
+
   // ---------------------------------------------------------------------------
   // Shortcodes
   // ---------------------------------------------------------------------------

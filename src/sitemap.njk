@@ -8,6 +8,12 @@ eleventyExcludeFromCollections: true
   Driven by the route registry, so it cannot drift from the pages that actually
   exist. Excluded automatically:
     - routes flagged noindex (thank-you pages)
+    - routes with no page actually built yet (routes.js can carry a route
+      before its page exists -- Phase 3E's service/smallBusiness entries are
+      exactly this; `key in collections.routeKeys` is what makes "cannot
+      drift from the pages that actually exist" true rather than aspirational
+      -- Phase 4's audit found this template advertising two 404s until this
+      check was added)
     - /admin/ (not in the registry at all)
     - 404
   Each entry carries its xhtml:link alternates, which is the sitemap-level
@@ -20,7 +26,7 @@ eleventyExcludeFromCollections: true
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 {%- if site.indexable -%}
 {%- for key, entry in routes %}
-{%- if not entry.noindex %}
+{%- if not entry.noindex and key in collections.routeKeys %}
 {%- for lang in site.languages %}
   <url>
     <loc>{{ entry[lang] | absolute(site.url) }}</loc>

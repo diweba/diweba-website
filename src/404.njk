@@ -23,24 +23,29 @@ layout: layouts/base.njk
   valid entry to resolve; the page itself is noindex and excluded from the
   sitemap, so neither is used for indexing.
 #}
-<section class="section">
-  <div class="container container--narrow">
-    <div class="stack stack--lg">
+{#- Phase 4 audit fix: this page used class="section", which is not a real
+    class anywhere in components.css/base.css -- every other page's content
+    is inset with .row's padding-inline, so this one alone rendered flush to
+    the viewport edge with unstyled default heading sizes. Switched to the
+    same .row/.container/.stack tokens (and explicit heading sizes) every
+    other page already uses -- no new visual language, just the one this
+    page was missing. -#}
+<section class="row row--no-border">
+  <div class="container container--narrow stack" style="gap:var(--space-lg)">
 
-      <div class="stack">
-        <h1>{{ ui.de.error404.title }}</h1>
-        <p class="text-soft">{{ ui.de.error404.body }}</p>
-        <p><a class="btn btn--primary" href="{{ routes.home.de }}">{{ ui.de.error404.back }}</a></p>
-      </div>
-
-      <hr>
-
-      <div class="stack" lang="en">
-        <h2>{{ ui.en.error404.title }}</h2>
-        <p class="text-soft">{{ ui.en.error404.body }}</p>
-        <p><a class="btn btn--secondary" href="{{ routes.home.en }}">{{ ui.en.error404.back }}</a></p>
-      </div>
-
+    <div class="stack">
+      <h1 style="font-size:var(--text-3xl)">{{ ui.de.error404.title }}</h1>
+      <p class="text-soft" style="font-size:var(--text-md)">{{ ui.de.error404.body }}</p>
+      <p><a class="btn btn--primary" href="{{ routes.home.de }}">{{ ui.de.error404.back }}</a></p>
     </div>
+
+    <hr style="border:none;border-top:1px solid var(--color-border);width:100%">
+
+    <div class="stack" lang="en">
+      <h2 style="font-size:var(--text-2xl)">{{ ui.en.error404.title }}</h2>
+      <p class="text-soft" style="font-size:var(--text-md)">{{ ui.en.error404.body }}</p>
+      <p><a class="btn btn--secondary" href="{{ routes.home.en }}">{{ ui.en.error404.back }}</a></p>
+    </div>
+
   </div>
 </section>
