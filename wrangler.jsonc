@@ -40,10 +40,10 @@
   "kv_namespaces": [
     {
       // Per-IP rate limit for the contact endpoint.
-      // CREATE BEFORE FIRST DEPLOY:  wrangler kv namespace create RATE_LIMIT
-      // then paste the returned id here.
+      // Created Phase 8C via `wrangler kv namespace create RATE_LIMIT` under
+      // the diweba (tech@diweba.de) Cloudflare account — not InsightWert's.
       "binding": "RATE_LIMIT",
-      "id": "PLACEHOLDER_CREATE_WITH_WRANGLER_KV_NAMESPACE_CREATE"
+      "id": "6e70d97b395e498f8d9736ee31b170cc"
     }
   ],
 
