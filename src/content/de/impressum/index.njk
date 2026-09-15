@@ -1,0 +1,13 @@
+---
+routeKey: imprint
+title: "Impressum | DIWEBA"
+description: "Impressum von DIWEBA gemäß § 5 DDG: Anbieterkennzeichnung und Kontaktangaben."
+---
+{#
+  /impressum/ (DE). STRUCTURE ONLY -- see partials/legal-body.njk and
+  src/_data/impressumPage.js's header comments. No legal wording is written
+  in this phase; sections without reviewed text render an honest "not
+  written yet" status instead of invented copy or a bracket placeholder.
+#}
+{%- set legal = impressumPage[lang] -%}
+{% include "partials/legal-body.njk" %}

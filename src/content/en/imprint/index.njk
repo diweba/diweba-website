@@ -1,0 +1,11 @@
+---
+routeKey: imprint
+title: "Imprint | DIWEBA"
+description: "DIWEBA's imprint pursuant to § 5 DDG: provider identification and contact details."
+---
+{#
+  /en/imprint/. Courtesy translation of /impressum/ -- see
+  impressumPage.js's translationNote and legal-body.njk's header comment.
+#}
+{%- set legal = impressumPage[lang] -%}
+{% include "partials/legal-body.njk" %}

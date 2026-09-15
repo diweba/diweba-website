@@ -1,0 +1,13 @@
+---
+routeKey: privacy
+title: "Datenschutzerklärung | DIWEBA"
+description: "Datenschutzerklärung von DIWEBA: Verantwortlicher und verarbeitete Daten."
+---
+{#
+  /datenschutz/ (DE). STRUCTURE ONLY -- see partials/legal-body.njk and
+  src/_data/datenschutzPage.js's header comments. Sections for tools that
+  are not actually configured (Turnstile, Usercentrics/GTM/GA4) do not
+  render at all, matching the same rule consent-head.njk already follows.
+#}
+{%- set legal = datenschutzPage[lang] -%}
+{% include "partials/legal-body.njk" %}

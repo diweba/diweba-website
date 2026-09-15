@@ -54,12 +54,36 @@ export default {
        *  non-home page, so it needs a label to show. Matches contactPage.js's
        *  own thanks.heading in spirit without being that literal sentence. */
       thanks: "Anfrage gesendet",
+      /** Same pattern again (Phase 3F): imprint/privacy are legal:true
+       *  routes, not nav:true, but breadcrumbs.njk renders on every
+       *  non-home page and needs a label. Matches legal.imprint/legal.privacy
+       *  below -- duplicated per-key rather than having breadcrumbs.njk fall
+       *  back to t.legal[routeKey], since that would special-case one
+       *  partial around a naming coincidence that won't always hold. */
+      imprint: "Impressum",
+      privacy: "Datenschutz",
     },
 
     legal: {
       imprint: "Impressum",
       privacy: "Datenschutz",
     },
+
+    /** Phase 3F: labels for the confirmed-facts block shared by the
+     *  Impressum and Datenschutz structural skeletons (legal-body.njk).
+     *  Kept separate from ui.form's name/email (contact-form field labels)
+     *  so the two contexts can diverge later without coupling. */
+    legalFields: {
+      name: "Name",
+      form: "Rechtsform",
+      address: "Anschrift",
+      email: "E-Mail",
+    },
+    /** Status note for a legal-page section that has real structure (a
+     *  heading) but no reviewed legal text yet -- see legal-body.njk. This
+     *  is a statement about the page's own completeness, not legal wording
+     *  about DIWEBA's data processing or liability. */
+    legalPending: "Dieser Abschnitt wird ergänzt, sobald der rechtlich geprüfte Text vorliegt.",
 
     /** Reused across header, mobile nav, hero and closing CTA — same target
      *  (the contact route) with a more action-oriented label than the plain
@@ -143,12 +167,22 @@ export default {
       contact: "Contact",
       faq: "FAQ",
       thanks: "Inquiry sent",
+      imprint: "Imprint",
+      privacy: "Privacy",
     },
 
     legal: {
       imprint: "Imprint",
       privacy: "Privacy",
     },
+
+    legalFields: {
+      name: "Name",
+      form: "Legal form",
+      address: "Address",
+      email: "Email",
+    },
+    legalPending: "This section will be completed once the legally reviewed text is available.",
 
     ctaPrimary: "Start a project",
     ctaSecondary: "See pricing",

@@ -1,0 +1,82 @@
+{#
+  Shared body for the four legal-page routes (/impressum/, /en/imprint/,
+  /datenschutz/, /en/privacy/). Phase 3F: STRUCTURE ONLY -- no legal wording
+  is written anywhere in this partial or the two data files it reads
+  (impressumPage.js / datenschutzPage.js). Deliberately simpler than the
+  commercial pages: page-hero, one confirmed-facts block, then a flat list
+  of sections -- no cards, no grids, no color blocks. Text-oriented content
+  gets a text-oriented layout; this is not a new visual language, it's the
+  existing typography/spacing/border tokens used more sparingly.
+
+  Include with `legal` set to either impressumPage[lang] or
+  datenschutzPage[lang] before this partial, e.g.:
+    {%- set legal = impressumPage[lang] -%}
+    {% include "partials/legal-body.njk" %}
+
+  CONFIRMED-FACTS BLOCK: reads company.legalName/legalForm/address/email
+  directly through the `required` filter (eleventy.config.js) -- the single
+  source those facts already have everywhere else on the site. If one of
+  them were ever nulled out again, the build fails loudly instead of
+  quietly publishing a blank or a guess. Telephone is never rendered here:
+  company.phone is null on purpose and there is no pending line for it,
+  because there will never be a value to fill in (Phase 3A business rule).
+
+  SECTION LIST: each `legal.sections[]` entry is {id, heading, body,
+  configKey?}. `body` is null until real legal text exists -- rendered as
+  the real heading plus an honest "not written yet" status note
+  (ui.legalPending), never invented prose and never a bracket placeholder
+  like "[STEUERNUMMER]". A `configKey` gates the whole section on whether
+  that tool is actually configured (site.forms.turnstileSiteKey /
+  site.analytics.configured) -- the same "render nothing when unconfigured"
+  rule already used by consent-head.njk and the contact form, so this page
+  can never claim a tool is active that isn't.
+#}
+{%- set t = ui[lang] -%}
+{%- set heroEyebrow = legal.eyebrow -%}
+{%- set heroH1 = legal.h -%}
+{% include "partials/page-hero.njk" %}
+
+<section class="row row--no-border">
+  <div class="container stack" style="max-width:42em;gap:var(--space-lg)">
+
+    {%- if legal.translationNote %}
+    <p class="text-faint" style="font-size:var(--text-sm);font-style:italic">{{ legal.translationNote }}</p>
+    {%- endif %}
+
+    <div class="stack" style="gap:12px">
+      <h2 style="font-size:var(--text-2xl)">{{ legal.operatorHeading }}</h2>
+      <div class="stack" style="gap:2px">
+        <span class="eyebrow" style="color:var(--color-text-faint)">{{ t.legalFields.name }}</span>
+        <span>{{ company.legalName | required("legalName") }}</span>
+      </div>
+      <div class="stack" style="gap:2px">
+        <span class="eyebrow" style="color:var(--color-text-faint)">{{ t.legalFields.form }}</span>
+        <span>{{ company.legalForm | required("legalForm") }}</span>
+      </div>
+      <div class="stack" style="gap:2px">
+        <span class="eyebrow" style="color:var(--color-text-faint)">{{ t.legalFields.address }}</span>
+        <span>{{ company.address.street | required("address.street") }}<br>{{ company.address.postalCode | required("address.postalCode") }} {{ company.address.city | required("address.city") }}</span>
+      </div>
+      <div class="stack" style="gap:2px">
+        <span class="eyebrow" style="color:var(--color-text-faint)">{{ t.legalFields.email }}</span>
+        <a href="mailto:{{ company.email | required('email') }}">{{ company.email }}</a>
+      </div>
+    </div>
+
+    {%- for s in legal.sections %}
+      {%- if not s.configKey
+          or (s.configKey == "turnstile" and site.forms.turnstileSiteKey)
+          or (s.configKey == "analytics" and site.analytics.configured) %}
+    <div class="stack" style="gap:8px;border-top:1px solid var(--color-border-soft);padding-top:var(--space-lg)">
+      <h2 style="font-size:var(--text-xl)">{{ s.heading }}</h2>
+      {%- if s.body %}
+      <p class="text-soft" style="font-size:var(--text-base);line-height:var(--leading-relaxed)">{{ s.body }}</p>
+      {%- else %}
+      <p class="text-faint" style="font-size:var(--text-sm);font-style:italic">{{ t.legalPending }}</p>
+      {%- endif %}
+    </div>
+      {%- endif %}
+    {%- endfor %}
+
+  </div>
+</section>
