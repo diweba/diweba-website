@@ -20,8 +20,15 @@ eleventyExcludeFromCollections: true
   counterpart to the on-page hreflang cluster.
 
   Emitted only for production builds; a preview sitemap would invite indexing.
-#}
-<?xml version="1.0" encoding="UTF-8"?>
+
+  NOTE: this comment's end tag sits on the same line as the XML declaration
+  below, with nothing between them. Nunjucks strips only the comment's own
+  content; surrounding template text is untouched, so a line break right
+  after the comment closes would become the first byte of the rendered
+  file, ahead of the XML declaration -- invalid XML. Nunjucks comment tags
+  have no whitespace-trimming variant the way block tags do, so keeping
+  them adjacent, with no characters at all in between, is the fix.
+#}<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 {%- if site.indexable -%}
