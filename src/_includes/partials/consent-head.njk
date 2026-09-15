@@ -10,7 +10,7 @@
 
       1. Put the values in `.env` (local) or GitHub Actions variables (CI):
 
-             USERCENTRICS_SETTINGS_ID=...      from the Usercentrics admin UI
+             USERCENTRICS_RULESET_ID=...       from the Usercentrics admin UI
              GTM_CONTAINER_ID=GTM-XXXXXXX
              GA4_MEASUREMENT_ID=G-XXXXXXXXXX   (configured inside GTM;
                                                 recorded for the privacy policy)
@@ -18,6 +18,18 @@
       2. Set SITE_ENV=production.
 
       3. Rebuild. This partial then emits the blocks below, in order.
+
+  PHASE 9A (Usercentrics ruleset-based CMP + Autoblocker): Usercentrics'
+  newer product line configures a "ruleset" rather than the older numeric
+  "Settings ID" -- the loader script takes `data-ruleset-id`, not
+  `data-settings-id`, and ships with a separate Autoblocker script that must
+  run before anything else in <head> (its job is intercepting third-party
+  script insertion until a consent decision exists, which only works if it
+  is the first thing to execute). GTM itself is still the plain, unmodified
+  standard snippet from Google -- installing it here does not configure GA4,
+  Google Ads, or any other tag. Those are configured separately, inside GTM,
+  by the project owner; this file has no way to create them and does not
+  attempt to.
 
   Until BOTH the Usercentrics ID and the GTM ID exist, this partial renders
   NOTHING AT ALL. That is deliberate:
@@ -35,14 +47,19 @@
   ORDER IS LOAD-BEARING — DO NOT REORDER (spec §8)
   ---------------------------------------------------------------------------
       1. <meta charset>              in base.njk, above this include
-      2. Consent Mode v2 defaults    THIS FILE, first
-      3. Usercentrics CMP loader     THIS FILE, second
-      4. GTM container               THIS FILE, third
+      2. Usercentrics Autoblocker    THIS FILE, first -- must run before any
+                                      third-party script tag exists to block
+      3. Consent Mode v2 defaults    THIS FILE, second
+      4. Usercentrics CMP loader     THIS FILE, third (data-ruleset-id)
+      5. GTM container               THIS FILE, fourth -- unmodified standard
+                                      snippet, loads no tags of its own
 
   GTM is itself a Google tag: it starts evaluating triggers the moment it loads.
   Consent Mode only works if the "nothing consented yet" state is already in the
   dataLayer before anything reads it. Usercentrics must initialise before GTM so
-  a returning visitor's stored decision is applied rather than raced.
+  a returning visitor's stored decision is applied rather than raced. Autoblocker
+  must run before Usercentrics itself (and everything else) so it can intercept
+  script tags from the moment the page starts parsing.
 
   On a comparable project this exact ordering bug shipped: the CMP was delivered
   as a tag *inside* GTM, so it could only run after GTM had already begun firing.
@@ -79,6 +96,10 @@
   verified locally — it needs an allow-listed preview domain (spec §15).
 #}
 {%- if site.analytics.enabled %}
+    <!-- Usercentrics Autoblocker - must be the first script in <head> -->
+    <script src="https://web.cmp.usercentrics.eu/modules/autoblocker.js"></script>
+    <!-- End Usercentrics Autoblocker -->
+
     <!-- Consent Mode v2 defaults - must run before any Google tag -->
     <script>
     window.dataLayer = window.dataLayer || [];
@@ -100,7 +121,7 @@
     <!-- Usercentrics CMP - must load before GTM -->
     <script id="usercentrics-cmp"
             src="https://web.cmp.usercentrics.eu/ui/loader.js"
-            data-settings-id="{{ site.analytics.usercentricsId }}"
+            data-ruleset-id="{{ site.analytics.usercentricsRulesetId }}"
             async></script>
     <!-- End Usercentrics CMP -->
 
