@@ -1,0 +1,137 @@
+{#
+  Shared body for /kontakt/ and /en/contact/ — ported from
+  DIWEBA/diweba-site.js's `contact` object via src/_data/contactPage.js.
+  Section order and visual structure match the design's isContact markup
+  exactly: hero -> two-column grid (form left, promise+direct-contact right).
+
+  TWO DEPARTURES FROM THE SOURCE, both explicit Phase 3B business rules,
+  documented fully in contactPage.js's header comment:
+    1. No telephone field — dropped entirely, not hidden.
+    2. Bracket placeholders replaced with natural placeholder text.
+
+  REAL FORM, NOT DECORATION. Every control is a genuine <input>/<textarea>/
+  <select> with a visible <label>, inside a real <form> that POSTs to
+  site.forms.endpoint (/api/contact) — works with JavaScript disabled
+  (native POST, Worker redirects to the noindex thank-you page on success,
+  same pattern already proven by the pricing configurator's own real link).
+  scripts/contact-form.js progressively enhances this with inline
+  validation, live status announcements, and a Turnstile-aware submit flow
+  — see that file for the full behaviour contract.
+
+  Turnstile renders only when site.forms.turnstileSiteKey is configured
+  (same "render nothing when unconfigured, never fake it" pattern already
+  used for analytics/consent — see consent-head.njk). No key is configured
+  in this environment; the widget is structurally absent, and the Worker's
+  own "not_configured" check is what keeps submission failing safely.
+#}
+{%- set t = ui[lang] -%}
+{%- set cp = contactPage[lang] -%}
+{%- set heroEyebrow = cp.eyebrow -%}
+{%- set heroH1 = cp.h -%}
+{%- set heroSub = cp.sub -%}
+{% include "partials/page-hero.njk" %}
+
+<section class="row row--no-border">
+  <div class="container row-grid row-grid--split" style="align-items:start">
+
+    {#- data-msg-* / data-*-label carry scripts/contact-form.js's user-facing
+        strings. Kept as data attributes rendered from ui.js here rather than
+        duplicated as a translated string table inside the JS file itself —
+        one source of truth per string, same rule the rest of this project
+        follows for page copy. -#}
+    <form class="stack" action="{{ site.forms.endpoint }}" method="post" novalidate data-contact-form
+          data-contact-email="{{ company.email }}"
+          data-submit-label="{{ t.form.submit }}"
+          data-sending-label="{{ t.form.sending }}"
+          data-msg-required="{{ t.form.errorRequired }}"
+          data-msg-email="{{ t.form.errorEmail }}"
+          data-msg-turnstile="{{ t.form.errorTurnstile }}"
+          data-msg-not-configured="{{ t.form.errorNotConfigured }}"
+          data-msg-rate-limit="{{ t.form.errorRateLimit }}"
+          data-msg-send-failed="{{ t.form.errorSendFailed }}"
+          data-msg-generic="{{ t.form.errorGeneric }}">
+      <input type="hidden" name="lang" value="{{ lang }}">
+
+      {#- Honeypot. Real humans never see or fill this; a filled honeypot is
+          the server-side signal a bot submitted (worker/validate.ts). -#}
+      <div class="hp-field" aria-hidden="true">
+        <label for="website">Website</label>
+        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(13.75rem, 1fr));gap:1.125rem">
+        <div class="field">
+          <label class="field__label" for="cf-name">{{ t.form.name }}<span class="field__required" aria-hidden="true">*</span></label>
+          <input class="input" type="text" id="cf-name" name="name" autocomplete="name" required
+                 aria-required="true" maxlength="120" placeholder="{{ cp.fieldPlaceholders.name }}">
+          <span class="field__error" id="cf-name-error" hidden></span>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="cf-company">{{ t.form.companyOptional }}</label>
+          <input class="input" type="text" id="cf-company" name="company" autocomplete="organization"
+                 maxlength="160" placeholder="{{ cp.fieldPlaceholders.company }}">
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="cf-email">{{ t.form.email }}<span class="field__required" aria-hidden="true">*</span></label>
+          <input class="input" type="email" id="cf-email" name="email" autocomplete="email" required
+                 aria-required="true" maxlength="254" placeholder="{{ cp.fieldPlaceholders.email }}">
+          <span class="field__error" id="cf-email-error" hidden></span>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="cf-package">{{ t.form.packageInterestOptional }}</label>
+          <select class="select" id="cf-package" name="package">
+            <option value="">{{ t.form.packageUnsure }}</option>
+            {%- for item in packages.items %}
+            <option value="{{ item.id }}">{{ item.name }}</option>
+            {%- endfor %}
+          </select>
+        </div>
+
+        <div class="field field--full">
+          <label class="field__label" for="cf-message">{{ t.form.message }}<span class="field__required" aria-hidden="true">*</span></label>
+          <textarea class="textarea" id="cf-message" name="message" required aria-required="true"
+                    maxlength="5000" placeholder="{{ cp.fieldPlaceholders.message }}"></textarea>
+          <span class="field__error" id="cf-message-error" hidden></span>
+        </div>
+
+        {%- if site.forms.turnstileSiteKey %}
+        <div class="field field--full">
+          <div class="cf-turnstile" data-sitekey="{{ site.forms.turnstileSiteKey }}" data-language="{{ lang }}"></div>
+        </div>
+        {%- endif %}
+
+        <div class="field field--full" style="gap:12px">
+          <div class="form-status" role="status" aria-live="polite" data-form-status hidden></div>
+          <button class="btn btn--primary" type="submit" style="width:100%" data-submit-btn>
+            <span data-btn-label>{{ t.form.submit }}</span>
+          </button>
+          <p class="contact-privacy-note">{{ cp.note }}</p>
+          <p class="contact-privacy-note">
+            {{ t.form.privacyNote }}
+            <a href="{{ "privacy" | route(lang) }}">{{ t.form.privacyLink }}</a>{{ t.form.privacyNoteEnd }}
+          </p>
+        </div>
+      </div>
+    </form>
+
+    <div class="stack" style="gap:clamp(1.125rem, 2.2vw, 1.75rem)">
+      <div style="border:2px solid var(--color-ink);padding:clamp(1.25rem, 2.4vw, 1.875rem)">
+        <p class="field__label" style="margin-bottom:8px">{{ cp.promiseLabel }}</p>
+        <p style="font-size:1.3125rem;font-weight:var(--weight-semibold);line-height:1.3">{{ cp.promise }}</p>
+      </div>
+      <div class="stack" style="gap:10px">
+        <p class="field__label">{{ cp.directLabel }}</p>
+        <a href="mailto:{{ company.email }}" style="font-family:var(--font-mono);font-size:var(--text-lg);color:var(--color-text)">{{ company.email }}</a>
+        {%- if company.publishAddressPublicly %}
+        <address style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--color-text-faint);font-style:normal;line-height:var(--leading-loose)">
+          {{ company.address.street }}<br>{{ company.address.postalCode }} {{ company.address.city }}
+        </address>
+        {%- endif %}
+      </div>
+    </div>
+
+  </div>
+</section>

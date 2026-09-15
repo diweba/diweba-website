@@ -7,8 +7,7 @@
  * traces back to that file, in the language it was written in. See
  * docs/DIWEBA_PHASE_0_SPEC.md and CLAUDE.md for why this data model exists.
  *
- * THREE DELIBERATE DEPARTURES FROM THE SOURCE FILE, each documented at the
- * point it matters:
+ * DEPARTURES FROM THE SOURCE FILE, each documented at the point it matters:
  *
  *   1. NO TESTIMONIAL CARDS. The source's `refs.voices` array holds two cards
  *      of bracket placeholder text ("[ZITAT]", "[KUNDENNAME]", "[VORHER] →
@@ -23,13 +22,18 @@
      cards. This is the same "renders nothing until real" principle as
  *      partials/proof.njk, applied to this section's own content.
  *
- *   2. NO FOUNDER PHOTO. The mockup's image-slot placeholder for the founder
- *      portrait is literally labelled "Porträt Katrin Vogler, hochkant" —
- *      Katrin Vogler is the placeholder name from the withdrawn demo/contract
- *      templates (Angebot.dc.html etc.), not the real operator. No photo of
- *      Baki Cirak exists for this project, and the InsightWert photo assets
- *      are explicitly off-limits (unrelated project, per instruction). The
- *      founder section is text-only until a real portrait exists.
+ *   2. FOUNDER PHOTO — real, but not the source's own asset. The mockup's
+ *      image-slot placeholder is literally labelled "Porträt Katrin Vogler,
+ *      hochkant" — Katrin Vogler is the placeholder name from the withdrawn
+ *      demo/contract templates, not the real operator, and that image was
+ *      never usable. Phase 3B instead uses a real, confirmed photo of Baki
+ *      Cirak (the same portrait used on his other site, Insight Wert,
+ *      explicitly cleared for DIWEBA reuse), center-cropped from its native
+ *      500x402 landscape original to the 320x400 (4:5) portrait ratio the
+ *      design's own image-slot specifies — see
+ *      src/assets/img/founder-baki-cirak.{webp,jpg}. Layout, sizing and
+ *      position match the design's markup exactly; only the placeholder
+ *      gap is filled with real content, nothing is reinterpreted.
  *
  *   3. founderName / founderRole use the CONFIRMED legal identity
  *      (src/_data/company.js: "Baki Cirak") in place of the source's
@@ -121,6 +125,7 @@ export default {
       body: "Ich komme aus der Marketing-Datenanalyse und habe immer wieder dasselbe gesehen: Unternehmen mit einer Website, aber ohne eine einzige verlässliche Zahl darüber, was sie bringt. DIWEBA ist die Antwort darauf.",
       note: "Auch Gründer von Insight Wert.",
       role: "Gründung · Systemarchitektur",
+      photoAlt: "Porträt von Baki Cirak, Gründer von DIWEBA",
     },
     process: {
       label: "Ablauf",
@@ -225,6 +230,7 @@ export default {
       body: "I come from marketing data analysis and kept seeing the same thing: companies with a website, but without a single reliable number about what it brings in. DIWEBA is the answer to that.",
       note: "Also founder of Insight Wert.",
       role: "Founder · Systems architecture",
+      photoAlt: "Portrait of Baki Cirak, founder of DIWEBA",
     },
     process: {
       label: "Process",

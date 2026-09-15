@@ -149,16 +149,37 @@
 
 <section class="row row--sunk">
   <div class="container">
-    <div class="stack" style="max-width:40rem">
-      <p class="eyebrow">{{ h.founder.label }}</p>
-      <h2 style="font-size:var(--text-2xl)">{{ h.founder.h }}</h2>
-      <p class="text-soft" style="font-size:var(--text-md);line-height:var(--leading-relaxed)">{{ h.founder.body }}</p>
-      <div class="stack" style="gap:2px;margin-top:4px">
-        <span style="font-size:var(--text-md);font-weight:var(--weight-semibold)">{{ company.legalName }}</span>
-        <span class="eyebrow" style="color:var(--color-text-faint)">{{ h.founder.role }}</span>
+    {#- Two-column portrait + text, matching the design's founder-section
+        markup exactly (DIWEBA Website.dc.html: image column max-width 340px,
+        aspect-ratio 4/5, "justify-self:start"; text column as a stack).
+        Phase 2 built this text-only because no real photo existed yet
+        (design's own image-slot placeholder named "Katrin Vogler", the
+        stale demo operator, which the DIWEBA/CLAUDE.md no-fabrication rule
+        blocked). Phase 3B adds the real, confirmed photo of Baki Cirak
+        (src/_data/company.js) into the exact slot the design specifies —
+        nothing about the layout is reinterpreted, only the placeholder
+        gap is filled with real content. -#}
+    <div class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(17.5rem, 1fr));gap:clamp(1.5rem, 3.4vw, 3.25rem);align-items:center">
+      <div style="max-width:340px;width:100%;justify-self:start">
+        <picture>
+          <source srcset="/assets/img/founder-baki-cirak.webp" type="image/webp">
+          <img src="/assets/img/founder-baki-cirak.jpg" width="320" height="400"
+               alt="{{ h.founder.photoAlt }}"
+               style="width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:var(--radius)"
+               loading="lazy">
+        </picture>
       </div>
-      <p class="text-faint" style="font-size:var(--text-sm)">{{ h.founder.note }}</p>
-      <a href="{{ "about" | route(lang) }}" style="font-size:var(--text-md);font-weight:var(--weight-semibold);border-bottom:2px solid var(--color-accent-blue);align-self:flex-start;padding-bottom:3px;margin-top:4px">{{ t.nav.about }} →</a>
+      <div class="stack" style="max-width:40rem">
+        <p class="eyebrow">{{ h.founder.label }}</p>
+        <h2 style="font-size:var(--text-2xl)">{{ h.founder.h }}</h2>
+        <p class="text-soft" style="font-size:var(--text-md);line-height:var(--leading-relaxed)">{{ h.founder.body }}</p>
+        <div class="stack" style="gap:2px;margin-top:4px">
+          <span style="font-size:var(--text-md);font-weight:var(--weight-semibold)">{{ company.legalName }}</span>
+          <span class="eyebrow" style="color:var(--color-text-faint)">{{ h.founder.role }}</span>
+        </div>
+        <p class="text-faint" style="font-size:var(--text-sm)">{{ h.founder.note }}</p>
+        <a href="{{ "about" | route(lang) }}" style="font-size:var(--text-md);font-weight:var(--weight-semibold);border-bottom:2px solid var(--color-accent-blue);align-self:flex-start;padding-bottom:3px;margin-top:4px">{{ t.nav.about }} →</a>
+      </div>
     </div>
   </div>
 </section>

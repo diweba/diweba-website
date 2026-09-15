@@ -376,6 +376,87 @@
 .proof-note__body { font-size: var(--text-md); line-height: var(--leading-relaxed); }
 
 /* ---------------------------------------------------------------------------
+   Contact form (Phase 3B). Ported from the design's contactFields markup
+   (bordered box, mono uppercase label above, dark full-width submit) --
+   rebuilt with real <label>/<input>/<textarea>/<select>/<button>, never a
+   div standing in for a control. Field-level component styles did not
+   survive Phase 2's full rewrite of this file (same class of gap as
+   .stack/.breadcrumb, caught later each time only because something finally
+   used them) -- rebuilt once, now, actually exercised by a real form.
+   --------------------------------------------------------------------------- */
+.field { display: flex; flex-direction: column; gap: 7px; }
+.field--full { grid-column: 1 / -1; }
+
+.field__label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+}
+.field__required { color: var(--color-accent-amber); margin-left: 2px; }
+.field__optional { text-transform: none; letter-spacing: 0; font-family: var(--font-sans); }
+
+.input, .textarea, .select {
+  width: 100%;
+  min-height: var(--target-min);
+  border: 1px solid var(--color-border-strong);
+  border-color: oklch(0.82 0.006 255);
+  background: var(--color-paper-raised);
+  padding: 14px;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--color-text);
+  line-height: 1.5;
+  border-radius: var(--radius);
+}
+.input:hover, .textarea:hover, .select:hover { border-color: var(--color-text-faint); }
+.input:focus-visible, .textarea:focus-visible, .select:focus-visible {
+  outline: var(--focus-ring-width) solid var(--color-focus);
+  outline-offset: 1px;
+  border-color: var(--color-ink);
+}
+.textarea { min-height: 8.5rem; resize: vertical; }
+
+/* State carried by more than colour: border widens too, for visitors who
+   cannot distinguish the hue. */
+.input[aria-invalid="true"], .textarea[aria-invalid="true"] {
+  border: 2px solid var(--color-accent-amber);
+}
+
+.field__error {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: oklch(0.48 0.16 40);
+}
+
+/* Honeypot: present in the DOM (bots fill visible-to-them fields), removed
+   from sighted AND assistive-technology perception. Never display:none --
+   some bots skip fields that are never rendered at all. */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.form-status {
+  padding: 14px 16px;
+  border: 2px solid;
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+}
+.form-status--error { border-color: oklch(0.48 0.16 40); color: oklch(0.4 0.16 40); background: oklch(0.97 0.03 40); }
+.form-status--success { border-color: var(--color-accent-blue); color: var(--color-ink); background: var(--color-surface-sunk); }
+.form-status a { color: inherit; text-decoration: underline; }
+
+.contact-privacy-note { font-size: var(--text-sm); color: var(--color-text-faint); line-height: var(--leading-relaxed); }
+
+/* ---------------------------------------------------------------------------
    Comparison table (Phase 3A). display:grid on <tr>/<th>/<td> keeps table
    semantics (thead/tbody/th scope) while getting the design's 5fr/2fr/2fr
    column layout, rather than browser default table sizing. */

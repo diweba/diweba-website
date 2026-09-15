@@ -49,6 +49,11 @@ export default {
        *  breadcrumb trail and JSON-LD BreadcrumbList on /faq/, never
        *  rendered as a top-level menu item. Matches faq.js's own `label`. */
       faq: "Häufige Fragen",
+      /** Same pattern as `faq` above -- /kontakt/danke/ is noindex (routes.js)
+       *  and not a nav:true route, but breadcrumbs.njk still renders on every
+       *  non-home page, so it needs a label to show. Matches contactPage.js's
+       *  own thanks.heading in spirit without being that literal sentence. */
+      thanks: "Anfrage gesendet",
     },
 
     legal: {
@@ -74,20 +79,34 @@ export default {
     form: {
       name: "Name",
       company: "Unternehmen",
+      companyOptional: "Unternehmen (optional)",
       email: "E-Mail",
-      phone: "Telefon",
-      phoneOptional: "Telefon (optional)",
       packageInterest: "Interesse an",
+      packageInterestOptional: "Interesse an (optional)",
+      packageUnsure: "Noch unklar",
       message: "Ihre Nachricht",
       submit: "Anfrage senden",
       sending: "Wird gesendet …",
       required: "Pflichtfeld",
+      privacyNote: "Mit dem Absenden stimmen Sie der Verarbeitung Ihrer Angaben gemäß unserer",
+      privacyLink: "Datenschutzerklärung",
+      /** Leading space deliberate -- rendered directly after the </a> in
+       *  contact-body.njk with no whitespace of its own, unlike the EN
+       *  string below which needs none ("policy." not "policy ."). */
+      privacyNoteEnd: " zu.",
       errorGeneric:
         "Die Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
       errorRequired: "Bitte füllen Sie dieses Feld aus.",
       errorEmail: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
       errorTurnstile:
         "Die Sicherheitsprüfung konnte nicht abgeschlossen werden. Bitte laden Sie die Seite neu.",
+      errorNotConfigured:
+        "Dieses Formular ist noch nicht aktiv. Bitte schreiben Sie uns stattdessen direkt an",
+      errorRateLimit:
+        "Zu viele Anfragen in kurzer Zeit. Bitte versuchen Sie es später erneut.",
+      errorSendFailed:
+        "Die Nachricht konnte nicht zugestellt werden. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an",
+      successHeading: "Anfrage gesendet.",
     },
 
     error404: {
@@ -123,6 +142,7 @@ export default {
       about: "About DIWEBA",
       contact: "Contact",
       faq: "FAQ",
+      thanks: "Inquiry sent",
     },
 
     legal: {
@@ -143,19 +163,29 @@ export default {
     form: {
       name: "Name",
       company: "Company",
+      companyOptional: "Company (optional)",
       email: "Email",
-      phone: "Phone",
-      phoneOptional: "Phone (optional)",
       packageInterest: "Interested in",
+      packageInterestOptional: "Interested in (optional)",
+      packageUnsure: "Not sure yet",
       message: "Your message",
       submit: "Send inquiry",
       sending: "Sending …",
       required: "Required",
+      privacyNote: "By submitting, you agree to the processing of your details under our",
+      privacyLink: "privacy policy",
+      privacyNoteEnd: ".",
       errorGeneric: "Your inquiry could not be sent. Please try again.",
       errorRequired: "Please complete this field.",
       errorEmail: "Please enter a valid email address.",
       errorTurnstile:
         "The security check could not be completed. Please reload the page.",
+      errorNotConfigured:
+        "This form is not active yet. Please write to us directly at",
+      errorRateLimit: "Too many requests in a short time. Please try again later.",
+      errorSendFailed:
+        "The message could not be delivered. Please try again or write to us directly at",
+      successHeading: "Inquiry sent.",
     },
 
     error404: {

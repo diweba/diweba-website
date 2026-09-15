@@ -154,7 +154,6 @@ function buildNotificationText(s: {
   name: string;
   email: string;
   company: string;
-  phone: string;
   packageInterest: string;
   message: string;
   lang: string;
@@ -163,7 +162,6 @@ function buildNotificationText(s: {
     `Name:      ${s.name}`,
     `E-Mail:    ${s.email}`,
     `Firma:     ${s.company || "—"}`,
-    `Telefon:   ${s.phone || "—"}`,
     `Interesse: ${s.packageInterest || "—"}`,
     `Sprache:   ${s.lang}`,
     "",

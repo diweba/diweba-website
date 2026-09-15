@@ -1,0 +1,29 @@
+---
+routeKey: thanks
+title: "Anfrage gesendet — DIWEBA"
+description: "Ihre Anfrage ist eingegangen. Sie erhalten eine Antwort am nächsten Werktag."
+noindex: true
+---
+{#
+  /kontakt/danke/ — the real success page a visitor lands on after
+  worker/index.ts's handleContact() redirects a successfully-sent
+  submission here (303, see THANKS_PATH in that file). noindex is set both
+  here and in routes.js's `thanks` entry (belt-and-braces, same as the
+  route registry already enforces via base.njk's `self.noindex` check) —
+  spec §9: a conversion confirmation returns 200 so a GA4 event can fire,
+  but must never be indexable.
+
+  Nothing on this page is reachable except by an actual successful POST to
+  /api/contact — there is no link to it anywhere else on the site.
+#}
+{%- set c = contactPage[lang].thanks -%}
+{%- set h = home[lang] -%}
+<section class="row row--no-border" style="padding-block:clamp(3rem, 8vw, 7rem)">
+  <div class="container stack" style="gap:18px;max-width:36em">
+    <h1 style="font-size:clamp(2rem, 3.8vw, 3.25rem)">{{ c.heading }}</h1>
+    <p class="text-soft" style="font-size:var(--text-lg);line-height:var(--leading-relaxed)">{{ c.body }}</p>
+    <p>
+      <a class="btn btn--primary" href="{{ "home" | route(lang) }}">{{ c.back }}</a>
+    </p>
+  </div>
+</section>

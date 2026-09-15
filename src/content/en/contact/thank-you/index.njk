@@ -1,0 +1,21 @@
+---
+routeKey: thanks
+title: "Inquiry Sent — DIWEBA"
+description: "Your inquiry has been received. You'll get a reply on the next working day."
+noindex: true
+---
+{#
+  /en/contact/thank-you/ — mirrors src/content/de/kontakt/danke/index.njk.
+  See that file's header comment for the full provenance note.
+#}
+{%- set c = contactPage[lang].thanks -%}
+{%- set h = home[lang] -%}
+<section class="row row--no-border" style="padding-block:clamp(3rem, 8vw, 7rem)">
+  <div class="container stack" style="gap:18px;max-width:36em">
+    <h1 style="font-size:clamp(2rem, 3.8vw, 3.25rem)">{{ c.heading }}</h1>
+    <p class="text-soft" style="font-size:var(--text-lg);line-height:var(--leading-relaxed)">{{ c.body }}</p>
+    <p>
+      <a class="btn btn--primary" href="{{ "home" | route(lang) }}">{{ c.back }}</a>
+    </p>
+  </div>
+</section>

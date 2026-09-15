@@ -22,9 +22,19 @@
     "html_handling": "auto-trailing-slash",
     // The Worker converts this into a real 404 with the error page.
     "not_found_handling": "none",
-    // Assets are served without invoking the Worker unless the path matches an
-    // API route, so static delivery stays at edge speed.
-    "run_worker_first": ["/api/*"]
+    // In the installed Wrangler (3.114.17), run_worker_first is a plain
+    // boolean, not a path-pattern array -- confirmed against
+    // node_modules/wrangler/config-schema.json directly (Phase 3A.1 found
+    // the array form rejected: "Expected ... to be of type boolean but got
+    // [...]"). false is what actually implements the original intent:
+    // requests matching a built static file are served directly at the
+    // edge (fast path, Worker never invoked); a request matching NO static
+    // file -- which /api/contact never does -- falls through to the
+    // Worker's own fetch handler regardless of this flag. That fallthrough
+    // is what worker/index.ts's routing already relies on (its /api/contact
+    // branch, then env.ASSETS.fetch for everything else) and needed no
+    // change here.
+    "run_worker_first": false
   },
 
   "kv_namespaces": [

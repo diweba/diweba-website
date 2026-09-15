@@ -82,7 +82,10 @@ else fail("possible secret in build output", leaked.join("\n        "));
 const PLACEHOLDER_PATTERNS = [
   /\bTODO\b/,
   /\bFIXME\b/,
-  /\bPLACEHOLDER\b/i,
+  // Negative lookahead excludes the HTML `placeholder="…"` attribute itself
+  // (Phase 3B's contact form is the first page to use one) -- this check is
+  // for the word left as stand-in prose, not the native form attribute name.
+  /\bplaceholder\b(?!=["'])/i,
   /\bLorem ipsum\b/i,
   /\[Rechtstext folgt/i,
   /Platzhalter/i,

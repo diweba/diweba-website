@@ -124,5 +124,18 @@
         payload is unaffected. See scripts/configurator.js. -#}
     <script src="/assets/js/configurator.js" defer></script>
 {%- endif %}
+{%- if routeKey == "contact" %}
+    {#- Page-specific, same reasoning as configurator.js above. See
+        scripts/contact-form.js for the full behaviour contract (validation,
+        submit states, Turnstile-aware fetch, no fake success). -#}
+    {%- if site.forms.turnstileSiteKey %}
+    {#- Official Turnstile script -- renders any element with class
+        "cf-turnstile" automatically (see contact-body.njk's widget div).
+        Loaded only when a site key actually exists, never unconditionally
+        (spec: "do not invent production keys"). -#}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+    {%- endif %}
+    <script src="/assets/js/contact-form.js" defer></script>
+{%- endif %}
 </body>
 </html>

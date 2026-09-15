@@ -12,7 +12,6 @@ const LIMITS = {
   name: 120,
   email: 254, // RFC 5321 maximum
   company: 160,
-  phone: 40,
   packageInterest: 40,
   message: 5000,
 } as const;
@@ -37,7 +36,6 @@ export function validateContact(form: FormData): ValidationResult {
   const name = clean(form.get("name"));
   const email = clean(form.get("email"));
   const company = clean(form.get("company"));
-  const phone = clean(form.get("phone"));
   const packageInterest = clean(form.get("package")).toLowerCase();
   const message = clean(form.get("message"));
   const lang = clean(form.get("lang")) === "en" ? "en" : "de";
@@ -58,8 +56,6 @@ export function validateContact(form: FormData): ValidationResult {
 
   if (company.length > LIMITS.company)
     errors.push({ field: "company", code: "too_long" });
-  if (phone.length > LIMITS.phone)
-    errors.push({ field: "phone", code: "too_long" });
 
   // Reject unexpected values rather than passing them through to the email body.
   if (!ALLOWED_PACKAGES.has(packageInterest))
@@ -71,7 +67,6 @@ export function validateContact(form: FormData): ValidationResult {
     name,
     email,
     company,
-    phone,
     packageInterest,
     message,
     lang,
