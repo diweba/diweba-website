@@ -53,9 +53,14 @@ export default {
     nav: true,
   },
 
+  // en: "/en/ai-search/" (Phase 3D instruction -- supersedes the
+  // "/en/ai-search-optimization/" placeholder this registry held before any
+  // AI-search page existed). de stays "/ki-suche-optimierung/": the URL is
+  // deliberately more descriptive/stable than the nav label ("KI-Sichtbarkeit"),
+  // which is free to be the user-friendly text -- see aiSearchPage.js.
   aiSearch: {
     de: "/ki-suche-optimierung/",
-    en: "/en/ai-search-optimization/",
+    en: "/en/ai-search/",
     nav: true,
   },
 

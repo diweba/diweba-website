@@ -1,0 +1,138 @@
+{#
+  Shared body for /ki-suche-optimierung/ and /en/ai-search/ — ported
+  section-for-section from the design's `isAi` markup (DIWEBA/DIWEBA
+  Website.dc.html, lines 476-583) via src/_data/aiSearchPage.js. Section
+  order matches the source exactly: hero -> before/after search example ->
+  "what decides who gets named" (reuses .why-row, the same num/title/desc
+  pattern the homepage's own "why DIWEBA" list already uses) -> the
+  honesty split box (what we don't promise / what we do) -> what's
+  included where (technical vs content) -> closing CTA.
+
+  See aiSearchPage.js's header comment for the one departure from the
+  source: "Schreinerei Baumann" (withdrawn demo data, never a real
+  customer) is replaced with neutral, non-invented wording in both example
+  lists, not swapped for a different fictional company name.
+
+  Closing CTA reuses home.js's finalH and ui.js's ctaPrimary/ctaSecondary —
+  the same pattern ablauf/faq/about-body.njk already use — rather than
+  duplicating those strings here.
+#}
+{%- set t = ui[lang] -%}
+{%- set a = aiSearchPage[lang] -%}
+{%- set h = home[lang] -%}
+
+<section class="row row--edge-bottom">
+  <div class="container stack" style="gap:16px;max-width:44rem">
+    <p class="eyebrow" style="color:var(--color-accent-amber)">{{ a.eyebrow }}</p>
+    <h1 style="font-size:clamp(1.9375rem, 3.7vw, 3.25rem)">{{ a.h }}</h1>
+    <p class="text-soft" style="font-size:var(--text-md);line-height:var(--leading-relaxed);max-width:40em">{{ a.sub }}</p>
+  </div>
+</section>
+
+<section class="row">
+  <div class="container stack" style="gap:clamp(1.25rem, 2.6vw, 2.125rem)">
+    <div class="stack" style="gap:10px">
+      <p class="eyebrow">{{ a.changeLabel }}</p>
+      <p class="text-soft" style="font-size:var(--text-md);line-height:var(--leading-relaxed);max-width:44em">{{ a.changeBody }}</p>
+    </div>
+    <p class="eyebrow" style="color:var(--color-accent-amber);border-left:3px solid var(--color-accent-amber);padding-left:10px">{{ a.exampleTag }}</p>
+    <div class="row-grid row-grid--2">
+      <div style="border:1px solid var(--color-border-soft);padding:clamp(1.25rem, 2.4vw, 1.875rem);display:flex;flex-direction:column;gap:14px;background:var(--color-surface-sunk)">
+        <p class="eyebrow" style="color:var(--color-text-soft)">{{ a.listSide.label }}</p>
+        <p style="font-family:var(--font-mono);font-size:var(--text-sm);border:1px solid var(--color-border);padding:10px 12px;color:var(--color-ink-soft);background:var(--color-paper-raised)">{{ a.listSide.q }}</p>
+        <ul class="stack" style="gap:7px">
+          {%- for item in a.listSide.items %}
+          <li style="display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:baseline">
+            <span style="font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-text-faint)">{{ loop.index }}</span>
+            <span style="font-size:var(--text-sm);color:var(--color-text-soft)">{{ item }}</span>
+          </li>
+          {%- endfor %}
+        </ul>
+      </div>
+      <div style="border:2px solid var(--color-ink);padding:clamp(1.25rem, 2.4vw, 1.875rem);display:flex;flex-direction:column;gap:14px">
+        <p class="eyebrow" style="color:var(--color-accent-amber)">{{ a.aiSide.label }}</p>
+        <p style="font-size:var(--text-md);line-height:1.45;padding:12px;border:1px solid var(--color-border);background:var(--color-surface-sunk);color:var(--color-ink-soft)">{{ a.aiSide.q }}</p>
+        <ul class="stack" style="gap:10px">
+          {%- for item in a.aiSide.items %}
+          <li style="display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:baseline">
+            <span style="font-family:var(--font-mono);font-size:var(--text-sm);color:var(--color-accent-blue)">{{ loop.index }}</span>
+            <span style="font-size:var(--text-lg);font-weight:var(--weight-semibold);letter-spacing:var(--tracking-snug)">{{ item }}</span>
+          </li>
+          {%- endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="row row--sunk">
+  <div class="container">
+    <h2 style="font-size:var(--text-3xl);margin-bottom:clamp(1.125rem, 2.4vw, 1.875rem);max-width:20em">{{ a.decideLabel }}</h2>
+    <div class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(330px, 1fr))">
+      {%- for d in a.decide %}
+      <div class="why-row">
+        <span class="why-row__num tabular">{{ loop.index }}</span>
+        <div class="stack" style="gap:7px">
+          <h3 class="why-row__title" style="font-size:var(--text-lg)">{{ d.t }}</h3>
+          <p class="why-row__desc" style="font-size:var(--text-body-sm)">{{ d.d }}</p>
+        </div>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="row">
+  <div class="container">
+    <div style="border:3px solid var(--color-accent-amber);display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr))">
+      <div class="stack" style="padding:clamp(1.375rem, 2.8vw, 2.25rem);gap:12px">
+        <p class="eyebrow" style="color:var(--color-accent-amber)">{{ a.honesty.h1 }}</p>
+        <p style="font-size:var(--text-md);line-height:var(--leading-relaxed);color:var(--color-ink-soft)">{{ a.honesty.b1 }}</p>
+      </div>
+      <div class="stack" style="padding:clamp(1.375rem, 2.8vw, 2.25rem);gap:12px;background:var(--color-accent-amber);color:var(--color-paper)">
+        <p class="eyebrow" style="color:inherit">{{ a.honesty.h2 }}</p>
+        <p style="font-size:var(--text-lg);line-height:1.5;letter-spacing:var(--tracking-snug)">{{ a.honesty.b2 }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="row">
+  <div class="container">
+    <h2 style="font-size:var(--text-3xl);margin-bottom:clamp(1.125rem, 2.4vw, 1.875rem)">{{ a.includedLabel }}</h2>
+    <div class="row-grid row-grid--2">
+      <div class="stack" style="border:2px solid var(--color-ink);padding:clamp(1.375rem, 2.6vw, 2rem);gap:14px">
+        <h3 style="font-size:var(--text-xl)">{{ a.tech.h }}</h3>
+        <span class="eyebrow" style="background:var(--color-ink);color:var(--color-paper);padding:6px 10px;align-self:flex-start">{{ a.tech.note }}</span>
+        <ul class="stack" style="gap:10px;margin-top:4px">
+          {%- for item in a.tech.items %}
+          <li style="display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:start">
+            <span style="color:var(--color-accent-blue)">✓</span><span style="font-size:var(--text-body-sm)">{{ item }}</span>
+          </li>
+          {%- endfor %}
+        </ul>
+      </div>
+      <div class="stack" style="border:2px solid var(--color-border-soft);padding:clamp(1.375rem, 2.6vw, 2rem);gap:14px;background:var(--color-surface-sunk)">
+        <h3 style="font-size:var(--text-xl)">{{ a.content.h }}</h3>
+        <span class="eyebrow" style="background:var(--color-accent-amber);color:var(--color-paper);padding:6px 10px;align-self:flex-start">{{ a.content.note }}</span>
+        <ul class="stack" style="gap:10px;margin-top:4px">
+          {%- for item in a.content.items %}
+          <li style="display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:start">
+            <span style="color:var(--color-accent-amber)">✓</span><span style="font-size:var(--text-body-sm)">{{ item }}</span>
+          </li>
+          {%- endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="row row--edge-top row--no-border">
+  <div class="container cluster" style="justify-content:space-between;align-items:center">
+    <h2 style="font-size:var(--text-3xl);max-width:20em">{{ h.finalH }}</h2>
+    <div class="cluster" style="gap:12px">
+      <a class="btn btn--primary" href="{{ "contact" | route(lang) }}">{{ t.ctaPrimary }}</a>
+      <a class="btn btn--secondary" href="{{ "pricing" | route(lang) }}">{{ t.ctaSecondary }}</a>
+    </div>
+  </div>
+</section>
