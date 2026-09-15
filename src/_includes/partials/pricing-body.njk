@@ -35,7 +35,7 @@
         <div class="cluster" style="justify-content:space-between;min-height:30px">
           <h2 style="font-size:clamp(1.625rem, 2.4vw, 2rem);font-weight:var(--weight-bold);letter-spacing:0.05em">{{ item.name }}</h2>
           {%- if item.badge %}
-          <span style="font-family:var(--font-mono);font-size:0.6875rem;letter-spacing:var(--tracking-wide);text-transform:uppercase;background:var(--color-accent-amber);color:var(--color-paper);padding:5px 9px">{{ item.badge[lang] }}</span>
+          <span style="font-family:var(--font-mono);font-size:0.6875rem;letter-spacing:var(--tracking-wide);text-transform:uppercase;background:var(--color-accent-amber-strong);color:var(--color-paper);padding:5px 9px">{{ item.badge[lang] }}</span>
           {%- endif %}
         </div>
         <div class="cluster" style="align-items:baseline;gap:12px">
@@ -53,7 +53,7 @@
           {%- endfor %}
         </ul>
         {%- if item.saving %}
-        <p style="font-size:var(--text-sm);color:var(--color-accent-amber);font-weight:var(--weight-semibold)">{{ item.saving[lang] }}</p>
+        <p style="font-size:var(--text-sm);color:var(--color-accent-amber-strong);font-weight:var(--weight-semibold)">{{ item.saving[lang] }}</p>
         {%- endif %}
         <a class="btn btn--primary" style="margin-top:auto;text-align:center" href="#configurator">{{ pp.cfg.cta }}</a>
       </div>
@@ -74,7 +74,7 @@
       <div style="border:2px solid {{ 'var(--color-ink)' if loop.first else 'var(--color-border-soft)' }};padding:clamp(1.375rem, 2.6vw, 2rem);display:flex;flex-direction:column;gap:14px">
         <div class="cluster" style="justify-content:space-between">
           <span style="font-size:1.375rem;font-weight:var(--weight-semibold)">{{ m.n }}</span>
-          <span style="font-family:var(--font-mono);font-size:0.6875rem;letter-spacing:var(--tracking-wide);text-transform:uppercase;background:{{ 'var(--color-ink)' if loop.first else 'var(--color-accent-amber)' }};color:var(--color-paper);padding:5px 9px">{{ m.req }}</span>
+          <span style="font-family:var(--font-mono);font-size:0.6875rem;letter-spacing:var(--tracking-wide);text-transform:uppercase;background:{{ 'var(--color-ink)' if loop.first else 'var(--color-accent-amber-strong)' }};color:var(--color-paper);padding:5px 9px">{{ m.req }}</span>
         </div>
         <div class="cluster" style="align-items:baseline;gap:6px">
           <span style="font-family:var(--font-mono);font-size:clamp(2rem, 3.2vw, 2.75rem);font-weight:var(--weight-medium)">{{ ("+" if m.signed else "") + (m.p | price(lang, packages.currency)) }}</span>
@@ -138,7 +138,7 @@
 <section class="row row--sunk" id="configurator">
   <div class="container stack" style="gap:clamp(1.25rem, 2.6vw, 2.125rem)">
     <div class="stack" style="gap:10px">
-      <p class="eyebrow" style="color:var(--color-accent-amber)">{{ pp.cfg.label }}</p>
+      <p class="eyebrow" style="color:var(--color-accent-amber-strong)">{{ pp.cfg.label }}</p>
       <h2 style="font-size:clamp(1.625rem, 3vw, 2.5rem)">{{ pp.cfg.h }}</h2>
     </div>
 
@@ -229,7 +229,7 @@
 {#- ===================== Scope statement ===================== -#}
 <section class="row row--no-border">
   <div class="container stack" style="gap:12px">
-    <p class="eyebrow" style="color:var(--color-accent-amber)">{{ pp.oneThingLabel }}</p>
+    <p class="eyebrow" style="color:var(--color-accent-amber-strong)">{{ pp.oneThingLabel }}</p>
     <p style="font-size:clamp(1.1875rem, 1.8vw, 1.5rem);line-height:1.55;letter-spacing:-0.015em;max-width:44em">{{ pp.oneThingBody }}</p>
   </div>
 </section>

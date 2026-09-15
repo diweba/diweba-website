@@ -23,7 +23,7 @@
 
 <section class="row row--edge-bottom">
   <div class="container stack" style="gap:16px;max-width:44rem">
-    <p class="eyebrow" style="color:var(--color-accent-amber)">{{ a.eyebrow }}</p>
+    <p class="eyebrow" style="color:var(--color-accent-amber-strong)">{{ a.eyebrow }}</p>
     <h1 style="font-size:clamp(1.9375rem, 3.7vw, 3.25rem)">{{ a.h }}</h1>
     <p class="text-soft" style="font-size:var(--text-md);line-height:var(--leading-relaxed);max-width:40em">{{ a.sub }}</p>
   </div>
@@ -35,7 +35,7 @@
       <p class="eyebrow">{{ a.changeLabel }}</p>
       <p class="text-soft" style="font-size:var(--text-md);line-height:var(--leading-relaxed);max-width:44em">{{ a.changeBody }}</p>
     </div>
-    <p class="eyebrow" style="color:var(--color-accent-amber);border-left:3px solid var(--color-accent-amber);padding-left:10px">{{ a.exampleTag }}</p>
+    <p class="eyebrow" style="color:var(--color-accent-amber-strong);border-left:3px solid var(--color-accent-amber-strong);padding-left:10px">{{ a.exampleTag }}</p>
     <div class="row-grid row-grid--2">
       <div style="border:1px solid var(--color-border-soft);padding:clamp(1.25rem, 2.4vw, 1.875rem);display:flex;flex-direction:column;gap:14px;background:var(--color-surface-sunk)">
         <p class="eyebrow" style="color:var(--color-text-soft)">{{ a.listSide.label }}</p>
@@ -50,7 +50,7 @@
         </ul>
       </div>
       <div style="border:2px solid var(--color-ink);padding:clamp(1.25rem, 2.4vw, 1.875rem);display:flex;flex-direction:column;gap:14px">
-        <p class="eyebrow" style="color:var(--color-accent-amber)">{{ a.aiSide.label }}</p>
+        <p class="eyebrow" style="color:var(--color-accent-amber-strong)">{{ a.aiSide.label }}</p>
         <p style="font-size:var(--text-md);line-height:1.45;padding:12px;border:1px solid var(--color-border);background:var(--color-surface-sunk);color:var(--color-ink-soft)">{{ a.aiSide.q }}</p>
         <ul class="stack" style="gap:10px">
           {%- for item in a.aiSide.items %}
@@ -86,10 +86,10 @@
   <div class="container">
     <div style="border:3px solid var(--color-accent-amber);display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr))">
       <div class="stack" style="padding:clamp(1.375rem, 2.8vw, 2.25rem);gap:12px">
-        <p class="eyebrow" style="color:var(--color-accent-amber)">{{ a.honesty.h1 }}</p>
+        <p class="eyebrow" style="color:var(--color-accent-amber-strong)">{{ a.honesty.h1 }}</p>
         <p style="font-size:var(--text-md);line-height:var(--leading-relaxed);color:var(--color-ink-soft)">{{ a.honesty.b1 }}</p>
       </div>
-      <div class="stack" style="padding:clamp(1.375rem, 2.8vw, 2.25rem);gap:12px;background:var(--color-accent-amber);color:var(--color-paper)">
+      <div class="stack" style="padding:clamp(1.375rem, 2.8vw, 2.25rem);gap:12px;background:var(--color-accent-amber-strong);color:var(--color-paper)">
         <p class="eyebrow" style="color:inherit">{{ a.honesty.h2 }}</p>
         <p style="font-size:var(--text-lg);line-height:1.5;letter-spacing:var(--tracking-snug)">{{ a.honesty.b2 }}</p>
       </div>
@@ -114,7 +114,7 @@
       </div>
       <div class="stack" style="border:2px solid var(--color-border-soft);padding:clamp(1.375rem, 2.6vw, 2rem);gap:14px;background:var(--color-surface-sunk)">
         <h3 style="font-size:var(--text-xl)">{{ a.content.h }}</h3>
-        <span class="eyebrow" style="background:var(--color-accent-amber);color:var(--color-paper);padding:6px 10px;align-self:flex-start">{{ a.content.note }}</span>
+        <span class="eyebrow" style="background:var(--color-accent-amber-strong);color:var(--color-paper);padding:6px 10px;align-self:flex-start">{{ a.content.note }}</span>
         <ul class="stack" style="gap:10px;margin-top:4px">
           {%- for item in a.content.items %}
           <li style="display:grid;grid-template-columns:20px 1fr;gap:10px;align-items:start">

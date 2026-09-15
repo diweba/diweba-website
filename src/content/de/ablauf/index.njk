@@ -32,14 +32,14 @@ description: "Kurzes Gespräch, Festpreis-Angebot, Aufbau in 10 bzw. 15 Arbeitst
       </div>
       <p class="text-soft" style="font-size:var(--text-lg);line-height:var(--leading-relaxed)">{{ step.d }}</p>
       <div style="border-left:3px solid var(--color-accent-amber);padding-left:var(--space-md)">
-        <span class="eyebrow" style="color:var(--color-accent-amber);display:block;margin-bottom:6px">{{ p.needLabel }}</span>
+        <span class="eyebrow" style="color:var(--color-accent-amber-strong);display:block;margin-bottom:6px">{{ p.needLabel }}</span>
         <p class="text-soft" style="font-size:var(--text-base)">{{ step.need }}</p>
       </div>
     </div>
 
     {%- if loop.first %}
     <div style="border:2px solid var(--color-border); background:var(--color-surface-sunk); padding:clamp(1.25rem, 2.6vw, 2rem); display:flex; flex-direction:column; gap:14px; margin-bottom:12px">
-      <span class="eyebrow" style="color:var(--color-accent-amber)">{{ p.qLabel }}</span>
+      <span class="eyebrow" style="color:var(--color-accent-amber-strong)">{{ p.qLabel }}</span>
       <p style="font-size:var(--text-lg);line-height:var(--leading-relaxed);max-width:46em">{{ p.qIntro }}</p>
       <div class="row-grid" style="grid-template-columns:repeat(auto-fit, minmax(18.75rem, 1fr))">
         {%- for q in p.questions %}

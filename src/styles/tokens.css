@@ -208,9 +208,36 @@
   --color-border-soft: oklch(0.88 0.006 255);
   --color-border-strong: var(--color-ink);    /* structural 1-2px section borders */
 
-  --color-accent-blue: oklch(0.55 0.12 248);       /* links, hover states, active-page dot */
+  /* Phase 6 contrast audit: EVERY text/link/icon use of this token measured
+     around 4.34:1 (why-row numbers, the "Wie das funktioniert →" /
+     "Über DIWEBA →" / "Alle Fragen ansehen →" links, at their normal
+     16-20px sizes) -- under the 4.5:1 minimum, consistently, across every
+     sampled context. Unlike amber (a genuinely dual-role token: plain text
+     in some places, a heavy badge/panel FILL in others, which is why that
+     one got a separate "-strong" variant instead), blue's role here is
+     uniformly text/link/icon/focus-ring/UI-accent -- there is no
+     background-fill use to keep unchanged. Darkening the single token is
+     therefore the smaller, more consistent fix: one value change instead
+     of a dozen scattered per-component overrides, and it also strengthens
+     --color-focus (below), which only improves the site-wide keyboard
+     focus ring's own visibility. Measured 5.3-5.7:1 against paper and the
+     sunk section background after this change. */
+  --color-accent-blue: oklch(0.5 0.12 248);        /* links, hover states, active-page dot */
   --color-accent-blue-hover: oklch(0.42 0.1 248);
   --color-accent-amber: oklch(0.62 0.13 48);       /* eyebrow labels, popular badge, honest-box */
+  /* Phase 6 contrast audit: every amber-on-paper/sunk TEXT use (eyebrow
+     labels, the required-field asterisk, configurator badges) measured
+     3.44-3.65:1 -- and by the same math, every paper-text-on-amber-FILL
+     badge ("Am häufigsten gewählt", "Freiwillig", the AI-search "Was wir
+     tun" panel, the configurator hint) measured the identical 3.65:1,
+     since contrast is symmetric. Same hue/chroma as --color-accent-amber,
+     darkened until paper/sunk pass 4.5:1 (measured 4.58-4.87:1). Used only
+     where amber sits directly against text or as a badge fill; the
+     dark-background "Von uns gebaut" eyebrows and the PLUS card's 2px
+     border already clear 4.5:1 / 3:1 with the original token and are
+     deliberately left unchanged -- see the Phase 6 report for the full
+     usage-by-usage audit. */
+  --color-accent-amber-strong: oklch(0.55 0.13 48);
 
   --color-focus: var(--color-accent-blue);
 
