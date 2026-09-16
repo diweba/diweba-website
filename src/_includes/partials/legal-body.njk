@@ -21,7 +21,7 @@
   company.phone is null on purpose and there is no pending line for it,
   because there will never be a value to fill in (Phase 3A business rule).
 
-  SECTION LIST: each `legal.sections[]` entry is {id, heading, body,
+  SECTION LIST: each `legal.sections[]` entry is {id, heading, body, list,
   configKey?}. `body` is null until real legal text exists -- rendered as
   the real heading plus an honest "not written yet" status note
   (ui.legalPending), never invented prose and never a bracket placeholder
@@ -30,6 +30,14 @@
   site.analytics.configured) -- the same "render nothing when unconfigured"
   rule already used by consent-head.njk and the contact form, so this page
   can never claim a tool is active that isn't.
+
+  `body` may be a single string (one <p>), or an array whose entries are
+  rendered in order -- a string becomes a <p>, an array becomes a <ul><li>
+  bullet list at that exact position (so a section can read: paragraph,
+  list, paragraph, in whatever order the real legal text needs). Same
+  text-soft/text-base typography throughout -- not a new visual language,
+  just the semantically correct elements for genuinely list-shaped content
+  (data categories, rights, recipients) interleaved with real prose.
 #}
 {%- set t = ui[lang] -%}
 {%- set heroEyebrow = legal.eyebrow -%}
@@ -70,7 +78,17 @@
     <div class="stack" style="gap:8px;border-top:1px solid var(--color-border-soft);padding-top:var(--space-lg)">
       <h2 style="font-size:var(--text-xl)">{{ s.heading }}</h2>
       {%- if s.body %}
-      <p class="text-soft" style="font-size:var(--text-base);line-height:var(--leading-relaxed)">{{ s.body }}</p>
+        {%- for block in ([s.body] if s.body is string else s.body) %}
+          {%- if block is string %}
+      <p class="text-soft" style="font-size:var(--text-base);line-height:var(--leading-relaxed)">{{ block }}</p>
+          {%- else %}
+      <ul class="text-soft" style="font-size:var(--text-base);line-height:var(--leading-relaxed);padding-left:1.25em;display:flex;flex-direction:column;gap:4px">
+            {%- for item in block %}
+        <li>{{ item }}</li>
+            {%- endfor %}
+      </ul>
+          {%- endif %}
+        {%- endfor %}
       {%- else %}
       <p class="text-faint" style="font-size:var(--text-sm);font-style:italic">{{ t.legalPending }}</p>
       {%- endif %}

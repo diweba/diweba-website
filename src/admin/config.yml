@@ -71,14 +71,20 @@
 #                                   tightly bound to behaviour/accessibility,
 #                                   not page editorial prose.
 #   - src/_data/impressumPage.js
-#     src/_data/datenschutzPage.js — legal-page STRUCTURE (section headings,
-#                                   the conditional Turnstile/analytics gate).
-#                                   No legal prose exists yet on purpose
-#                                   (Phase 3F); exposing even the headings to
-#                                   free editing risks breaking the
-#                                   `body: null` → "pending" detection the
-#                                   templates rely on. Stays code-controlled
-#                                   until real, lawyer-reviewed text exists.
+#     src/_data/datenschutzPage.js — full legal-page content (Phase 3F set up
+#                                   the structure; a later phase filled in a
+#                                   researched draft). Deliberately still NOT
+#                                   CMS-editable, and won't become so: legal
+#                                   text carries real risk if altered casually
+#                                   without review, so it stays in git,
+#                                   reviewable via normal commits/PRs, pending
+#                                   the owner's final legal/attorney sign-off
+#                                   before being treated as authoritative
+#                                   (CLAUDE.md "Legal caution"). Exposing this
+#                                   to free CMS editing would also risk
+#                                   breaking the `body: null` → "pending"
+#                                   fallback the templates still rely on for
+#                                   any future section.
 #   - consent / analytics / Turnstile / Cloudflare configuration — all
 #                                   environment variables, never files a CMS
 #                                   touches (spec §8, §14).
@@ -464,7 +470,8 @@ collections:
   # ==========================================================================
   # SEO-Metadaten je Seite — Titel/Beschreibung aus dem Front Matter der
   # tatsächlichen Seiten-Dateien. Bewusst NICHT die Legal-Seiten (Impressum,
-  # Datenschutz): deren Texte sind noch nicht final — siehe Phase 3F.
+  # Datenschutz): deren Inhalt bleibt vollständig code-kontrolliert, siehe
+  # src/_data/impressumPage.js / datenschutzPage.js.
   # ==========================================================================
   - name: pages
     label: "SEO — Seitentitel & Beschreibung"
