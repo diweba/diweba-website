@@ -62,12 +62,26 @@ export default {
    * approved design source exactly, both languages) lives in
    * src/_data/pricingPage.js's `note` field — every place a price appears
    * must use that wording verbatim, never an invented shorthand like "VAT
-   * free" and never a VAT ID, since none exists under this regime.
+   * free".
+   *
+   * Having a VAT ID (below) does not contradict this: §19 UStG governs
+   * whether VAT is *charged*; §27a UStG (VAT ID issuance) is a separate
+   * registration, commonly used for cross-border purposes, and doesn't by
+   * itself change whether VAT is charged on prices. Both facts are stated
+   * side by side, not merged, in the Impressum's "vat" section.
    */
   taxStatus: "kleinunternehmer",
 
-  /** Only if VAT-registered. */
-  vatId: null,
+  /**
+   * Confirmed by the owner (VAT-ID correction phase). Not invented: the
+   * value below was supplied directly by the owner and independently
+   * checked against the standard German VAT-ID checksum algorithm
+   * (ISO 7064 MOD 11-10), which it satisfies. Rendered in the Impressum's
+   * confirmed-facts block (legal-body.njk) only when non-null -- this field
+   * stays legitimately optional for any future client site reusing this
+   * template (spec §17), since many Kleinunternehmer genuinely have none.
+   */
+  vatId: "DE457554552",
 
   /**
    * Whether the registered address may be shown outside the Impressum — in

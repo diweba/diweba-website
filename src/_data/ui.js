@@ -83,6 +83,7 @@ export default {
       form: "Rechtsform",
       address: "Anschrift",
       email: "E-Mail",
+      vatId: "USt-IdNr.",
     },
     /** Status note for a legal-page section that has real structure (a
      *  heading) but no reviewed legal text yet -- see legal-body.njk. This
@@ -188,6 +189,7 @@ export default {
       form: "Legal form",
       address: "Address",
       email: "Email",
+      vatId: "VAT ID",
     },
     legalPending: "This section will be completed once the legally reviewed text is available.",
 

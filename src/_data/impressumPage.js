@@ -48,7 +48,7 @@ export default {
       {
         id: "vat",
         heading: "Umsatzsteuer",
-        body: "Gemäß § 19 Abs. 1 UStG (Kleinunternehmerregelung) wird auf den ausgewiesenen Preisen keine Umsatzsteuer erhoben und nicht gesondert ausgewiesen. Eine Umsatzsteuer-Identifikationsnummer besteht dementsprechend nicht.",
+        body: "Gemäß § 19 Abs. 1 UStG (Kleinunternehmerregelung) wird auf den ausgewiesenen Preisen keine Umsatzsteuer erhoben und nicht gesondert ausgewiesen. Die oben genannte Umsatzsteuer-Identifikationsnummer wurde uns gemäß § 27a UStG zugeteilt; die Kleinunternehmerregelung nach § 19 UStG bleibt hiervon unberührt.",
       },
       {
         id: "responsible",
@@ -104,7 +104,7 @@ export default {
       {
         id: "vat",
         heading: "VAT",
-        body: "Under § 19 (1) of the German VAT Act (Umsatzsteuergesetz, UStG) — the small-business exemption (Kleinunternehmerregelung) — no VAT is charged on the prices shown and no VAT is separately stated. Accordingly, no VAT identification number exists.",
+        body: "Under § 19 (1) of the German VAT Act (Umsatzsteuergesetz, UStG) — the small-business exemption (Kleinunternehmerregelung) — no VAT is charged on the prices shown and no VAT is separately stated. The VAT identification number given above was issued to us pursuant to § 27a UStG; this does not affect the small-business exemption under § 19 UStG.",
       },
       {
         id: "responsible",

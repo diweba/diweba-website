@@ -21,6 +21,14 @@
   company.phone is null on purpose and there is no pending line for it,
   because there will never be a value to fill in (Phase 3A business rule).
 
+  company.vatId renders in this same block, but conditionally (plain
+  truthy check, not `required`) -- unlike the other facts, a VAT ID is
+  legitimately optional: many Kleinunternehmer genuinely have none, and a
+  future client site reusing this template (spec §17) may be in exactly
+  that position. When present, it does not contradict the Kleinunternehmer
+  regime described in the "vat" section below -- §19 UStG (VAT charged or
+  not) and §27a UStG (VAT ID issuance) are separate questions.
+
   SECTION LIST: each `legal.sections[]` entry is {id, heading, body, list,
   configKey?}. `body` is null until real legal text exists -- rendered as
   the real heading plus an honest "not written yet" status note
@@ -69,6 +77,12 @@
         <span class="eyebrow" style="color:var(--color-text-faint)">{{ t.legalFields.email }}</span>
         <a href="mailto:{{ company.email | required('email') }}">{{ company.email }}</a>
       </div>
+      {%- if company.vatId %}
+      <div class="stack" style="gap:2px">
+        <span class="eyebrow" style="color:var(--color-text-faint)">{{ t.legalFields.vatId }}</span>
+        <span>{{ company.vatId }}</span>
+      </div>
+      {%- endif %}
     </div>
 
     {%- for s in legal.sections %}
