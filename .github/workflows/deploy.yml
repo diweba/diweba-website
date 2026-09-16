@@ -17,7 +17,7 @@
 #
 # BUILD-TIME CONFIG — set as repository *variables* (public by design, they end
 # up in the HTML):
-#   SITE_URL, USERCENTRICS_RULESET_ID, GTM_CONTAINER_ID,
+#   SITE_URL, USERCENTRICS_SETTINGS_ID, GTM_CONTAINER_ID,
 #   GA4_MEASUREMENT_ID, TURNSTILE_SITE_KEY
 #
 # Leaving the analytics variables unset is valid: the consent block renders
@@ -63,7 +63,7 @@ jobs:
           # Pull requests build as preview: noindex site-wide, analytics off.
           SITE_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
           SITE_URL: ${{ vars.SITE_URL }}
-          USERCENTRICS_RULESET_ID: ${{ vars.USERCENTRICS_RULESET_ID }}
+          USERCENTRICS_SETTINGS_ID: ${{ vars.USERCENTRICS_SETTINGS_ID }}
           GTM_CONTAINER_ID: ${{ vars.GTM_CONTAINER_ID }}
           GA4_MEASUREMENT_ID: ${{ vars.GA4_MEASUREMENT_ID }}
           TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
@@ -100,7 +100,7 @@ jobs:
         env:
           SITE_ENV: production
           SITE_URL: ${{ vars.SITE_URL }}
-          USERCENTRICS_RULESET_ID: ${{ vars.USERCENTRICS_RULESET_ID }}
+          USERCENTRICS_SETTINGS_ID: ${{ vars.USERCENTRICS_SETTINGS_ID }}
           GTM_CONTAINER_ID: ${{ vars.GTM_CONTAINER_ID }}
           GA4_MEASUREMENT_ID: ${{ vars.GA4_MEASUREMENT_ID }}
           TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}

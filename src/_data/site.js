@@ -24,9 +24,9 @@ const isProduction = siteEnv === "production";
  * When this is false the consent partial renders NOTHING — no Consent Mode
  * defaults, no CMP, no GTM. Nothing is faked or stubbed.
  */
-const usercentricsRulesetId = env.USERCENTRICS_RULESET_ID || null;
+const usercentricsSettingsId = env.USERCENTRICS_SETTINGS_ID || null;
 const gtmId = env.GTM_CONTAINER_ID || null;
-const analyticsConfigured = Boolean(usercentricsRulesetId && gtmId);
+const analyticsConfigured = Boolean(usercentricsSettingsId && gtmId);
 
 export default {
   env: siteEnv,
@@ -52,7 +52,7 @@ export default {
      * traffic never reaches the real GA4 property.
      */
     enabled: analyticsConfigured && isProduction,
-    usercentricsRulesetId,
+    usercentricsSettingsId,
     gtmId,
     /** Configured inside GTM; recorded here for the privacy policy and tooling. */
     ga4Id: env.GA4_MEASUREMENT_ID || null,

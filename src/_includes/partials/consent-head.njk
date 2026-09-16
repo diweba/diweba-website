@@ -10,7 +10,7 @@
 
       1. Put the values in `.env` (local) or GitHub Actions variables (CI):
 
-             USERCENTRICS_RULESET_ID=...       from the Usercentrics admin UI
+             USERCENTRICS_SETTINGS_ID=...      from the Usercentrics admin UI
              GTM_CONTAINER_ID=GTM-XXXXXXX
              GA4_MEASUREMENT_ID=G-XXXXXXXXXX   (configured inside GTM;
                                                 recorded for the privacy policy)
@@ -19,13 +19,17 @@
 
       3. Rebuild. This partial then emits the blocks below, in order.
 
-  PHASE 9A (Usercentrics ruleset-based CMP + Autoblocker): Usercentrics'
-  newer product line configures a "ruleset" rather than the older numeric
-  "Settings ID" -- the loader script takes `data-ruleset-id`, not
-  `data-settings-id`, and ships with a separate Autoblocker script that must
-  run before anything else in <head> (its job is intercepting third-party
-  script insertion until a consent decision exists, which only works if it
-  is the first thing to execute). GTM itself is still the plain, unmodified
+  PHASE 9A (Usercentrics CMP + Autoblocker): ships with a separate
+  Autoblocker script that must run before anything else in <head> (its job
+  is intercepting third-party script insertion until a consent decision
+  exists, which only works if it is the first thing to execute). The loader
+  script's ID attribute is `data-settings-id` -- confirmed against the
+  actual snippet in the Usercentrics admin panel (an earlier version of this
+  file briefly used `data-ruleset-id` on the assumption that shipping with
+  Autoblocker implied Usercentrics' newer ruleset-based product; that
+  assumption was wrong, and is why the CMP failed to initialise -- Usercentrics
+  themselves returned 403 "Forbidden" for a ruleset lookup against an ID that
+  was actually a Settings ID). GTM itself is still the plain, unmodified
   standard snippet from Google -- installing it here does not configure GA4,
   Google Ads, or any other tag. Those are configured separately, inside GTM,
   by the project owner; this file has no way to create them and does not
@@ -50,7 +54,7 @@
       2. Usercentrics Autoblocker    THIS FILE, first -- must run before any
                                       third-party script tag exists to block
       3. Consent Mode v2 defaults    THIS FILE, second
-      4. Usercentrics CMP loader     THIS FILE, third (data-ruleset-id)
+      4. Usercentrics CMP loader     THIS FILE, third (data-settings-id)
       5. GTM container               THIS FILE, fourth -- unmodified standard
                                       snippet, loads no tags of its own
 
@@ -121,7 +125,7 @@
     <!-- Usercentrics CMP - must load before GTM -->
     <script id="usercentrics-cmp"
             src="https://web.cmp.usercentrics.eu/ui/loader.js"
-            data-ruleset-id="{{ site.analytics.usercentricsRulesetId }}"
+            data-settings-id="{{ site.analytics.usercentricsSettingsId }}"
             async></script>
     <!-- End Usercentrics CMP -->
 
