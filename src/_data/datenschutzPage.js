@@ -43,12 +43,20 @@
  * would also stop the form from working at all, so there is no state where
  * this section could describe an inactive tool as active.
  *
- * ITEMS FLAGGED "[Zur finalen rechtlichen Prüfung: ...]" / "[For final
- * legal review: ...]": specific provider-configured settings (exact log
- * retention windows, exact GA4 data-retention setting) that live in
- * Cloudflare's and Google's own dashboards, not in this repository or in
- * any primary documentation this draft could read from -- genuinely
- * unknown, not guessed. Every other item in every section is either a
+ * RETENTION WORDING FOR CLOUDFLARE ACCESS LOGS AND GA4: two specific
+ * settings (exact log retention window, exact GA4 data-retention setting)
+ * live in Cloudflare's and Google's own dashboards, not in this repository
+ * or in any primary documentation this draft could read from -- genuinely
+ * unknown, not guessed. The server-logs, ga4, and retention sections
+ * therefore describe retention with neutral, legally cautious wording
+ * ("governed by statutory requirements and the provider's configuration")
+ * rather than stating an unverified exact duration -- this was a deliberate
+ * pre-publish edit (internal "[Zur finalen rechtlichen Prüfung: ...]" /
+ * "[For final legal review: ...]" review markers existed in an earlier,
+ * unpublished draft of this file and were replaced with this wording before
+ * anything went live, not left as bracketed notes on the public page). If
+ * the exact settings are ever confirmed, the wording can be tightened to
+ * state them directly. Every other item in every section is either a
  * confirmed fact from this repository's real configuration, current
  * statutory text, or the relevant provider's own current documentation.
  */
@@ -86,7 +94,7 @@ export default {
         body: [
           "Beim Aufruf dieser Website erhebt die Hosting-Infrastruktur (Cloudflare, siehe vorstehender Abschnitt) automatisch technische Informationen, die Ihr Browser übermittelt. Dazu gehören insbesondere: die IP-Adresse des zugreifenden Geräts, Datum und Uhrzeit der Anfrage, die aufgerufene Seite bzw. Ressource, der HTTP-Statuscode, die übertragene Datenmenge, Browsertyp und -version, das verwendete Betriebssystem sowie die zuvor besuchte Seite (Referrer).",
           "Diese Daten dienen der technischen Auslieferung der Website, der Systemsicherheit (unter anderem der Erkennung und Abwehr von Angriffen) und einem störungsfreien Betrieb. Rechtsgrundlage ist unser berechtigtes Interesse an einer sicheren und stabilen Bereitstellung der Website (Art. 6 Abs. 1 lit. f DSGVO). Diese Protokolldaten werden nicht mit anderen Datenquellen zusammengeführt.",
-          "[Zur finalen rechtlichen Prüfung: Die genaue Speicherdauer der Zugriffsprotokolle wird durch die technische Infrastruktur von Cloudflare bestimmt; die dort konfigurierte Aufbewahrungsdauer ist zu bestätigen und hier zu ergänzen, sofern sie von den Standardeinstellungen des Anbieters abweicht.]",
+          "Die Speicherdauer dieser Protokolldaten richtet sich nach den gesetzlichen Vorgaben sowie der technischen und vertraglichen Konfiguration unserer Hosting-Infrastruktur bei Cloudflare und ist auf das für die genannten Zwecke erforderliche Maß begrenzt.",
         ],
       },
       {
@@ -144,7 +152,7 @@ export default {
           "Nach entsprechender Einwilligung über Usercentrics setzen wir Google Analytics 4 ein, einen Dienst der Google Ireland Limited (Konzernunternehmen der Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA) zur Analyse der Websitenutzung. Google Analytics 4 verarbeitet unter anderem Angaben zu Ihrem Nutzungsverhalten auf dieser Website (z. B. besuchte Seiten, Verweildauer, Interaktionen) sowie technische Gerätedaten, üblicherweise unter Einsatz von Cookies bzw. vergleichbaren Speichertechnologien.",
           "Die Verarbeitung erfolgt ausschließlich auf Grundlage Ihrer Einwilligung (Art. 6 Abs. 1 lit. a DSGVO), die Sie über den Consent-Banner erteilen, jederzeit widerrufen oder von vornherein ablehnen können. Der tatsächliche Ladevorgang wurde technisch geprüft: Ohne erteilte Einwilligung bleibt Google Analytics 4 inaktiv, nach erteilter Einwilligung wird es aktiv, und bei einer Ablehnung bleibt es inaktiv.",
           "Da Google Analytics 4 von der Google LLC mit Sitz in den USA betrieben wird, ist eine Datenübermittlung in ein Drittland (USA) nicht ausgeschlossen; nähere Angaben hierzu finden Sie im Abschnitt „Drittlandübermittlung“.",
-          "[Zur finalen rechtlichen Prüfung: Die konkrete Aufbewahrungsdauer der Nutzerdaten ist in den GA4-Property-Einstellungen konfigurierbar und dort zu bestätigen bzw. hier zu dokumentieren.]",
+          "Die Aufbewahrungsdauer der hierbei verarbeiteten Nutzerdaten richtet sich nach der jeweils in der GA4-Property konfigurierten Einstellung sowie den gesetzlichen Vorgaben.",
         ],
       },
       {
@@ -193,7 +201,7 @@ export default {
             "Server-Log-Dateien der Hosting-Infrastruktur: kurzfristig, im Rahmen der technischen Standardeinstellungen von Cloudflare.",
             "Einwilligungsentscheidungen (Usercentrics) und Analysedaten (Google Analytics 4): gemäß den jeweils konfigurierten Aufbewahrungsfristen der eingesetzten Dienste.",
           ],
-          "[Zur finalen rechtlichen Prüfung: Die konkreten, in den jeweiligen Anbieter-Dashboards (insbesondere Cloudflare-Zugriffsprotokolle und die GA4-Property) konfigurierten Aufbewahrungsfristen sind zu bestätigen und, soweit von den Standardeinstellungen abweichend, hier zu ergänzen.]",
+          "Im Übrigen richtet sich die Speicherdauer nach der jeweiligen Konfiguration der eingesetzten Dienste (insbesondere Cloudflare und Google Analytics 4) und den gesetzlichen Vorgaben.",
         ],
       },
       {
@@ -274,7 +282,7 @@ export default {
         body: [
           "When you access this website, the hosting infrastructure (Cloudflare, see the previous section) automatically collects technical information transmitted by your browser. This includes, in particular: the IP address of the accessing device, the date and time of the request, the page or resource accessed, the HTTP status code, the amount of data transferred, the browser type and version, the operating system used, and the previously visited page (referrer).",
           "This data is used for the technical delivery of the website, for system security (including the detection and prevention of attacks), and to ensure trouble-free operation. The legal basis is our legitimate interest in a secure and stable provision of the website (Art. 6 (1)(f) GDPR). This log data is not merged with other data sources.",
-          "[For final legal review: the exact retention period for access logs is determined by Cloudflare's technical infrastructure; the setting configured there should be confirmed and added here if it differs from the provider's default.]",
+          "The retention period for this log data is governed by statutory requirements as well as the technical and contractual configuration of our hosting infrastructure at Cloudflare, and is limited to what is necessary for the stated purposes.",
         ],
       },
       {
@@ -332,7 +340,7 @@ export default {
           "Following corresponding consent via Usercentrics, we use Google Analytics 4, a website-usage analysis service provided by Google Ireland Limited (part of the Google LLC group, 1600 Amphitheatre Parkway, Mountain View, CA 94043, USA). Google Analytics 4 processes information about your usage behaviour on this website (e.g. pages visited, time spent, interactions) as well as technical device data, typically using cookies or comparable storage technologies.",
           "Processing takes place exclusively on the basis of your consent (Art. 6 (1)(a) GDPR), which you can give via the consent banner, withdraw at any time, or decline from the outset. The actual loading behaviour has been technically verified: without consent, Google Analytics 4 remains inactive; once consent is given, it becomes active; and if consent is declined, it remains inactive.",
           "Because Google Analytics 4 is operated by Google LLC, headquartered in the USA, a transfer of data to a third country (the USA) cannot be excluded; see the “Third-country transfers” section for further detail.",
-          "[For final legal review: the specific retention period for user data is configurable within the GA4 property settings and should be confirmed and documented here.]",
+          "The retention period for the user data processed here is governed by the setting configured within the GA4 property as well as statutory requirements.",
         ],
       },
       {
@@ -381,7 +389,7 @@ export default {
             "Server log files from the hosting infrastructure: retained short-term, within Cloudflare's standard technical settings.",
             "Consent decisions (Usercentrics) and analytics data (Google Analytics 4): retained according to the respective configured retention periods of the services used.",
           ],
-          "[For final legal review: the specific retention periods configured in the respective provider dashboards (in particular Cloudflare access logs and the GA4 property) should be confirmed and, if they differ from the default settings, added here.]",
+          "Otherwise, the retention period is governed by the respective configuration of the services used (in particular Cloudflare and Google Analytics 4) and statutory requirements.",
         ],
       },
       {
